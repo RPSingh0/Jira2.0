@@ -1,4 +1,5 @@
 const dotenv = require("dotenv");
+const serverless = require('serverless-http');
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
@@ -17,7 +18,7 @@ const app = require('./app');
 /**
  * Database connection
  */
-const {dbConnection} = require("./DbHelper");
+const {dbConnection} = require("./db");
 
 dbConnection.connect((err) => {
     if (err) {
@@ -38,6 +39,7 @@ if (process.env.NODE_ENV === 'dev') {
     });
 } else {
     /**
-     * TODO: Add support for lambda
+     * Code for lambda
      */
+    module.exports.handler = serverless(app);
 }
