@@ -15,8 +15,18 @@ dotenv.config({
 const app = require('./app');
 
 /**
- * TODO: Database connection
+ * Database connection
  */
+const {dbConnection} = require("./DbHelper");
+
+dbConnection.connect((err) => {
+    if (err) {
+        console.log(`Unable to connect to DB: ${err.message}`);
+    } else {
+        console.log('Connected to DB');
+        dbConnection.end();
+    }
+});
 
 /**
  * Run server based on environment
