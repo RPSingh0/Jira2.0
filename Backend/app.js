@@ -1,8 +1,13 @@
 const express = require('express');
 const morgan = require('morgan');
 const globalErrorHandler = require('./utils/errorHandler');
+const swaggerUi = require('swagger-ui-express');
+const specs = require("./swaggerInit");
+const userRouter = require('./routes/userRoutes');
 
 const app = express();
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 
 /**
  * Adding support for full url in logging
@@ -17,6 +22,11 @@ app.use(morgan(':method :fullUrl :status :res[content-length] - :response-time m
  * using express's json middleware for parsing request/response body to json
  */
 app.use(express.json());
+
+/**
+ * Application routes
+ */
+app.use('/api/v1/user', userRouter);
 
 /**
  * If path is not defined, raising error which will be caught by global exception handler

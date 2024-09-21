@@ -9,7 +9,9 @@ class ErrorInterceptor extends Error {
      */
     constructor(details) {
         super(details.message);
-        this.name = this.constructor.name;
+        this.type = details.type;
         Error.captureStackTrace(this, this.constructor);
     }
 }
+
+module.exports = ErrorInterceptor;

@@ -1,4 +1,6 @@
 const {dbPromise} = require('../db');
+const ErrorInterceptor = require('../utils/errorInterceptor');
+const ErrorType = require('../utils/errorTypes');
 
 class User {
     constructor(firstName, lastName, email, status, password) {
@@ -11,14 +13,10 @@ class User {
 
     /**
      * A static method to build user using the builder pattern
-     * @param {string} firstName
-     * @param {string} lastName
      *
      * @returns {User} A new instance of User class
-     *
-     * @throws {ErrorInterceptor} Error for field validations
      */
-    static create(firstName, lastName) {
+    static create() {
         return new User();
     }
 
@@ -34,7 +32,8 @@ class User {
     setFirstName(firstName) {
         if (!firstName) {
             throw new ErrorInterceptor({
-                'message': 'First name is required.'
+                type: ErrorType.VALIDATION,
+                message: 'First name is required.'
             })
         }
 
@@ -54,7 +53,8 @@ class User {
     setLastName(lastName) {
         if (!lastName) {
             throw new ErrorInterceptor({
-                'message': 'Last name is required.'
+                type: ErrorType.VALIDATION,
+                message: 'Last name is required.'
             })
         }
 
@@ -75,9 +75,11 @@ class User {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             throw new ErrorInterceptor({
-                'message': 'Email is not valid.',
+                type: ErrorType.VALIDATION,
+                message: 'Email is not valid.',
             });
         }
+
         this.email = email;
         return this;
     }
@@ -95,10 +97,11 @@ class User {
         const validStatuses = ['active', 'inactive'];
         if (!validStatuses.includes(status)) {
             throw new ErrorInterceptor({
-                'message': `Status must be one of: ${validStatuses.join(', ')}.`,
+                type: ErrorType.VALIDATION,
+                message: `Status must be one of: ${validStatuses.join(', ')}.`,
             });
         }
-        this.status = status;
+        this.status = status === 'active' ? 1 : 0;
         return this;
     }
 
@@ -118,21 +121,24 @@ class User {
     setPassword(password) {
         if (password.length < 6 || password.length > 16) {
             throw new ErrorInterceptor({
-                'message': 'Password must be between 6 and 16 characters long.'
+                type: ErrorType.VALIDATION,
+                message: 'Password must be between 6 and 16 characters long.'
             });
         }
 
         const specialCharRegex = /[*,@,#,$]/;
         if (!specialCharRegex.test(password)) {
             throw new ErrorInterceptor({
-                'message': 'Password must contain at least one of the following characters: *, @, #, $.'
+                type: ErrorType.VALIDATION,
+                message: 'Password must contain at least one of the following characters: *, @, #, $.'
             });
         }
 
         const digitRegex = /\d/;
         if (!digitRegex.test(password)) {
             throw new ErrorInterceptor({
-                'message': 'Password must contain at least one digit.'
+                type: ErrorType.VALIDATION,
+                message: 'Password must contain at least one digit.'
             });
         }
 
@@ -150,16 +156,17 @@ class User {
     build() {
         const requiredFields = ['firstName', 'email', 'status', 'password'];
 
-        const validatedAllFields = requiredFields.reduce('', field => {
+        const validatedAllFields = requiredFields.reduce((acc, field) => {
             if (!this[field]) {
                 return `${field} is required. `;
             }
 
             return '';
-        });
+        }, '');
 
         if (validatedAllFields.length > 0) {
             throw new ErrorInterceptor({
+                type: ErrorType.VALIDATION,
                 message: validatedAllFields
             });
         }
@@ -176,14 +183,15 @@ class User {
      */
     async save() {
         this.build();
-        const query = 'INSERT INTO user (firstName, lastName, email, status, password) VALUES (?, ?, ?, ?, ?)';
+        const query = 'INSERT INTO user (first_name, last_name, email, status, password) VALUES (?, ?, ?, ?, ?)';
         const values = [this.firstName, this.lastName, this.email, this.status, this.password];
 
         try {
-            const [result] = await dbPromise.execute(query, values);
-            return result
+            const [{insertId: id}] = await dbPromise.execute(query, values);
+            return id;
         } catch (err) {
             throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
                 message: `Error saving user: ${err.message}`,
             })
         }

@@ -26,7 +26,6 @@ dbConnection.connect((err) => {
         process.exit(1);
     } else {
         console.log('Connected to DB');
-        dbConnection.end();
     }
 });
 

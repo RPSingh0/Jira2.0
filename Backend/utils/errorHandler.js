@@ -1,11 +1,24 @@
-const sendInternalServerError = (error, res) => {
-    return res.status(500).json({
-        status: 'fail',
-        message: error
-    });
-}
+const ErrorType = require("./errorTypes");
 
 module.exports = (err, req, res, next) => {
-    let error = err.message;
-    return sendInternalServerError(error, res);
+
+    /**
+     * All the `validation` errors will end up here
+     */
+    if (err.type === ErrorType.VALIDATION) {
+        return res.status(400).json({
+            status: 'fail',
+            message: err.message
+        });
+    }
+
+    /**
+     * All the `database` errors will end up here
+     */
+    if (err.type === ErrorType.DATABASE) {
+        return res.status(500).json({
+            status: 'fail',
+            message: err.message
+        });
+    }
 }
