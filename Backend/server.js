@@ -23,6 +23,7 @@ const {dbConnection} = require("./db");
 dbConnection.connect((err) => {
     if (err) {
         console.log(`Unable to connect to DB: ${err.message}`);
+        process.exit(1);
     } else {
         console.log('Connected to DB');
         dbConnection.end();
