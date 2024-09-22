@@ -1,6 +1,7 @@
 const {dbPromise} = require('../db');
 const ErrorInterceptor = require('../utils/errorInterceptor');
 const ErrorType = require('../utils/errorTypes');
+const bcrypt = require('bcryptjs');
 
 class User {
     constructor(firstName, lastName, email, status, password) {
@@ -23,7 +24,7 @@ class User {
     /**
      * First name setter, validates for null values
      *
-     * @param firstName
+     * @param {string} firstName
      *
      * @returns {User}
      *
@@ -44,7 +45,7 @@ class User {
     /**
      * Last name setter, validates for null values
      *
-     * @param lastName
+     * @param {string} lastName
      *
      * @returns {User}
      *
@@ -65,7 +66,7 @@ class User {
     /**
      * Email setter, validates email
      *
-     * @param email
+     * @param {string} email
      *
      * @returns {User}
      *
@@ -87,7 +88,7 @@ class User {
     /**
      * Status setter, validates status to be one of `active` or `inactive`
      *
-     * @param status
+     * @param {string} status
      *
      * @returns {User}
      *
@@ -112,7 +113,7 @@ class User {
      * * Have at least one of following `[*, @, #, $]`
      * * Have at least one digit
      *
-     * @param password
+     * @param {string} password
      *
      * @returns {User}
      *
@@ -144,6 +145,15 @@ class User {
 
         this.password = password;
         return this;
+    }
+
+    /**
+     * Hashes the password and overwrites the input value for password
+     *
+     * @returns {Promise<void>}
+     */
+    async hashPassword() {
+        this.password = await bcrypt.hash(this.password, 12);
     }
 
     /**
@@ -183,6 +193,8 @@ class User {
      */
     async save() {
         this.build();
+        await this.hashPassword();
+
         const query = 'INSERT INTO user (first_name, last_name, email, status, password) VALUES (?, ?, ?, ?, ?)';
         const values = [this.firstName, this.lastName, this.email, this.status, this.password];
 
@@ -195,6 +207,65 @@ class User {
                 message: `Error saving user: ${err.message}`,
             })
         }
+    }
+
+    /**
+     * Fetches and returns a single user from database by id
+     *
+     * @param id
+     *
+     * @returns {Promise<Object>} A promise that resolves with the result of database select operation
+     *
+     * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
+     */
+    static async findById(id) {
+        const query = 'SELECT id, email, password, status FROM user WHERE id = ?';
+
+        try {
+            const [results] = await dbPromise.execute(query, [id]);
+            return results[0];
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error fetching user: ${err.message}`,
+            })
+        }
+    }
+
+    /**
+     * Fetches and returns a single user from database by email
+     *
+     * @param {string} email
+     *
+     * @returns {Promise<Object>} A promise that resolves with the result of database select operation
+     *
+     * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
+     */
+    static async findByEmail(email) {
+        const query = 'SELECT id, email, password, status FROM user WHERE email = ?';
+
+        try {
+            const [results] = await dbPromise.execute(query, [email]);
+            return results[0]
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error fetching user: ${err.message}`,
+            })
+        }
+    }
+
+    /**
+     * Compares login password against the password stored in database
+     *
+     * @param {string} candidatePassword
+     *
+     * @param {string} userPassword
+     *
+     * @returns {Promise<*>} A promise that resolves with a boolean
+     */
+    static async comparePassword(candidatePassword, userPassword) {
+        return await bcrypt.compare(candidatePassword, userPassword);
     }
 }
 

@@ -1,5 +1,6 @@
 const catchAsync = require('../utils/catchAsync');
 const User = require('../models/User');
+const Response = require('../utils/response');
 
 exports.createUser = catchAsync(async (req, res, next) => {
     const {firstName, lastName, email, status, password} = req.body;
@@ -15,5 +16,5 @@ exports.createUser = catchAsync(async (req, res, next) => {
 
     const id = await newUser.save();
 
-    res.end(JSON.stringify(id));
+    Response.ok200(res, {id: id});
 })
