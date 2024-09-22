@@ -18,7 +18,7 @@ exports.login = catchAsync(async (req, res, next) => {
     // find user in database
     const user = await User.findByEmail(email);
 
-    if (!user) {
+    if (!user || user.status === 0) {
         throw new ErrorInterceptor({
             type: ErrorType.NOT_FOUND,
             message: 'No user found'
