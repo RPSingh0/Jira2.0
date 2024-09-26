@@ -1,26 +1,55 @@
-import {AppBar, Avatar, Box, Button, IconButton, Toolbar, Tooltip} from "@mui/material";
+import {AppBar, Avatar, Box, IconButton, styled, Toolbar, Tooltip, useMediaQuery, useTheme} from "@mui/material";
 import Logo from "../logo/Logo.jsx";
-import {TextButton} from "../button/Buttons.jsx";
+import {ContainedButton, TextButton} from "../button/Buttons.jsx";
+
+const StyledNavButtonBox = styled(Box)(() => ({
+    flexGrow: 1,
+    display: {xs: 'none', md: 'flex'},
+    gap: "1rem",
+    padding: "0 1rem 0 1rem"
+}));
+
+const StyledEmptyContainer = styled(Box)(() => ({
+    flexGrow: 1
+}));
+
+const StyledUserProfileBox = styled(Box)(() => ({
+    flexGrow: 0
+}));
 
 function Navbar() {
+
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up('sm'));
+
     return (
         <AppBar position="static" color={"transparent"} elevation={1}>
             <Toolbar>
-                {/* add logo here*/}
-                <Logo imageName={"main"} containerPadding={"0"} imageHeight={"1.5rem"}/>
-                <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}, gap:"1rem", padding: "0 1rem 0 1rem"}}>
+                {/* Logo (based on screen size) */}
+                <Logo
+                    imageName={matches ? "logo" : "main"}
+                    containerPadding={"0"}
+                    imageHeight={"1.5rem"}
+                />
+
+                {/* Buttons on right side of Logo */}
+                <StyledNavButtonBox>
                     <TextButton text={"Projects"}/>
                     <TextButton text={"Teams"}/>
-                    <Button variant="contained">Create</Button>
-                </Box>
-                <Box sx={{flexGrow: 1}}/>
-                <Box sx={{flexGrow: 0}}>
+                    <ContainedButton text={"Create"}/>
+                </StyledNavButtonBox>
+
+                {/* Empty container to take up remaining space */}
+                <StyledEmptyContainer/>
+
+                {/* User profile container and image */}
+                <StyledUserProfileBox>
                     <Tooltip title="Account - To be done">
                         <IconButton onClick={() => console.log('To be done')} sx={{p: 0}}>
                             <Avatar alt="user-avatar" src=""/>
                         </IconButton>
                     </Tooltip>
-                </Box>
+                </StyledUserProfileBox>
             </Toolbar>
         </AppBar>
     );
