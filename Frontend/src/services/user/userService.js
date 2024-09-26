@@ -9,6 +9,7 @@ const URL = `${import.meta.env.VITE_BACKEND_URL}/api/v1/user`;
  * @throws {Error} Error if login is unsuccessful
  */
 export async function loginUserService({email, password}) {
+
     let data = await fetch(`${URL}/login`, {
         method: 'POST',
         headers: {

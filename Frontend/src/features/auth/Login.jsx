@@ -1,10 +1,12 @@
 import {Alert, Box, Button, Divider, Paper, styled, TextField, Typography} from "@mui/material";
 import {getFormData} from "../../utils/FormUtils.js";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useLogin} from "./useLogin.js";
 import {NavLink, useNavigate} from "react-router-dom";
-import Logo from "../../components/Logo.jsx";
+import Logo from "../../components/logo/Logo.jsx";
 import {toast} from "react-toastify";
+import {useSelector} from "react-redux";
+import {isLoggedIn} from "../../services/user/authenticationSlice.js";
 
 const StyledLoginBox = styled(Box)(() => ({
     display: "flex",
@@ -44,6 +46,13 @@ function Login() {
     const [alertText, setAlertText] = useState('');
     const navigate = useNavigate();
     const {loginUser, isLoggingIn} = useLogin();
+    const isUserLoggedIn = useSelector(isLoggedIn);
+
+    useEffect(() => {
+        if (isUserLoggedIn) {
+            navigate('/');
+        }
+    }, [isUserLoggedIn, navigate]);
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -72,8 +81,8 @@ function Login() {
     return (
         <StyledLoginBox>
             <StyledFormPaper elevation={2}>
-                <Logo/>
-                <Typography variant={"body1"} sx={{paddingBottom: "0.5rem"}}>
+                <Logo imageName={"logo"} containerPadding={"0 0 1rem 0"} imageHeight={"2rem"}/>
+                <Typography variant={"body1"} sx={{paddingBottom: "1rem"}}>
                     Log in to continue
                 </Typography>
                 <StyledLoginForm onSubmit={handleSubmit}>
