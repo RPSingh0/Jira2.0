@@ -4,7 +4,7 @@ import {ContainedButton, TextButton} from "../button/Buttons.jsx";
 
 const StyledNavButtonBox = styled(Box)(() => ({
     flexGrow: 1,
-    display: {xs: 'none', md: 'flex'},
+    display: "flex",
     gap: "1rem",
     padding: "0 1rem 0 1rem"
 }));
