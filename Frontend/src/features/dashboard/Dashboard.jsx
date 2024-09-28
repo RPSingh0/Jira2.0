@@ -1,5 +1,6 @@
 import {Box, Divider, styled, Typography} from "@mui/material";
 import YourProjectsSection from "./YourProjectsSection.jsx";
+import WorkSection from "./WorkSection.jsx";
 
 const StyledDashboardBox = styled(Box)(({theme}) => ({
 
@@ -18,6 +19,7 @@ function Dashboard() {
             </Typography>
             <Divider flexItem sx={{marginBottom: "1rem"}}/>
             <YourProjectsSection/>
+            <WorkSection/>
         </StyledDashboardBox>
     );
 }
