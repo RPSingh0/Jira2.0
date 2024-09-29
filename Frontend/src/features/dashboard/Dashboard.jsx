@@ -9,14 +9,18 @@ const StyledDashboardBox = styled(Box)(({theme}) => ({
     }
 }));
 
+const StyledDashboardHeading = styled(Typography)(({theme}) => ({
+    color: theme.palette.defaultBlack.dark
+}));
+
 
 function Dashboard() {
     return (
         // main container for dashboard
         <StyledDashboardBox id={'dashboard-main'}>
-            <Typography variant={'h6'} gutterBottom sx={{color: '#172b4d'}}>
+            <StyledDashboardHeading variant={'h6'} gutterBottom>
                 Your Work
-            </Typography>
+            </StyledDashboardHeading>
             <Divider flexItem sx={{marginBottom: "1rem"}}/>
             <YourProjectsSection/>
             <WorkSection/>

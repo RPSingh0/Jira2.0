@@ -92,6 +92,7 @@ function Login() {
                         label="Email"
                         type={"email"}
                         disabled={isLoggingIn}
+                        size={"small"}
                     />
                     <TextField
                         id="user-password-input"
@@ -99,6 +100,7 @@ function Login() {
                         label="Password"
                         type={"password"}
                         disabled={isLoggingIn}
+                        size={"small"}
                     />
                     <StyledLoginSubmitButton
                         type="submit"

@@ -6,6 +6,7 @@ import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 import ProtectedRoute from "./features/auth/ProtectedRoute.jsx";
 import AppLayout from "./components/appLayout/AppLayout.jsx";
 import Dashboard from "./features/dashboard/Dashboard.jsx";
+import Projects from "./features/projects/Projects.jsx";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -23,12 +24,10 @@ function App() {
                 <Routes>
                     <Route index path={"welcome"} element={<WelcomeHome/>}/>
                     <Route path={"login"} element={<Login/>}/>
-                    <Route path={"/"} element={
-                        <ProtectedRoute>
-                            <AppLayout/>
-                        </ProtectedRoute>}>
+                    <Route path={"/"} element={<ProtectedRoute><AppLayout/></ProtectedRoute>}>
                         <Route index element={<Navigate replace to={"dashboard"}/>}/>
                         <Route path={"dashboard"} element={<Dashboard/>}/>
+                        <Route path={"projects"} element={<Projects/>}/>
                     </Route>
                 </Routes>
             </BrowserRouter>

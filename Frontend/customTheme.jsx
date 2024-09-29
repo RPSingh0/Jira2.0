@@ -8,6 +8,13 @@ const customTheme = createTheme({
             light: '#626f86',
             dark: '#172b4d',
         }
+    },
+    breakpoints: {
+        values: {
+            ...createTheme().breakpoints.values,
+            c500: 500,
+            c375: 375
+        }
     }
 });
 

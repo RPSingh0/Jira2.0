@@ -1,10 +1,11 @@
 import {AppBar, Avatar, Box, IconButton, styled, Toolbar, Tooltip, useMediaQuery, useTheme} from "@mui/material";
 import Logo from "../logo/Logo.jsx";
-import {ContainedButton, TextButton} from "../button/Buttons.jsx";
+import {ContainedButton, NavLinkButton, TextButton} from "../button/Buttons.jsx";
 
 const StyledNavButtonBox = styled(Box)(() => ({
     flexGrow: 1,
     display: "flex",
+    alignItems: "center",
     gap: "1rem",
     padding: "0 1rem 0 1rem"
 }));
@@ -34,7 +35,7 @@ function Navbar() {
 
                 {/* Buttons on right side of Logo */}
                 <StyledNavButtonBox>
-                    <TextButton text={"Projects"}/>
+                    <NavLinkButton text={"Projects"} link={"/projects"}/>
                     <TextButton text={"Teams"}/>
                     <ContainedButton text={"Create"}/>
                 </StyledNavButtonBox>
