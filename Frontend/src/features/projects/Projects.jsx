@@ -1,8 +1,7 @@
 import {Box, Divider, styled, Typography} from "@mui/material";
 import {ContainedButton} from "../../components/button/Buttons.jsx";
 import SearchProjects from "./SearchProjects.jsx";
-import ProjectsTableHeader from "./ProjectsTableHeader.jsx";
-import ProjectItem from "./ProjectItem.jsx";
+import ProjectCard from "./ProjectCard.jsx";
 
 const StyledProjectsBox = styled(Box)(({theme}) => ({
 
@@ -26,13 +25,23 @@ const StyledProjectsHeading = styled(Typography)(({theme}) => ({
 }));
 
 const StyledDivider = styled(Divider)(() => ({
+    marginTop: "2rem",
     marginBottom: "1rem"
 }));
 
-const StyledProjectItemContainerBox = styled(Box)(() => ({
-    display: "flex",
-    flexDirection: "column",
-    gap: "1rem"
+const StyledProjectCardContainerBox = styled(Box)(({theme}) => ({
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr 1fr",
+    columnGap: "1rem",
+    rowGap: "1rem",
+
+    [theme.breakpoints.down('c1360')]: {
+        gridTemplateColumns: "1fr 1fr"
+    },
+
+    [theme.breakpoints.down('c1000')]: {
+        gridTemplateColumns: "1fr"
+    }
 }));
 
 function Projects() {
@@ -46,17 +55,16 @@ function Projects() {
             </StyledProjectsHeaderBox>
             <SearchProjects/>
 
-            {/* Table (kind-of) heading start here */}
-            {/* Table header */}
-            <ProjectsTableHeader/>
             <StyledDivider/>
-            {/* Table Data Container */}
-            <StyledProjectItemContainerBox>
-                <ProjectItem/>
-                <ProjectItem/>
-                <ProjectItem/>
-                <ProjectItem/>
-            </StyledProjectItemContainerBox>
+
+            <StyledProjectCardContainerBox>
+                <ProjectCard/>
+                <ProjectCard/>
+                <ProjectCard/>
+                <ProjectCard/>
+
+            </StyledProjectCardContainerBox>
+
         </StyledProjectsBox>
     );
 }

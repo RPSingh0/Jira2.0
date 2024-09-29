@@ -12,8 +12,10 @@ const customTheme = createTheme({
     breakpoints: {
         values: {
             ...createTheme().breakpoints.values,
+            c375: 375,
             c500: 500,
-            c375: 375
+            c1000: 1000,
+            c1360: 1360
         }
     }
 });
