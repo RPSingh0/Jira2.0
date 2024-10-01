@@ -19,6 +19,11 @@ const StyledNavLinkButton = styled(Button)(({theme}) => ({
     color: theme.palette.defaultBlack.main
 }));
 
+const StyledContainedNavLinkButton = styled(Button)(({theme}) => ({
+    fontWeight: "bold",
+    fontSize: "0.8rem"
+}));
+
 export function TextButton({text, onClickHandler}) {
 
     const theme = useTheme();
@@ -52,6 +57,19 @@ export function NavLinkButton({text, link}) {
             <StyledNavLinkButton variant={"text"} size={matches ? "small" : "medium"}>
                 {text}
             </StyledNavLinkButton>
+        </NavLink>
+    );
+}
+
+export function ContainedNavLinkButton({text, link}) {
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.down('sm'));
+
+    return (
+        <NavLink to={link}>
+            <StyledContainedNavLinkButton variant={"contained"} size={matches ? "small" : "medium"}>
+                {text}
+            </StyledContainedNavLinkButton>
         </NavLink>
     );
 }

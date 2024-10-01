@@ -1,5 +1,5 @@
 import {Box, Divider, styled, Typography} from "@mui/material";
-import {ContainedButton} from "../../components/button/Buttons.jsx";
+import {ContainedNavLinkButton} from "../../components/button/Buttons.jsx";
 import SearchProjects from "./SearchProjects.jsx";
 import ProjectCard from "./ProjectCard.jsx";
 
@@ -51,7 +51,7 @@ function Projects() {
                 <StyledProjectsHeading variant="h6">
                     Projects
                 </StyledProjectsHeading>
-                <ContainedButton text={"Create Project"}/>
+                <ContainedNavLinkButton text={"Create Project"} link={"create"}/>
             </StyledProjectsHeaderBox>
             <SearchProjects/>
 

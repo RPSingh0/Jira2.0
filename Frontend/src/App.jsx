@@ -7,6 +7,7 @@ import ProtectedRoute from "./features/auth/ProtectedRoute.jsx";
 import AppLayout from "./components/appLayout/AppLayout.jsx";
 import Dashboard from "./features/dashboard/Dashboard.jsx";
 import Projects from "./features/projects/Projects.jsx";
+import CreateProject from "./features/projects/CreateProject.jsx";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -27,7 +28,10 @@ function App() {
                     <Route path={"/"} element={<ProtectedRoute><AppLayout/></ProtectedRoute>}>
                         <Route index element={<Navigate replace to={"dashboard"}/>}/>
                         <Route path={"dashboard"} element={<Dashboard/>}/>
-                        <Route path={"projects"} element={<Projects/>}/>
+                        <Route path={"projects"}>
+                            <Route index element={<Projects/>}/>
+                            <Route path={"create"} element={<CreateProject/>}/>
+                        </Route>
                     </Route>
                 </Routes>
             </BrowserRouter>
