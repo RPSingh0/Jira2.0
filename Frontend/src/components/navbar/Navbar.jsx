@@ -24,7 +24,7 @@ function Navbar() {
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
 
     return (
-        <AppBar position="static" color={"transparent"} elevation={1}>
+        <AppBar position="sticky" color={"default"} elevation={1}>
             <Toolbar>
                 {/* Logo (based on screen size) */}
                 <Logo
