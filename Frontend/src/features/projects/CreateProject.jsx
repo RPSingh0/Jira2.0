@@ -4,6 +4,8 @@ import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 import TextEditor from "../../components/editor/Editor.jsx";
 import {getFormData} from "../../utils/FormUtils.js";
 import useDefaultEditor from "../../components/editor/useDefaultEditor.js";
+import AutocompleteSelector from "./AutocompleteSelector.jsx";
+import {useState} from "react";
 
 const StyledCreateProjectContainer = styled(Box)(() => ({
     display: "flex",
@@ -69,6 +71,9 @@ const StyledImage = styled('img')(({theme}) => ({
 function CreateProject() {
 
     const creatProjectEditor = useDefaultEditor('Description for project');
+    const [isLoadingUser, setIsLoadingUser] = useState(true);
+    const [users, setUsers] = useState([])
+    const [projectLead, setProjectLead] = useState(null);
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -79,6 +84,15 @@ function CreateProject() {
         const editorData = creatProjectEditor.getHTML();
         console.log(editorData);
     }
+
+    setTimeout(() => {
+        setUsers([
+            {name: 'john_doe', visibleName: 'john_doe', avatar: 'https://i.pravatar.cc/150?img=1'},
+            {name: 'jane_smith', visibleName: 'jane_smith', avatar: 'https://i.pravatar.cc/150?img=2'},
+            {name: 'michael_brown', visibleName: 'michael_brown', avatar: 'https://i.pravatar.cc/150?img=3'},
+        ]);
+        setIsLoadingUser(false);
+    }, 3000);
 
     return (
         // main container
@@ -98,6 +112,19 @@ function CreateProject() {
                         },
                     }} defaultValue={"taken from project name"}/>
                     <TextEditor editor={creatProjectEditor}/>
+
+                    <AutocompleteSelector
+                        name={"lead"}
+                        label={"Project Lead"}
+                        options={users}
+                        avatarNameKey={'name'}
+                        avatarSourceKey={'avatar'}
+                        optionText={'visibleName'}
+                        isLoading={isLoadingUser}
+                        value={projectLead}
+                        setValue={setProjectLead}
+                    />
+
                     <ProjectDatePicker name={"startDate"} label={"Start Date"}/>
                     <ProjectDatePicker name={"endDate"} label={"Expected End Date"}/>
                     <Button type={"submit"} variant={"contained"}>Create</Button>
@@ -111,7 +138,6 @@ function CreateProject() {
         </StyledCreateProjectContainer>
     );
 }
-
 
 function TextFieldInput({name, label, ...extras}) {
     return (
@@ -134,7 +160,13 @@ function ProjectDatePicker({name, label}) {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker name={name} label={label}
-                        slotProps={{textField: {size: "small", required: true, sx: (theme) => ({'input': {color: theme.palette.defaultBlack.main}})}}}/>
+                        slotProps={{
+                            textField: {
+                                size: "small",
+                                required: true,
+                                sx: (theme) => ({'input': {color: theme.palette.defaultBlack.main}})
+                            }
+                        }}/>
         </LocalizationProvider>
     );
 }
