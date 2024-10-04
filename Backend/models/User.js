@@ -219,7 +219,7 @@ class User {
      * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
      */
     static async findById(id) {
-        const query = 'SELECT id, email, password, status FROM user WHERE id = ?';
+        const query = 'SELECT id, email, password, status, password_changed_at FROM user WHERE id = ?';
 
         try {
             const [results] = await dbPromise.execute(query, [id]);
@@ -256,6 +256,27 @@ class User {
     }
 
     /**
+     * Fetches and returns all users from database
+     *
+     * @returns {Promise<Object>} A promise that resolves with the result of database select operation
+     *
+     * @throws {ErrorInterceptor} Throws error if there is a database error
+     */
+    static async getAllUsers() {
+        const query = 'SELECT id, email FROM user WHERE status = 1';
+
+        try {
+            const [results] = await dbPromise.execute(query);
+            return results;
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error fetching users: ${err.message}`,
+            })
+        }
+    }
+
+    /**
      * Compares login password against the password stored in database
      *
      * @param {string} candidatePassword
@@ -266,6 +287,24 @@ class User {
      */
     static async comparePassword(candidatePassword, userPassword) {
         return await bcrypt.compare(candidatePassword, userPassword);
+    }
+
+    /**
+     * Checks if user changed password after token is issued
+     *
+     * @param {string} passwordChangedAt
+     *
+     * @param {string} tokenIssuedAt
+     *
+     * @returns {Boolean} A boolean representing result
+     */
+    static passwordChangedAfterTokenIssued(passwordChangedAt, tokenIssuedAt) {
+        if (passwordChangedAt) {
+            const changedTimestamp = parseInt(new Date(passwordChangedAt).getTime() / 1000, 10);
+            return tokenIssuedAt < changedTimestamp;
+        }
+
+        return false;
     }
 }
 

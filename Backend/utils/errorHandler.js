@@ -31,6 +31,15 @@ module.exports = (err, req, res, next) => {
     }
 
     /**
+     * All the `forbidden` errors will end up here
+     */
+    if (err.type === ErrorType.FORBIDDEN) {
+        return Response.forbidden403(res, {
+            message: err.message
+        });
+    }
+
+    /**
      * All the `not found` errors will end up here
      */
     if (err.type === ErrorType.NOT_FOUND) {

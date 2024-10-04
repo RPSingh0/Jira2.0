@@ -20,6 +20,13 @@ class Response {
         });
     }
 
+    static forbidden403(res, data) {
+        res.status(403).json({
+            status: 'fail',
+            message: data.message
+        });
+    }
+
     static notFound404(res, data) {
         res.status(404).json({
             status: 'fail',

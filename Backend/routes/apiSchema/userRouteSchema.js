@@ -71,4 +71,24 @@
  *             token:
  *               type: string
  *               description: The jwt auth token for user
+ *     GetAllUsersSuccess:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *           description: The status for this request
+ *         data:
+ *           type: object
+ *           properties:
+ *             users:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     description: The id of the user
+ *                   email:
+ *                     type: string
+ *                     description: The email of the user
  */

@@ -36,6 +36,12 @@ const router = express.Router();
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/create')
     .post(userController.createUser);
@@ -71,14 +77,63 @@ router.route('/create')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Unauthorized'
+ *       403:
+ *         description: Forbidden
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Forbidden'
  *       404:
- *         description: Unauthorized
+ *         description: Not Found
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/NotFound'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/login')
     .post(authenticationController.login);
+
+/**
+ * @swagger
+ * /user/getAllUsers:
+ *   get:
+ *     security:
+ *       - Authorization: []
+ *     summary: Get all users
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description: Users retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GetAllUsersSuccess'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Unauthorized'
+ *       403:
+ *         description: Forbidden
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Forbidden'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/getAllUsers')
+    .get(authenticationController.authenticate, userController.getAllUsers);
 
 module.exports = router;
