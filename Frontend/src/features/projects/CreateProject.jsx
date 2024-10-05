@@ -8,6 +8,7 @@ import AutocompleteSelector from "./AutocompleteSelector.jsx";
 import {useState} from "react";
 import {getAllUsersService} from "../../services/user/userService.js";
 import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
+import {toast} from "react-toastify";
 
 const StyledCreateProjectContainer = styled(Box)(() => ({
     display: "flex",
@@ -87,12 +88,20 @@ function CreateProject() {
 
     function handleSubmit(event) {
         event.preventDefault();
+
+        if (projectLead === null) {
+            toast.error('Please select a lead');
+            return;
+        }
+
         console.log(event.target);
         const data = getFormData(event.target);
         console.log(data);
 
         const editorData = creatProjectEditor.getHTML();
         console.log(editorData);
+
+        console.log(projectLead);
     }
 
     return (
@@ -120,7 +129,7 @@ function CreateProject() {
                         options={(isLoadingUsers || usersForLeadError) ? [] : usersForLead.data.users}
                         avatarNameKey={'name'}
                         avatarSourceKey={'avatar'}
-                        optionText={'visibleName'}
+                        optionText={'name'}
                         isLoading={isLoadingUsers}
                         value={projectLead}
                         setValue={setProjectLead}

@@ -1,9 +1,7 @@
 import {Autocomplete, Avatar, CircularProgress, ListItem, ListItemAvatar, ListItemText, TextField} from "@mui/material";
 
-function AutocompleteSelector({
-                                  options, name, label, avatarNameKey, avatarSourceKey, optionText, isLoading,
-                                  value, setValue
-                              }) {
+function AutocompleteSelector({options, name, label, avatarNameKey, avatarSourceKey, optionText, isLoading, value, setValue}) {
+
     return (
         <Autocomplete
             fullWidth={true}
@@ -11,10 +9,11 @@ function AutocompleteSelector({
             name={name}
             value={value}
             onChange={(event, newValue) => {
-                setValue(newValue);
+                setValue(newValue ? newValue : null);
             }}
-            getOptionLabel={(option) => option.name}
-
+            getOptionLabel={(option) => {
+                return option[optionText] || ""
+            }}
             renderOption={(props, option) => {
                 const {key, ...other} = props;
                 return (
@@ -26,7 +25,6 @@ function AutocompleteSelector({
                     </ListItem>
                 );
             }}
-
             renderInput={(params) => <TextField
                 {...params}
                 label={label}
