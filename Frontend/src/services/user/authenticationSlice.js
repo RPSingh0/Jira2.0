@@ -20,8 +20,8 @@ const authenticationSlice = createSlice({
     }
 });
 
-export const getAuthToken = state => state.authentication.token;
-export const isLoggedIn = state => state.authentication.isLoggedIn;
+export const getAuthToken = state => state.authentication?.token;
+export const isLoggedIn = state => state.authentication?.isLoggedIn;
 
 export const {login, logout} = authenticationSlice.actions;
 export default authenticationSlice.reducer;

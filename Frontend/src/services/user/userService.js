@@ -29,3 +29,20 @@ export async function loginUserService({email, password}) {
 
     return data;
 }
+
+export async function authenticateUserWithTokenService({token}) {
+    let data = await fetch(`${URL}/validateToken`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    if (data.status !== 204) {
+        data = await data.json();
+        throw new Error(data.message);
+    }
+
+    return data;
+}
