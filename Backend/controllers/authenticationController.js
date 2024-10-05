@@ -69,7 +69,16 @@ exports.authenticate = catchAsync(async (req, res, next) => {
     }
 
     // validate token
-    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRETE);
+    let decoded = null;
+
+    try {
+        decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRETE);
+    } catch (error) {
+        throw new ErrorInterceptor({
+            type: ErrorType.UNAUTHORIZED,
+            message: 'Invalid token'
+        });
+    }
 
     // check if user exists
     const currentUser = await User.findById(decoded.id);
@@ -101,4 +110,8 @@ exports.authenticate = catchAsync(async (req, res, next) => {
     // #IMPORTANT Adding this user to request object, and it will be carried forward in next middleware
     req.user = currentUser;
     next();
+});
+
+exports.validateToken = catchAsync(async (req, res, next) => {
+    Response.ok204(res);
 });

@@ -101,6 +101,39 @@ router.route('/login')
 
 /**
  * @swagger
+ * /user/validateToken:
+ *   get:
+ *     security:
+ *       - Authorization: []
+ *     summary: Validate token
+ *     tags: [User]
+ *     responses:
+ *       204:
+ *         description: Token is verified
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Unauthorized'
+ *       403:
+ *         description: Forbidden
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Forbidden'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/validateToken')
+    .get(authenticationController.authenticate, authenticationController.validateToken);
+
+/**
+ * @swagger
  * /user/getAllUsers:
  *   get:
  *     security:

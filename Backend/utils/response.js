@@ -6,6 +6,10 @@ class Response {
         });
     }
 
+    static ok204(res) {
+        res.status(204).send();
+    }
+
     static badRequest400(res, data) {
         res.status(400).json({
             status: 'fail',
