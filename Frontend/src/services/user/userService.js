@@ -51,3 +51,27 @@ export async function authenticateUserWithTokenService({token}) {
         throw new Error(data.message);
     }
 }
+
+/**
+ * Get all users in system
+ *
+ * @returns {Promise<*>}
+ * @throws {Error} Error if unable to fetch or if token is invalid
+ */
+export async function getAllUsersService({token}) {
+    let data = await fetch(`${URL}/getAllUsers`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    data = await data.json();
+
+    if (data && data.status === 'fail') {
+        throw new Error(data.message);
+    }
+
+    return data;
+}

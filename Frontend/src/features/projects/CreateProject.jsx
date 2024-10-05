@@ -6,6 +6,8 @@ import {getFormData} from "../../utils/FormUtils.js";
 import useDefaultEditor from "../../components/editor/useDefaultEditor.js";
 import AutocompleteSelector from "./AutocompleteSelector.jsx";
 import {useState} from "react";
+import {getAllUsersService} from "../../services/user/userService.js";
+import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
 
 const StyledCreateProjectContainer = styled(Box)(() => ({
     display: "flex",
@@ -71,9 +73,17 @@ const StyledImage = styled('img')(({theme}) => ({
 function CreateProject() {
 
     const creatProjectEditor = useDefaultEditor('Description for project');
-    const [isLoadingUser, setIsLoadingUser] = useState(true);
-    const [users, setUsers] = useState([])
     const [projectLead, setProjectLead] = useState(null);
+
+    // getting all users in system for lead selection
+    const {
+        isLoading: isLoadingUsers,
+        data: usersForLead,
+        error: usersForLeadError
+    } = useGetQueryHook({
+        key: ['usersForLead'],
+        fn: getAllUsersService
+    });
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -84,15 +94,6 @@ function CreateProject() {
         const editorData = creatProjectEditor.getHTML();
         console.log(editorData);
     }
-
-    setTimeout(() => {
-        setUsers([
-            {name: 'john_doe', visibleName: 'john_doe', avatar: 'https://i.pravatar.cc/150?img=1'},
-            {name: 'jane_smith', visibleName: 'jane_smith', avatar: 'https://i.pravatar.cc/150?img=2'},
-            {name: 'michael_brown', visibleName: 'michael_brown', avatar: 'https://i.pravatar.cc/150?img=3'},
-        ]);
-        setIsLoadingUser(false);
-    }, 3000);
 
     return (
         // main container
@@ -116,11 +117,11 @@ function CreateProject() {
                     <AutocompleteSelector
                         name={"lead"}
                         label={"Project Lead"}
-                        options={users}
+                        options={(isLoadingUsers || usersForLeadError) ? [] : usersForLead.data.users}
                         avatarNameKey={'name'}
                         avatarSourceKey={'avatar'}
                         optionText={'visibleName'}
-                        isLoading={isLoadingUser}
+                        isLoading={isLoadingUsers}
                         value={projectLead}
                         setValue={setProjectLead}
                     />
