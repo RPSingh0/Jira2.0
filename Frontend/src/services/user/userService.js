@@ -30,6 +30,13 @@ export async function loginUserService({email, password}) {
     return data;
 }
 
+/**
+ * Takes token and validates it
+ *
+ * @param {string} token
+ * @returns {Promise<*>}
+ * @throws {Error} Error if token is invalid
+ */
 export async function authenticateUserWithTokenService({token}) {
     let data = await fetch(`${URL}/validateToken`, {
         method: 'GET',
@@ -43,6 +50,4 @@ export async function authenticateUserWithTokenService({token}) {
         data = await data.json();
         throw new Error(data.message);
     }
-
-    return data;
 }
