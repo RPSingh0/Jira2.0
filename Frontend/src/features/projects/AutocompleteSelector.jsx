@@ -28,6 +28,7 @@ function AutocompleteSelector({options, name, label, avatarNameKey, avatarSource
             renderInput={(params) => <TextField
                 {...params}
                 label={label}
+                placeholder={"Unassigned"}
                 slotProps={{
                     input: {
                         ...params.InputProps,

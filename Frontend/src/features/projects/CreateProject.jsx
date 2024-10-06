@@ -115,13 +115,22 @@ function CreateProject() {
 
                 {/* Actual Form */}
                 <StyledCreateProjectForm onSubmit={handleSubmit}>
-                    <TextFieldInput name={"name"} label={"Project Name"}/>
-                    <TextFieldInput name={"projectKey"} label={"Project Key"} slotProps={{
+                    <TextFieldInput
+                        name={"name"}
+                        label={"Project Name"}
+                    />
+                    <TextFieldInput
+                        name={"projectKey"}
+                        label={"Project Key"}
+                        slotProps={{
                         input: {
                             readOnly: true,
                         },
-                    }} defaultValue={"taken from project name"}/>
-                    <TextEditor editor={creatProjectEditor}/>
+                    }}
+                        defaultValue={"taken from project name"}/>
+                    <TextEditor
+                        editor={creatProjectEditor}
+                    />
 
                     <AutocompleteSelector
                         name={"lead"}
@@ -135,9 +144,16 @@ function CreateProject() {
                         setValue={setProjectLead}
                     />
 
-                    <ProjectDatePicker name={"startDate"} label={"Start Date"}/>
-                    <ProjectDatePicker name={"endDate"} label={"Expected End Date"}/>
-                    <Button type={"submit"} variant={"contained"}>Create</Button>
+                    <ProjectDatePicker
+                        name={"startDate"}
+                        label={"Start Date"}/>
+                    <ProjectDatePicker
+                        name={"endDate"}
+                        label={"Expected End Date"}
+                    />
+                    <Button type={"submit"} variant={"contained"}>
+                        Create
+                    </Button>
                 </StyledCreateProjectForm>
             </StyledCreateProjectContentBox>
 
