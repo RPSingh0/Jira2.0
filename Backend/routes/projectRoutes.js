@@ -23,7 +23,7 @@ const router = express.Router();
  *             $ref: '#/components/schemas/ProjectCreate'
  *     responses:
  *       201:
- *         description: User registered successfully
+ *         description: Project created successfully
  *         content:
  *           application/json:
  *             schema:
@@ -48,7 +48,7 @@ router.route('/create')
  * @swagger
  * /project/getProjectKey:
  *   post:
- *     summary: Creates a new project for the application
+ *     summary: Generates a new project key using project name
  *     tags: [Project]
  *     requestBody:
  *       required: true
@@ -58,7 +58,7 @@ router.route('/create')
  *             $ref: '#/components/schemas/GetProjectKey'
  *     responses:
  *       201:
- *         description: User registered successfully
+ *         description: Project key generated successfully
  *         content:
  *           application/json:
  *             schema:
