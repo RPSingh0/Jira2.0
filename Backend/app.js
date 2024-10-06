@@ -5,6 +5,7 @@ const globalErrorHandler = require('./utils/errorHandler');
 const swaggerUi = require('swagger-ui-express');
 const specs = require("./swaggerInit");
 const userRouter = require('./routes/userRoutes');
+const projectRouter = require('./routes/projectRoutes');
 
 const app = express();
 app.use(cors());
@@ -29,6 +30,7 @@ app.use(express.json());
  * Application routes
  */
 app.use('/api/v1/user', userRouter);
+app.use('/api/v1/project', projectRouter);
 
 /**
  * If path is not defined, raising error which will be caught by global exception handler

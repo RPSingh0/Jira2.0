@@ -47,4 +47,11 @@ module.exports = (err, req, res, next) => {
             message: err.message
         })
     }
+
+    /**
+     * All other errors will end up here
+     */
+    Response.internalServer500(res, {
+        message: err.message
+    });
 }

@@ -29,24 +29,15 @@
  *     UserCreateSuccess:
  *       type: object
  *       properties:
- *       status:
- *         type: string
- *         description: The status for this request
- *       data:
- *         type: object
- *         properties:
- *           firstName:
- *             type: string
- *             description: The first name of the user
- *           lastName:
- *             type: string
- *             description: The last name of the user
- *           email:
- *             type: string
- *             description: The email address of the user
- *           status:
- *             type: string
- *             description: The active/inactive status of the user
+ *         status:
+ *           type: string
+ *           description: The status for this request
+ *         data:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: number
+ *               description: The id of the user created
  *     UserLogin:
  *       type: object
  *       required:

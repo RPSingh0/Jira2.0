@@ -16,7 +16,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
 
     const id = await newUser.save();
 
-    Response.ok200(res, {id: id});
+    Response.ok201(res, {id: id});
 });
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {

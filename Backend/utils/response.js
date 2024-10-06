@@ -6,6 +6,13 @@ class Response {
         });
     }
 
+    static ok201(res, data) {
+        res.status(200).json({
+            status: 'success',
+            data: data
+        });
+    }
+
     static ok204(res) {
         res.status(204).send();
     }
@@ -42,7 +49,7 @@ class Response {
         res.status(500).json({
             status: 'fail',
             message: data.message
-        })
+        });
     }
 }
 
