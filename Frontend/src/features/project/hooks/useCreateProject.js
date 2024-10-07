@@ -1,6 +1,6 @@
 import {useMutation} from "@tanstack/react-query";
 import {toast} from "react-toastify";
-import {createProjectService} from "../../services/project/projectService.js";
+import {createProjectService} from "../../../services/project/projectService.js";
 
 export function useCreateProject() {
 

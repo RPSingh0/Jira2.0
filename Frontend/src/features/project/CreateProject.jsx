@@ -10,70 +10,16 @@ import {getAllUsersService} from "../../services/user/userService.js";
 import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
 import {toast} from "react-toastify";
 import useDebounce from "../../hooks/useDebounce.js";
-import {useGetProjectKey} from "./useGetProjectKey.js";
-import {useCreateProject} from "./useCreateProject.js";
+import {useGetProjectKey} from "./hooks/useGetProjectKey.js";
+import {useCreateProject} from "./hooks/useCreateProject.js";
 import {useNavigate} from "react-router-dom";
-
-const StyledCreateProjectContainer = styled(Box)(() => ({
-    display: "flex",
-    padding: "1rem",
-    flexGrow: 1,
-}));
-
-const StyledCreateProjectContentBox = styled(Box)(({theme}) => ({
-    display: "flex",
-    flexDirection: "column",
-    flex: 1,
-    maxWidth: "50%",
-    padding: "1rem 1rem 1rem 0",
-
-    [theme.breakpoints.down("lg")]: {
-        maxWidth: "70%"
-    },
-
-    [theme.breakpoints.down("c800")]: {
-        maxWidth: "100%",
-        padding: "1rem"
-    }
-}));
-
-const StyledCreateProjectHeading = styled(Typography)(({theme}) => ({
-    textTransform: "uppercase",
-    fontWeight: "bold",
-    color: theme.palette.defaultBlack.main,
-    marginBottom: "2rem",
-    textAlign: "center"
-}));
-
-const StyledCreateProjectForm = styled('form')(() => ({
-    display: "flex",
-    flexDirection: "column",
-    gap: "2rem",
-}));
-
-const StyledAsideImageBox = styled(Box)(({theme}) => ({
-    flex: 1,
-    maxWidth: "50%",
-    overflow: "hidden",
-
-    [theme.breakpoints.down("lg")]: {
-        maxWidth: "30%"
-    },
-
-    [theme.breakpoints.down("c800")]: {
-        display: "none"
-    }
-}));
-
-const StyledImage = styled('img')(({theme}) => ({
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-
-    [theme.breakpoints.down("c800")]: {
-        display: "none"
-    }
-}));
+import {
+    StyledCreateProjectAsideImageBox,
+    StyledCreateProjectContainer,
+    StyledCreateProjectContentBox, StyledCreateProjectForm,
+    StyledCreateProjectHeading, StyledCreateProjectImage
+} from "./CreateProjectStyles.jsx";
+import {ProjectDatePicker, TextFieldInput} from "./CreateProjectComponents.jsx";
 
 function CreateProject() {
 
@@ -198,42 +144,10 @@ function CreateProject() {
             </StyledCreateProjectContentBox>
 
             {/* Image Section */}
-            <StyledAsideImageBox>
-                <StyledImage src={"/new/create_new_project.png"} alt={"new project image"}/>
-            </StyledAsideImageBox>
+            <StyledCreateProjectAsideImageBox>
+                <StyledCreateProjectImage src={"/new/create_new_project.png"} alt={"new project image"}/>
+            </StyledCreateProjectAsideImageBox>
         </StyledCreateProjectContainer>
-    );
-}
-
-function TextFieldInput({name, label, ...extras}) {
-    return (
-        <TextField
-            name={name}
-            label={label}
-            variant="outlined"
-            size="small"
-            required={true}
-            fullWidth={true}
-            sx={(theme) => ({
-                'input': {color: theme.palette.defaultBlack.main}
-            })}
-            {...extras}
-        />
-    );
-}
-
-function ProjectDatePicker({name, label}) {
-    return (
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker name={name} label={label} format={"DD/MM/YYYY"}
-                        slotProps={{
-                            textField: {
-                                size: "small",
-                                required: true,
-                                sx: (theme) => ({'input': {color: theme.palette.defaultBlack.main}})
-                            }
-                        }}/>
-        </LocalizationProvider>
     );
 }
 

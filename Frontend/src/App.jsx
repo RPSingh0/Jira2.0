@@ -7,7 +7,7 @@ import ProtectedRoute from "./features/auth/ProtectedRoute.jsx";
 import AppLayout from "./components/appLayout/AppLayout.jsx";
 import Dashboard from "./features/dashboard/Dashboard.jsx";
 import Projects from "./features/projects/Projects.jsx";
-import CreateProject from "./features/projects/CreateProject.jsx";
+import CreateProject from "./features/project/CreateProject.jsx";
 
 const queryClient = new QueryClient({
     defaultOptions: {

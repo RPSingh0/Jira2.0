@@ -1,9 +1,6 @@
-import {InputAdornment, styled, TextField} from "@mui/material";
+import {InputAdornment} from "@mui/material";
 import {IconMap} from "../../utils/IconMap.jsx";
-
-const StyledSearchProjectsTextField = styled(TextField)(({theme}) => ({
-    input: {color: theme.palette.defaultBlack.main}
-}));
+import {StyledSearchProjectsTextField} from "./SearchProjectsStyles.jsx";
 
 function SearchProjects() {
     return (
