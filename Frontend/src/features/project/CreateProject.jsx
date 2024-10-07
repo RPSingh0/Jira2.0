@@ -1,6 +1,4 @@
-import {Box, Button, styled, TextField, Typography} from "@mui/material";
-import {DatePicker, LocalizationProvider} from "@mui/x-date-pickers";
-import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
+import {Button} from "@mui/material";
 import TextEditor from "../../components/editor/Editor.jsx";
 import {getFormData} from "../../utils/FormUtils.js";
 import useDefaultEditor from "../../components/editor/useDefaultEditor.js";
@@ -16,8 +14,10 @@ import {useNavigate} from "react-router-dom";
 import {
     StyledCreateProjectAsideImageBox,
     StyledCreateProjectContainer,
-    StyledCreateProjectContentBox, StyledCreateProjectForm,
-    StyledCreateProjectHeading, StyledCreateProjectImage
+    StyledCreateProjectContentBox,
+    StyledCreateProjectForm,
+    StyledCreateProjectHeading,
+    StyledCreateProjectImage
 } from "./CreateProjectStyles.jsx";
 import {ProjectDatePicker, TextFieldInput} from "./CreateProjectComponents.jsx";
 
