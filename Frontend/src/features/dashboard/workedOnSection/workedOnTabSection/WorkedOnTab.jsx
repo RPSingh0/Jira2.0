@@ -1,14 +1,4 @@
-import {Box, styled} from "@mui/material";
-
-const StyledWorkedOnTabBox = styled(Box)(() => ({
-    display: "flex"
-}));
-
-const StyledNoItemsContainer = styled('img')(() => ({
-    height: "20rem",
-    margin: "auto",
-    marginTop: "3rem"
-}));
+import {StyledNoItemsContainer, StyledWorkedOnTabBox} from "./WorkedOnTabStyles.jsx";
 
 function WorkedOnTab() {
     return (

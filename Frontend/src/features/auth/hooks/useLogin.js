@@ -1,7 +1,7 @@
 import {useDispatch} from "react-redux";
 import {useMutation} from "@tanstack/react-query";
-import {loginUserService} from "../../services/user/userService.js";
-import {login} from "../../services/user/authenticationSlice.js";
+import {loginUserService} from "../../../services/user/userService.js";
+import {login} from "../../../services/user/authenticationSlice.js";
 import {toast} from "react-toastify";
 
 export function useLogin() {

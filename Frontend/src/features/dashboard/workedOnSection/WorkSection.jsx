@@ -1,27 +1,11 @@
-import {Box, styled, Tab, Tabs} from "@mui/material";
+import {Tabs} from "@mui/material";
 import {useState} from "react";
-import {IconMap} from "../../utils/IconMap.jsx";
-import WorkedOnTab from "./WorkedOnTab.jsx";
-import StoriesTab from "./StoriesTab.jsx";
-import BugsTab from "./BugsTab.jsx";
-
-const StyledWorkedOnSectionBox = styled(Box)(() => ({
-    marginTop: "2rem"
-}));
-
-const StyledTabButtonBox = styled(Box)(({theme}) => ({
-    borderBottom: "1px solid",
-    borderColor: theme.palette.divider
-}));
-
-const StyledTabButton = styled(Tab)(() => ({
-    minHeight: "3rem",
-    fontSize: "0.8rem",
-
-    "& svg": {
-        height: "1.2rem"
-    }
-}));
+import {IconMap} from "../../../utils/IconMap.jsx";
+import WorkedOnTab from "./workedOnTabSection/WorkedOnTab.jsx";
+import StoriesTab from "./storiesTabSection/StoriesTab.jsx";
+import BugsTab from "./bugsTabSection/BugsTab.jsx";
+import {StyledTabButton, StyledTabButtonBox, StyledWorkedOnSectionBox} from "./WorkSectionStyles.jsx";
+import {TabContentContainer} from "./WorkSectionComponents.jsx";
 
 function WorkSection() {
 
@@ -50,14 +34,6 @@ function WorkSection() {
                 <BugsTab/>
             </TabContentContainer>
         </StyledWorkedOnSectionBox>
-    );
-}
-
-function TabContentContainer({value, index, children}) {
-    return (
-        <Box role="tabpanel" hidden={value !== index}>
-            {children}
-        </Box>
     );
 }
 

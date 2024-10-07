@@ -2,7 +2,7 @@ import {useSelector} from "react-redux";
 import {getAuthToken, isLoggedIn} from "../../services/user/authenticationSlice.js";
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
-import {useAuthenticateWithToken} from "./useAuthenticateWithToken.js";
+import {useAuthenticateWithToken} from "./hooks/useAuthenticateWithToken.js";
 
 function ProtectedRoute({children}) {
     const isUserLoggedIn = useSelector(isLoggedIn);

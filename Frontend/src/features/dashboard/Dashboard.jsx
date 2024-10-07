@@ -1,18 +1,7 @@
-import {Box, Divider, styled, Typography} from "@mui/material";
-import YourProjectsSection from "./YourProjectsSection.jsx";
-import WorkSection from "./WorkSection.jsx";
-
-const StyledDashboardBox = styled(Box)(({theme}) => ({
-
-    [theme.breakpoints.up('sm')]: {
-        padding: '2rem'
-    }
-}));
-
-const StyledDashboardHeading = styled(Typography)(({theme}) => ({
-    color: theme.palette.defaultBlack.dark
-}));
-
+import {Divider} from "@mui/material";
+import YourProjectsSection from "./projectSection/YourProjectsSection.jsx";
+import WorkSection from "./workedOnSection/WorkSection.jsx";
+import {StyledDashboardBox, StyledDashboardHeading} from "./DashboardStyles.jsx";
 
 function Dashboard() {
     return (

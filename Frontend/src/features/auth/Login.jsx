@@ -1,52 +1,34 @@
-import {Alert, Box, Button, Divider, Paper, styled, TextField, Typography} from "@mui/material";
+import {Divider, TextField, Typography} from "@mui/material";
 import {getFormData} from "../../utils/FormUtils.js";
 import {useEffect, useState} from "react";
-import {useLogin} from "./useLogin.js";
+import {useLogin} from "./hooks/useLogin.js";
 import {NavLink, useNavigate} from "react-router-dom";
 import Logo from "../../components/logo/Logo.jsx";
 import {toast} from "react-toastify";
 import {useSelector} from "react-redux";
 import {isLoggedIn} from "../../services/user/authenticationSlice.js";
-
-const StyledLoginBox = styled(Box)(() => ({
-    display: "flex",
-    width: "100vw",
-    height: "100vh",
-    alignItems: "center",
-    justifyContent: "center",
-    padding: "1rem",
-}));
-
-const StyledFormPaper = styled(Paper)(() => ({
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    padding: "1.5rem 2rem"
-}));
-
-const StyledLoginForm = styled('form')(() => ({
-    display: "flex",
-    flexDirection: "column",
-    gap: "1rem"
-}));
-
-const StyledLoginSubmitButton = styled(Button)(() => ({
-    marginTop: "1rem"
-}));
-
-const StyledAlert = styled(Alert)(() => ({
-    position: "absolute",
-    bottom: "1rem",
-    left: "1rem"
-}));
+import {
+    StyledAlert,
+    StyledFormPaper,
+    StyledLoginBox,
+    StyledLoginForm,
+    StyledLoginSubmitButton
+} from "./LoginStyles.jsx";
 
 function Login() {
 
+    // Local states for form input management
     const [alert, setAlert] = useState(false);
     const [alertText, setAlertText] = useState('');
-    const navigate = useNavigate();
+
+    // Custom hooks
     const {loginUser, isLoggingIn} = useLogin();
+
+    // Redux selectors
     const isUserLoggedIn = useSelector(isLoggedIn);
+
+    // Other hooks
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (isUserLoggedIn) {

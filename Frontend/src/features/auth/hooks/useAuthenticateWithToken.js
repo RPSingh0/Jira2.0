@@ -1,8 +1,8 @@
 import {useMutation} from "@tanstack/react-query";
-import {authenticateUserWithTokenService} from "../../services/user/userService.js";
+import {authenticateUserWithTokenService} from "../../../services/user/userService.js";
 import {toast} from "react-toastify";
 import {useDispatch} from "react-redux";
-import {logout} from "../../services/user/authenticationSlice.js";
+import {logout} from "../../../services/user/authenticationSlice.js";
 
 export function useAuthenticateWithToken() {
 
