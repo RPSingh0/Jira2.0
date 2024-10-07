@@ -55,7 +55,10 @@ export async function authenticateUserWithTokenService({token}) {
 /**
  * Get all users in system
  *
+ * @param {string} token
+ *
  * @returns {Promise<*>}
+ *
  * @throws {Error} Error if unable to fetch or if token is invalid
  */
 export async function getAllUsersService({token}) {

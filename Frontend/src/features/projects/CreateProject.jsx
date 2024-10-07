@@ -5,10 +5,13 @@ import TextEditor from "../../components/editor/Editor.jsx";
 import {getFormData} from "../../utils/FormUtils.js";
 import useDefaultEditor from "../../components/editor/useDefaultEditor.js";
 import AutocompleteSelector from "./AutocompleteSelector.jsx";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {getAllUsersService} from "../../services/user/userService.js";
 import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
 import {toast} from "react-toastify";
+import useDebounce from "../../hooks/useDebounce.js";
+import {useGetProjectKey} from "./useGetProjectKey.js";
+import {useCreateProject} from "./useCreateProject.js";
 
 const StyledCreateProjectContainer = styled(Box)(() => ({
     display: "flex",
@@ -74,34 +77,56 @@ const StyledImage = styled('img')(({theme}) => ({
 function CreateProject() {
 
     const creatProjectEditor = useDefaultEditor('Description for project');
+    const [projectName, setProjectName] = useState('');
+    const [projectKey, setProjectKey] = useState('');
+    const debouncedProjectName = useDebounce(projectName, 500);
+    const {getProjectKey, isFetchingProjectKey} = useGetProjectKey()
     const [projectLead, setProjectLead] = useState(null);
+    const {createProject, isCreating} = useCreateProject();
 
     // getting all users in system for lead selection
-    const {
-        isLoading: isLoadingUsers,
-        data: usersForLead,
-        error: usersForLeadError
-    } = useGetQueryHook({
+    const {isLoading: isLoadingUsers, data: usersForLead, error: usersForLeadError} = useGetQueryHook({
         key: ['usersForLead'],
         fn: getAllUsersService
     });
 
+    function handleProjectNameChange(event) {
+        setProjectName(event.target.value.trimStart());
+    }
+
+    useEffect(() => {
+
+        if (debouncedProjectName.length === 0) {
+            setProjectKey('');
+            return;
+        }
+
+        getProjectKey({name: debouncedProjectName}, {
+            onSuccess: (data) => {
+                setProjectKey(data.data.projectKey);
+            }
+        });
+    }, [debouncedProjectName]);
+
     function handleSubmit(event) {
         event.preventDefault();
+        const {startDate, expectedEndDate} = getFormData(event.target);
 
         if (projectLead === null) {
             toast.error('Please select a lead');
             return;
         }
 
-        console.log(event.target);
-        const data = getFormData(event.target);
-        console.log(data);
-
         const editorData = creatProjectEditor.getHTML();
-        console.log(editorData);
 
-        console.log(projectLead);
+        createProject({
+            name: projectName,
+            projectKey: projectKey,
+            description: editorData,
+            projectLeadBy: projectLead.id,
+            startDate: startDate,
+            expectedEndDate: expectedEndDate
+        });
     }
 
     return (
@@ -118,16 +143,21 @@ function CreateProject() {
                     <TextFieldInput
                         name={"name"}
                         label={"Project Name"}
+                        value={projectName}
+                        onChange={handleProjectNameChange}
+                        disabled={isCreating}
                     />
                     <TextFieldInput
                         name={"projectKey"}
                         label={"Project Key"}
+                        value={projectKey}
+                        disabled={isFetchingProjectKey || isCreating}
                         slotProps={{
-                        input: {
-                            readOnly: true,
-                        },
-                    }}
-                        defaultValue={"taken from project name"}/>
+                            input: {
+                                readOnly: true,
+                            },
+                        }}
+                    />
                     <TextEditor
                         editor={creatProjectEditor}
                     />
@@ -148,7 +178,7 @@ function CreateProject() {
                         name={"startDate"}
                         label={"Start Date"}/>
                     <ProjectDatePicker
-                        name={"endDate"}
+                        name={"expectedEndDate"}
                         label={"Expected End Date"}
                     />
                     <Button type={"submit"} variant={"contained"}>
