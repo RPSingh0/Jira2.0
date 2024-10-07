@@ -12,6 +12,7 @@ import {toast} from "react-toastify";
 import useDebounce from "../../hooks/useDebounce.js";
 import {useGetProjectKey} from "./useGetProjectKey.js";
 import {useCreateProject} from "./useCreateProject.js";
+import {useNavigate} from "react-router-dom";
 
 const StyledCreateProjectContainer = styled(Box)(() => ({
     display: "flex",
@@ -76,26 +77,32 @@ const StyledImage = styled('img')(({theme}) => ({
 
 function CreateProject() {
 
+    // Initializing editor
     const creatProjectEditor = useDefaultEditor('Description for project');
+
+    // Local states for form input management
     const [projectName, setProjectName] = useState('');
     const [projectKey, setProjectKey] = useState('');
-    const debouncedProjectName = useDebounce(projectName, 500);
-    const {getProjectKey, isFetchingProjectKey} = useGetProjectKey()
     const [projectLead, setProjectLead] = useState(null);
+
+    // Custom debounce project name for delayed project key fetching
+    const debouncedProjectName = useDebounce(projectName, 500);
+
+    // React query custom hooks
+    const {getProjectKey, isFetchingProjectKey} = useGetProjectKey()
     const {createProject, isCreating} = useCreateProject();
 
-    // getting all users in system for lead selection
+    // Other hooks
+    const navigate = useNavigate();
+
+    // Getting all users in system for lead selection
     const {isLoading: isLoadingUsers, data: usersForLead, error: usersForLeadError} = useGetQueryHook({
         key: ['usersForLead'],
         fn: getAllUsersService
     });
 
-    function handleProjectNameChange(event) {
-        setProjectName(event.target.value.trimStart());
-    }
-
+    // Based on debounced value, fetching project key from database
     useEffect(() => {
-
         if (debouncedProjectName.length === 0) {
             setProjectKey('');
             return;
@@ -110,6 +117,7 @@ function CreateProject() {
 
     function handleSubmit(event) {
         event.preventDefault();
+
         const {startDate, expectedEndDate} = getFormData(event.target);
 
         if (projectLead === null) {
@@ -126,6 +134,8 @@ function CreateProject() {
             projectLeadBy: projectLead.id,
             startDate: startDate,
             expectedEndDate: expectedEndDate
+        }, {
+            onSuccess: () => navigate('/dashboard')
         });
     }
 
@@ -144,7 +154,7 @@ function CreateProject() {
                         name={"name"}
                         label={"Project Name"}
                         value={projectName}
-                        onChange={handleProjectNameChange}
+                        onChange={(event) => setProjectName(event.target.value.trimStart())}
                         disabled={isCreating}
                     />
                     <TextFieldInput
@@ -215,7 +225,7 @@ function TextFieldInput({name, label, ...extras}) {
 function ProjectDatePicker({name, label}) {
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker name={name} label={label}
+            <DatePicker name={name} label={label} format={"DD/MM/YYYY"}
                         slotProps={{
                             textField: {
                                 size: "small",
