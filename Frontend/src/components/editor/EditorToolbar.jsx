@@ -1,9 +1,8 @@
 import {Box, Divider, styled} from "@mui/material";
 import {ToolbarItems} from "./ToolbarItems.jsx";
 import React from 'react';
-import {grey} from "@mui/material/colors";
 
-const StyledEditorToolbarBox = styled(Box)(({theme}) => ({
+const StyledEditorToolbarBox = styled(Box)(() => ({
     display: 'flex',
     flexDirection: "row",
     flexWrap: "wrap",

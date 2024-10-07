@@ -19,7 +19,7 @@ const StyledNavLinkButton = styled(Button)(({theme}) => ({
     color: theme.palette.defaultBlack.main
 }));
 
-const StyledContainedNavLinkButton = styled(Button)(({theme}) => ({
+const StyledContainedNavLinkButton = styled(Button)(() => ({
     fontWeight: "bold",
     fontSize: "0.8rem"
 }));
