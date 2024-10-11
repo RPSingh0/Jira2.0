@@ -1,6 +1,7 @@
 import {Button, styled, useMediaQuery, useTheme} from "@mui/material";
 import {grey} from "@mui/material/colors";
 import {NavLink} from "react-router-dom";
+import {IconMap} from "../../utils/IconMap.jsx";
 
 const StyledTextButton = styled(Button)(() => ({
     color: grey["800"],
@@ -68,6 +69,19 @@ export function ContainedNavLinkButton({text, link}) {
     return (
         <NavLink to={link}>
             <StyledContainedNavLinkButton variant={"contained"} size={matches ? "small" : "medium"}>
+                {text}
+            </StyledContainedNavLinkButton>
+        </NavLink>
+    );
+}
+
+export function OutlinedIconNavLinkButton({text, link, startIcon}) {
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.down('sm'));
+
+    return (
+        <NavLink to={link}>
+            <StyledContainedNavLinkButton variant="outlined" size={matches ? "small" : "medium"} startIcon={IconMap[startIcon]}>
                 {text}
             </StyledContainedNavLinkButton>
         </NavLink>

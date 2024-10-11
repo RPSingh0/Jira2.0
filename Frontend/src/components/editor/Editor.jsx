@@ -3,7 +3,7 @@ import {Paper, styled} from "@mui/material";
 import EditorToolbar from "./EditorToolbar.jsx";
 import {grey} from "@mui/material/colors";
 
-const StyledEditorPaper = styled(Paper)(({theme}) => ({
+const StyledEditorPaper = styled(Paper)(({theme, height}) => ({
     padding: "0.5rem",
     border: `1px solid ${grey["400"]}`,
     color: theme.palette.defaultBlack.main,
@@ -11,7 +11,7 @@ const StyledEditorPaper = styled(Paper)(({theme}) => ({
     "& .tiptap.ProseMirror": {
         outline: 'none',
         padding: '0.5rem',
-        height: "12rem",
+        height: height || "12rem",
         maxWidth: "100%",
         wordWrap: "break-word",
         overflowWrap: "break-word",
@@ -96,10 +96,10 @@ const StyledEditorPaper = styled(Paper)(({theme}) => ({
 
 }))
 
-function TextEditor({editor}) {
+function TextEditor({editor, height}) {
 
     return (
-        <StyledEditorPaper elevation={0}>
+        <StyledEditorPaper elevation={0} height={height}>
             <EditorToolbar editor={editor}/>
             <EditorContent editor={editor}/>
         </StyledEditorPaper>

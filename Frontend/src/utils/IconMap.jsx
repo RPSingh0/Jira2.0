@@ -1,8 +1,9 @@
-import {AutoStories, BugReport, Search, WorkHistory} from "@mui/icons-material";
+import {AutoStories, BugReport, FeaturedVideo, Search, WorkHistory} from "@mui/icons-material";
 
 export const IconMap = {
     'work': <WorkHistory/>,
     'userStory': <AutoStories/>,
     'bug': <BugReport/>,
-    'search': <Search/>
+    'search': <Search/>,
+    'feature': <FeaturedVideo/>
 }

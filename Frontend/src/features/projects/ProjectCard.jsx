@@ -18,7 +18,7 @@ function ProjectCard() {
     const match = useMediaQuery(theme.breakpoints.down('c500'));
 
     return (
-        <StyledCardPaper elevation={2}>
+        <StyledCardPaper elevation={2} variant={"outlined"}>
 
             <ProjectProgress/>
 
