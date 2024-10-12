@@ -2,7 +2,7 @@ import {Button} from "@mui/material";
 import TextEditor from "../../components/editor/Editor.jsx";
 import {getFormData} from "../../utils/FormUtils.js";
 import useDefaultEditor from "../../components/editor/useDefaultEditor.js";
-import AutocompleteSelector from "./AutocompleteSelector.jsx";
+import AutocompleteSelector from "../../components/autocomplete/AutocompleteSelector.jsx";
 import {useEffect, useState} from "react";
 import {getAllUsersService} from "../../services/user/userService.js";
 import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
@@ -119,12 +119,10 @@ function CreateProject() {
                     />
 
                     <AutocompleteSelector
+                        variant={'user-avatar'}
                         name={"lead"}
                         label={"Project Lead"}
                         options={(isLoadingUsers || usersForLeadError) ? [] : usersForLead.data.users}
-                        avatarNameKey={'name'}
-                        avatarSourceKey={'avatar'}
-                        optionText={'name'}
                         isLoading={isLoadingUsers}
                         value={projectLead}
                         setValue={setProjectLead}

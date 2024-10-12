@@ -2,7 +2,9 @@ import {useParams} from "react-router-dom";
 import {Box, Divider, Paper, styled, Typography} from "@mui/material";
 import useDefaultEditor from "../../components/editor/useDefaultEditor.js";
 import TextEditor from "../../components/editor/Editor.jsx";
-import {OutlinedIconNavLinkButton} from "../../components/button/Buttons.jsx";
+import {OutlinedButton} from "../../components/button/Buttons.jsx";
+import CreateFeature from "./CreateFeature.jsx";
+import {useState} from "react";
 
 const StyledProjectDetailBox = styled(Box)(() => ({
     display: "flex",
@@ -94,6 +96,8 @@ function ProjectDetail() {
     const {projectKey} = useParams();
     const creatProjectEditor = useDefaultEditor('Description for project');
 
+    const [openCreateFeature, setOpenCreateFeature] = useState(false);
+
     return (
         <StyledProjectDetailBox>
             <StyledProjectDetailHeading variant="h5">
@@ -102,12 +106,10 @@ function ProjectDetail() {
 
             {/* Project Detail Toolbar */}
             <StyledProjectDetailToolbar>
-                <OutlinedIconNavLinkButton
-                    text="Add Feature"
-                    link={`/projects/${projectKey}/feature/create`}
-                    startIcon="feature"
-                />
+                <OutlinedButton text={"Add Feature"} onClickHandler={() => setOpenCreateFeature(true)}/>
             </StyledProjectDetailToolbar>
+            <CreateFeature open={openCreateFeature} setOpen={setOpenCreateFeature} projectId={1}
+                           key={openCreateFeature}/>
 
             {/* Main content container */}
             <StyledProjectDetailContentBox>

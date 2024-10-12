@@ -14,6 +14,11 @@ const StyledContainedButton = styled(Button)(() => ({
     fontSize: "0.8rem"
 }));
 
+const StyledOutlinedButton = styled(Button)(() => ({
+    fontWeight: "bold",
+    fontSize: "0.8rem"
+}));
+
 const StyledNavLinkButton = styled(Button)(({theme}) => ({
     fontWeight: "bold",
     fontSize: "0.8rem",
@@ -46,6 +51,18 @@ export function ContainedButton({text, onClickHandler}) {
         <StyledContainedButton variant={"contained"} onClick={onClickHandler} size={matches ? "small" : "medium"}>
             {text}
         </StyledContainedButton>
+    );
+}
+
+export function OutlinedButton({text, onClickHandler}) {
+
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.down('sm'));
+
+    return (
+        <StyledOutlinedButton variant={"outlined"} onClick={onClickHandler} size={matches ? "small" : "medium"}>
+            {text}
+        </StyledOutlinedButton>
     );
 }
 
