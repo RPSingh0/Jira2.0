@@ -272,6 +272,29 @@ class Project {
             })
         }
     }
+
+    /**
+     * Fetches and returns a single project from database by id
+     *
+     * @param id
+     *
+     * @returns {Promise<Object>} A promise that resolves with the result of database select operation
+     *
+     * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
+     */
+    static async findById(id) {
+        const query = 'SELECT id, name, project_key FROM project WHERE id = ?';
+
+        try {
+            const [results] = await dbPromise.execute(query, [id]);
+            return results[0];
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error fetching project: ${err.message}`,
+            })
+        }
+    }
 }
 
 module.exports = Project;
