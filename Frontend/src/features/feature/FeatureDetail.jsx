@@ -1,8 +1,8 @@
-import {Box, Divider, InputAdornment, styled, TextField, Typography} from "@mui/material";
+import {Box, Divider, styled, Typography} from "@mui/material";
 import TextEditor from "../../components/editor/Editor.jsx";
 import useDefaultEditor from "../../components/editor/useDefaultEditor.js";
-import {IconMap} from "../../utils/IconMap.jsx";
 import FeatureDetailItemCard from "./FeatureDetailItemCard.jsx";
+import Search from "../../components/search/Search.jsx";
 
 const StyledFeatureDetailBox = styled(Box)(() => ({
     display: "flex",
@@ -47,19 +47,7 @@ function FeatureDetail() {
                 <Typography variant="body1" gutterBottom>
                     Stories
                 </Typography>
-                <TextField
-                    sx={(theme) => ({input: {color: theme.palette.defaultBlack.main}, marginBottom: "1rem"})}
-                    variant="outlined"
-                    size="small"
-                    placeholder="Search Stories"
-                    slotProps={{
-                        input: {
-                            endAdornment: <InputAdornment position="end">
-                                {IconMap['search']}
-                            </InputAdornment>,
-                        },
-                    }}
-                />
+                <Search placeholder={"Search stories"}/>
                 <StyledTwoRowGrid>
                     <FeatureDetailItemCard
                         type={'userStory'}
@@ -70,24 +58,15 @@ function FeatureDetail() {
                     />
                 </StyledTwoRowGrid>
             </StyledFeatureDetailStoriesBox>
+
             <Divider/>
+
+            {/* Bugs Box */}
             <Box>
                 <Typography variant="body1" gutterBottom>
                     Bugs
                 </Typography>
-                <TextField
-                    sx={(theme) => ({input: {color: theme.palette.defaultBlack.main}, marginBottom: "1rem"})}
-                    variant="outlined"
-                    size="small"
-                    placeholder="Search Bugs"
-                    slotProps={{
-                        input: {
-                            endAdornment: <InputAdornment position="end">
-                                {IconMap['search']}
-                            </InputAdornment>,
-                        },
-                    }}
-                />
+                <Search placeholder={"Search bugs"}/>
                 <StyledTwoRowGrid>
                     <FeatureDetailItemCard
                         type={"bug"}

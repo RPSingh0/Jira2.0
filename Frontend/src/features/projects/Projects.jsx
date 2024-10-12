@@ -1,5 +1,4 @@
 import {ContainedNavLinkButton} from "../../components/button/Buttons.jsx";
-import SearchProjects from "./SearchProjects.jsx";
 import ProjectCard from "./ProjectCard.jsx";
 import {
     StyledDivider,
@@ -8,6 +7,7 @@ import {
     StyledProjectsHeaderBox,
     StyledProjectsHeading
 } from "./ProjectsStyles.jsx";
+import Search from "../../components/search/Search.jsx";
 
 function Projects() {
     return (
@@ -18,7 +18,7 @@ function Projects() {
                 </StyledProjectsHeading>
                 <ContainedNavLinkButton text={"Create Project"} link={"create"}/>
             </StyledProjectsHeaderBox>
-            <SearchProjects/>
+            <Search placeholder={"Search projects"}/>
 
             <StyledDivider/>
 
