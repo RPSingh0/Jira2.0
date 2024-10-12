@@ -3,7 +3,7 @@ import {Box, Divider, Paper, styled, Typography} from "@mui/material";
 import useDefaultEditor from "../../components/editor/useDefaultEditor.js";
 import TextEditor from "../../components/editor/Editor.jsx";
 import {OutlinedButton} from "../../components/button/Buttons.jsx";
-import CreateFeature from "./CreateFeature.jsx";
+import CreateFeature from "../feature/CreateFeature.jsx";
 import {useState} from "react";
 
 const StyledProjectDetailBox = styled(Box)(() => ({
