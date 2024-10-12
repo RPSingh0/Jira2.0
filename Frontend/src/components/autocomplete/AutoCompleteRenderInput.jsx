@@ -1,5 +1,5 @@
 import {Avatar, TextField} from "@mui/material";
-import {CircularProgressBarSize20} from "../ProgressBars.jsx";
+import {CircularProgressBarSize20} from "../progress/ProgressBars.jsx";
 
 export function AutoCompleteRenderInputWithUserAvatar(params, label, isLoading, value) {
     return (
