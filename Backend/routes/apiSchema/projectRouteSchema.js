@@ -64,4 +64,27 @@
  *           id:
  *             type: number
  *             description: The id of the project created
+ *     GetAllProjectsSuccess:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *           description: The status for this request
+ *         data:
+ *           type: object
+ *           properties:
+ *             projects:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     description: The id of the project
+ *                   projectKey:
+ *                     type: string
+ *                     description: The project key for the project
+ *                   optionText:
+ *                     type: string
+ *                     description: The option text to show for frontend
  */

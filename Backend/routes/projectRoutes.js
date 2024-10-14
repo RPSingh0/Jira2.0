@@ -1,5 +1,6 @@
 const express = require('express');
 const projectController = require('../controllers/projectController');
+const authenticationController = require("../controllers/authenticationController");
 const router = express.Router();
 
 /**
@@ -78,5 +79,34 @@ router.route('/create')
  */
 router.route('/getProjectKey')
     .post(projectController.getProjectKey);
+
+/**
+ * @swagger
+ * /project/getAllProjects:
+ *   get:
+ *     summary: Get all projects from db
+ *     tags: [Project]
+ *     responses:
+ *       200:
+ *         description: Get all projects from db
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GetAllProjectsSuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/getAllProjects')
+    .get(projectController.getAllProjects);
 
 module.exports = router;

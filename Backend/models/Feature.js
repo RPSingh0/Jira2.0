@@ -189,6 +189,29 @@ class Feature {
             })
         }
     }
+
+    /**
+     * Fetches and returns features from database by project key
+     *
+     * @param projectKey
+     *
+     * @returns {Promise<Object>} A promise that resolves with the result of database select operation
+     *
+     * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
+     */
+    static async findFeatureByProjectKey(projectKey) {
+        const query = 'SELECT F.id, F.feature_key AS featureKey, CONCAT(F.feature_key, \' | \', F.name) AS optionText FROM Feature AS F INNER JOIN project AS P ON F.project_id = P.id WHERE P.project_key = ?';
+
+        try {
+            const [results] = await dbPromise.execute(query, [projectKey]);
+            return results;
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error fetching features: ${err.message}`,
+            })
+        }
+    }
 }
 
 module.exports = Feature;

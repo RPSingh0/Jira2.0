@@ -28,6 +28,16 @@ app.use(morgan(':method :fullUrl :status :res[content-length] - :response-time m
 app.use(express.json());
 
 /**
+ * TODO: To be removed on project completion
+ * Added delay to see loading states properly on frontend
+ */
+app.use((req, res, next) => {
+    setTimeout(() => {
+        next();
+    }, 1000);
+})
+
+/**
  * Application routes
  */
 app.use('/api/v1/user', userRouter);

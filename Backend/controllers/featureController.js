@@ -26,3 +26,16 @@ exports.createFeature = catchAsync(async (req, res, next) => {
 
     Response.ok201(res, {id: id});
 });
+
+exports.getAllFeaturesByProjectKey = catchAsync(async (req, res, next) => {
+    let {projectKey} = req.params;
+    projectKey = projectKey.trim().toUpperCase();
+
+    if (!projectKey) {
+        Response.badRequest400(res, {message: 'No project key provided'});
+    }
+
+    const features = await Feature.findFeatureByProjectKey(projectKey);
+
+    Response.ok200(res, {features: features});
+})

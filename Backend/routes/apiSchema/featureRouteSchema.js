@@ -45,13 +45,36 @@
  *     FeatureCreateSuccess:
  *       type: object
  *       properties:
- *       status:
- *         type: string
- *         description: The status for this request
- *       data:
- *         type: object
- *         properties:
- *           id:
- *             type: number
- *             description: The id of the feature created
+ *         status:
+ *           type: string
+ *           description: The status for this request
+ *         data:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: number
+ *               description: The id of the feature created
+ *     GetAllFeaturesByProjectKeySuccess:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *           description: The status for this request
+ *         data:
+ *           type: object
+ *           properties:
+ *             features:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     description: The id of the feature
+ *                   featureKey:
+ *                     type: string
+ *                     description: The feature key for the feature
+ *                   optionText:
+ *                     type: string
+ *                     description: The option text to show for frontend
  */

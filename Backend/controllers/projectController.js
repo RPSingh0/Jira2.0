@@ -30,3 +30,8 @@ exports.createProject = catchAsync(async (req, res, next) => {
 
     Response.ok201(res, {id: id});
 });
+
+exports.getAllProjects = catchAsync(async (req, res, next) => {
+    const projects = await Project.getAllProjects();
+    Response.ok200(res, {projects: projects});
+});

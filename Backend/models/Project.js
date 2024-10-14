@@ -295,6 +295,27 @@ class Project {
             })
         }
     }
+
+    /**
+     * Fetches and returns all projects from database
+     *
+     * @returns {Promise<Object>} A promise that resolves with the result of database select operation
+     *
+     * @throws {ErrorInterceptor} Throws error if there is a database error
+     */
+    static async getAllProjects() {
+        const query = 'SELECT id, project_key as projectKey, CONCAT(project_key, \' | \', name) AS optionText FROM project';
+
+        try {
+            const [results] = await dbPromise.execute(query);
+            return results;
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error fetching projects: ${err.message}`,
+            })
+        }
+    }
 }
 
 module.exports = Project;

@@ -21,6 +21,5 @@ exports.createUser = catchAsync(async (req, res, next) => {
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
     const users = await User.getAllUsers();
-
     Response.ok200(res, {users: users});
 });
