@@ -17,9 +17,9 @@ export function AutoCompleteRenderOptionWithUserAvatar(props, option) {
     return (
         <ListItem key={key} {...other}>
             <ListItemAvatar>
-                <Avatar alt={option['image_alt_text']} src={option['profile_image']}/>
+                <Avatar alt={option['imageAltText']} src={option['profileImage']}/>
             </ListItemAvatar>
-            <ListItemText primary={option['option_text']}/>
+            <ListItemText primary={option['optionText']}/>
         </ListItem>
     );
 }
@@ -38,7 +38,7 @@ export function AutoCompleteRenderOptionDefault(props, option) {
     const {key, ...other} = props;
     return (
         <ListItem key={key} {...other}>
-            <ListItemText primary={option['option_text']}/>
+            <ListItemText primary={option['optionText']}/>
         </ListItem>
     );
 }

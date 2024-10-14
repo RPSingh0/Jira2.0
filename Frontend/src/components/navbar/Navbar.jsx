@@ -1,6 +1,7 @@
 import {AppBar, Avatar, Box, IconButton, styled, Toolbar, Tooltip, useMediaQuery, useTheme} from "@mui/material";
 import Logo from "../logo/Logo.jsx";
 import {ContainedButton, NavLinkButton, TextButton} from "../button/Buttons.jsx";
+import CreateJira from "../../features/jira/CreateJira.jsx";
 
 const StyledNavButtonBox = styled(Box)(() => ({
     flexGrow: 1,
@@ -52,6 +53,7 @@ function Navbar() {
                     </Tooltip>
                 </StyledUserProfileBox>
             </Toolbar>
+            <CreateJira/>
         </AppBar>
     );
 }

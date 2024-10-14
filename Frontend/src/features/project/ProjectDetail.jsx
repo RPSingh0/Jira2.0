@@ -93,7 +93,6 @@ const StyledProjectDetailAsideLeadByBox = styled(Box)(() => ({
 
 function ProjectDetail() {
 
-    const {projectKey} = useParams();
     const creatProjectEditor = useDefaultEditor('Description for project');
 
     const [openCreateFeature, setOpenCreateFeature] = useState(false);
@@ -108,7 +107,7 @@ function ProjectDetail() {
             <StyledProjectDetailToolbar>
                 <OutlinedButton text={"Add Feature"} onClickHandler={() => setOpenCreateFeature(true)}/>
             </StyledProjectDetailToolbar>
-            <CreateFeature open={openCreateFeature} setOpen={setOpenCreateFeature} projectId={1}
+            <CreateFeature open={openCreateFeature} setOpen={setOpenCreateFeature} projectId={2}
                            key={openCreateFeature}/>
 
             {/* Main content container */}

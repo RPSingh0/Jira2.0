@@ -65,3 +65,30 @@ export async function getFeatureKeyService({id}) {
 
     return data;
 }
+
+/**
+ * This function takes project key and returns all features
+ *
+ * @param projectKey
+ *
+ * @returns {Promise<*>}
+ *
+ * @throws {Error} Error if api call is unsuccessful
+ */
+export async function getAllFeaturesByProjectKey({projectKey}) {
+
+    let data = await fetch(`${URL}/getAllFeaturesByProjectKey/${projectKey}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    data = await data.json();
+
+    if (data && data.status === 'fail') {
+        throw new Error(data.message);
+    }
+
+    return data;
+}

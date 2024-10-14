@@ -11,7 +11,7 @@ import {QuickInfoItem} from "./YourProjectsSectionCardComponents.jsx";
 
 function ProjectCard() {
     return (
-        <StyledCardPaper elevation={2} variant={"outlined"}>
+        <StyledCardPaper variant="outlined">
             <StyledProjectProgressBox/>
             <StyledProjectCardContentBox>
                 <StyledProjectTitle variant={"body2"} gutterBottom noWrap>

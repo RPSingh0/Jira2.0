@@ -42,11 +42,11 @@ const StyledFeatureDetailItemStatusBox = styled(Box)(() => ({
 
 function FeatureDetailItemCard({type, jiraKey, title, user, status, priority}) {
     return (
-        <StyledFeatureDetailItemCardPaper variant={"outlined"} elevation={2}>
+        <StyledFeatureDetailItemCardPaper variant="outlined">
             {/* Header */}
             <StyledFeatureDetailItemCardHeader>
                 {IconMap[type]}
-                <Typography variant={"overline"}>
+                <Typography variant="overline">
                     {jiraKey}
                 </Typography>
             </StyledFeatureDetailItemCardHeader>

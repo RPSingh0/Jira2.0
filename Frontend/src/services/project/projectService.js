@@ -69,3 +69,30 @@ export async function getProjectKeyService({name}) {
 
     return data;
 }
+
+/**
+ * Get all projects in system
+ *
+ * @param {string} token
+ *
+ * @returns {Promise<*>}
+ *
+ * @throws {Error} Error if unable to fetch or if token is invalid
+ */
+export async function getAllProjectsService({token}) {
+    let data = await fetch(`${URL}/getAllProjects`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    data = await data.json();
+
+    if (data && data.status === 'fail') {
+        throw new Error(data.message);
+    }
+
+    return data;
+}

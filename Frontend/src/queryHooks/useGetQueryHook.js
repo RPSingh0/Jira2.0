@@ -6,13 +6,16 @@ function useGetQueryHook({key, fn, ...params}) {
     const isUserLoggedIn = useSelector(isLoggedIn);
     const token = useSelector(getAuthToken);
 
-    const {isLoading, data, error} = useQuery({
+    const {enabledDependency} = params;
+    const enabled = enabledDependency ? enabledDependency.reduce((acc, curr) => acc && curr, isUserLoggedIn) : isUserLoggedIn;
+
+    const {isPending, isFetching, data, error} = useQuery({
         queryKey: key,
         queryFn: () => fn({token: token, ...params}),
-        enabled: isUserLoggedIn
+        enabled: enabled
     });
 
-    return {isLoading, data, error};
+    return {isLoading: isPending, isFetching, data, error};
 }
 
 export default useGetQueryHook;

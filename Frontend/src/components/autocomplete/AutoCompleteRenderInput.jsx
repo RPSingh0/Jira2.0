@@ -19,8 +19,8 @@ export function AutoCompleteRenderInputWithUserAvatar(params, label, isLoading, 
                     startAdornment: (
                         <>
                             <Avatar
-                                src={value?.['profile_image']}
-                                alt={value?.['image_alt_text']}
+                                src={value?.['profileImage']}
+                                alt={value?.['imageAltText']}
                             />
                         </>
                     ),

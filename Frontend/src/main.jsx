@@ -16,5 +16,5 @@ createRoot(document.getElementById('root')).render(
                 <ToastContainer theme="colored" position={"bottom-left"} pauseOnFocusLoss={false}/>
             </ThemeProvider>
         </Provider>
-    </StrictMode>,
+    </StrictMode>
 )

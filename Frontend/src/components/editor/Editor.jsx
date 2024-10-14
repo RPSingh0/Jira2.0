@@ -19,7 +19,7 @@ const StyledEditorPaper = styled(Paper)(({theme, height}) => ({
         overflowX: "auto",
 
 
-        "& :first-child": {
+        "& div:first-of-type": {
             marginTop: "0.5rem"
         },
     },
