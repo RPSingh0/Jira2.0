@@ -212,6 +212,30 @@ class Feature {
             })
         }
     }
+
+    /**
+     * Fetches and returns features from database by project id and feature id
+     *
+     * @param projectId
+     * @param featureId
+     *
+     * @returns {Promise<Object>} A promise that resolves with the result of database select operation
+     *
+     * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
+     */
+    static async findFeatureByProjectIdAndFeatureId(projectId, featureId) {
+        const query = 'SELECT id, name, feature_key FROM Feature WHERE project_id = ? AND id = ?';
+
+        try {
+            const [results] = await dbPromise.execute(query, [projectId, featureId]);
+            return results[0];
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error fetching features: ${err.message}`,
+            })
+        }
+    }
 }
 
 module.exports = Feature;
