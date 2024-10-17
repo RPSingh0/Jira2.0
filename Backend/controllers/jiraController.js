@@ -4,7 +4,7 @@ const Jira = require("../models/Jira");
 const Metadata = require("../models/Metadata");
 
 exports.createJira = catchAsync(async (req, res, next) => {
-    const {summary, jiraType, description, projectId, featureId, assignedTo, createdBy} = req.body;
+    const {summary, jiraType, description, projectId, featureId, assignedTo} = req.body;
 
     // create the jira
     const jira = Jira.create()
@@ -18,11 +18,11 @@ exports.createJira = catchAsync(async (req, res, next) => {
         .setProjectId(projectId)
         .setFeatureId(featureId)
         .setAssignedTo(assignedTo)
-        .setCreatedBy(createdBy)
+        .setCreatedBy(req.user.id)
         .setStatus(1)
         .partialBuild();
 
     const result = await jira.save(partialMetadata);
 
-    Response.ok201(res, {jiraId: result.jiraId});
+    Response.ok201(res, {jiraKey: result.jiraKey});
 });

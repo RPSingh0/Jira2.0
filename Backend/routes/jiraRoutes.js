@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const authenticationController = require("../controllers/authenticationController");
 const jiraController = require('../controllers/jiraController');
 
 /**
@@ -42,6 +43,6 @@ const jiraController = require('../controllers/jiraController');
  *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/create')
-    .post(jiraController.createJira);
+    .post(authenticationController.authenticate, jiraController.createJira);
 
 module.exports = router;

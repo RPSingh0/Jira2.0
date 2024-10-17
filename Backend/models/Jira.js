@@ -6,11 +6,12 @@ const Feature = require("./Feature");
 const User = require("./User");
 
 class Jira {
-    constructor(summary, jiraKey, jiraType, description) {
+    constructor(summary, jiraKey, jiraType, description, jiraLink) {
         this.summary = summary;
         this.jiraKey = jiraKey;
         this.jiraType = jiraType;
         this.description = description;
+        this.jiraLink = jiraLink
     }
 
     /**
@@ -107,6 +108,27 @@ class Jira {
     }
 
     /**
+     * Jira link setter, validates for null values
+     *
+     * @param {string} jiraLink
+     *
+     * @returns {Jira}
+     *
+     * @throws {ErrorInterceptor} Error for field validations
+     */
+    setJiraLink(jiraLink) {
+        if (!jiraLink) {
+            throw new ErrorInterceptor({
+                type: ErrorType.VALIDATION,
+                message: 'Jira link is required.'
+            })
+        }
+
+        this.jiraLink = jiraLink;
+        return this;
+    }
+
+    /**
      * Validates all required fields are present, finalize and returns the Jira object
      *
      * @returns {Jira}
@@ -195,13 +217,16 @@ class Jira {
         // set jira key
         this.setJiraKey(`${projectId.project_key}-${jiraKeySequence + 1}`);
 
+        // set the jira link
+        this.setJiraLink(`/project/${projectId.project_key}/feature/${featureId.feature_key}/${this.jiraKey}`);
+
         // start transaction
         await dbPromise.beginTransaction();
 
         // save the jira object first
 
-        const jiraQuery = 'INSERT INTO Jira (summary, jira_key, jira_type, description) VALUES (?, ?, ?, ?)';
-        const jiraValues = [this.summary, this.jiraKey, this.jiraType, this.description];
+        const jiraQuery = 'INSERT INTO Jira (summary, jira_key, jira_type, description, jira_link) VALUES (?, ?, ?, ?, ?)';
+        const jiraValues = [this.summary, this.jiraKey, this.jiraType, this.description, this.jiraLink];
         let jiraSavedId = null;
 
         try {
@@ -244,6 +269,7 @@ class Jira {
         // return id for both jira and metadata
         return {
             jiraId: jiraSavedId,
+            jiraKey: this.jiraKey,
             metadataId: metadataSavedId,
         }
     }
