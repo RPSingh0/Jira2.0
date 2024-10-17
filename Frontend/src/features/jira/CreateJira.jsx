@@ -13,6 +13,10 @@ import {getFeatureIfLoaded, getProjectIfLoaded} from "../../utils/utils.js";
 import {getAllFeaturesByProjectKey} from "../../services/feature/featureService.js";
 import {useQueryClient} from "@tanstack/react-query";
 import {getAllUsersService} from "../../services/user/userService.js";
+import {toast} from "react-toastify";
+import {useCreateJira} from "./hooks/useCreateJira.js";
+import {getAuthToken} from "../../services/user/authenticationSlice.js";
+import {useSelector} from "react-redux";
 
 function CreateJira() {
 
@@ -27,6 +31,12 @@ function CreateJira() {
     const [pOption, setPOption] = useState({loading: true, optionText: "Loading..."});
     const [fOption, setFOption] = useState({loading: true, optionText: "Loading..."});
     const [uOption, setUOption] = useState(null);
+
+    // global state selectors
+    const token = useSelector(getAuthToken);
+
+    // React query hooks
+    const {createJira, isCreating} = useCreateJira();
 
     // Fetch all the projects
     const {isLoading: isLoadingProjects, data: projectOptions} = useGetQueryHook({
@@ -68,8 +78,51 @@ function CreateJira() {
 
     function handleSubmit(event) {
         event.preventDefault();
-        console.log(event.target.form);
-        console.log(getFormData(event.target.form));
+
+        // summary will come from form object
+        const {summary} = getFormData(event.target.form);
+
+        // verify all necessary fields are provided
+        if (!jiraType) {
+            toast.error('Jira type is required');
+            return;
+        }
+
+        if (!summary) {
+            toast.error('Summary is required');
+            return;
+        }
+
+        if (!jiraPoint) {
+            toast.error('Jira point is required');
+            return;
+        }
+
+        if (!pOption.id) {
+            toast.error('Please select a project');
+            return;
+        }
+
+        if (!fOption.id) {
+            toast.error('Please select a feature');
+            return;
+        }
+
+        if (!uOption?.id) {
+            toast.error('Please assign it to a user');
+            return;
+        }
+
+        // create jira
+        createJira({
+            token: token,
+            summary: summary,
+            jiraType: jiraType,
+            description: createJiraEditor.getHTML(),
+            projectId: pOption.id,
+            featureId: fOption.id,
+            assignedTo: uOption.id
+        });
     }
 
     return (
@@ -151,6 +204,7 @@ function CreateJira() {
                     variant={"outlined"}
                     type={"submit"}
                     form={"create-jira-form"}
+                    disabled={isCreating}
                     onClick={handleSubmit}
                 >
                     Create
@@ -159,6 +213,7 @@ function CreateJira() {
                     variant={"outlined"}
                     type={"submit"}
                     form={"create-feature-form"}
+                    disabled={isCreating}
                     onClick={() => {
                     }}
                 >

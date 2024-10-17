@@ -1,4 +1,3 @@
-import {useParams} from "react-router-dom";
 import {Box, Divider, Paper, styled, Typography} from "@mui/material";
 import useDefaultEditor from "../../components/editor/useDefaultEditor.js";
 import TextEditor from "../../components/editor/Editor.jsx";

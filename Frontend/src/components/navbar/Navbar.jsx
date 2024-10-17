@@ -53,7 +53,6 @@ function Navbar() {
                     </Tooltip>
                 </StyledUserProfileBox>
             </Toolbar>
-            <CreateJira/>
         </AppBar>
     );
 }
