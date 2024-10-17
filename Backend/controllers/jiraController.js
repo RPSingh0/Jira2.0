@@ -4,12 +4,11 @@ const Jira = require("../models/Jira");
 const Metadata = require("../models/Metadata");
 
 exports.createJira = catchAsync(async (req, res, next) => {
-    const {summary, jiraKey, jiraType, description, projectId, featureId, assignedTo, createdBy} = req.body;
+    const {summary, jiraType, description, projectId, featureId, assignedTo, createdBy} = req.body;
 
     // create the jira
     const jira = Jira.create()
         .setSummary(summary)
-        .setJiraKey(jiraKey)
         .setJiraType(jiraType)
         .setDescription(description)
         .build();

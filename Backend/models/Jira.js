@@ -114,7 +114,7 @@ class Jira {
      * @throws {ErrorInterceptor} Error for field validation if any required field is missing
      */
     build() {
-        const requiredFields = ['summary', 'jiraKey', 'type', 'description'];
+        const requiredFields = ['summary', 'type', 'description'];
 
         const validatedAllFields = requiredFields.reduce((acc, field) => {
             if (!this[field]) {
@@ -189,6 +189,12 @@ class Jira {
             });
         }
 
+        // get next jira key
+        let jiraKeySequence = await Jira.generateJiraKeySequence(metadata.projectId);
+
+        // set jira key
+        this.setJiraKey(`${projectId.project_key}-${jiraKeySequence + 1}`);
+
         // start transaction
         await dbPromise.beginTransaction();
 
@@ -239,6 +245,33 @@ class Jira {
         return {
             jiraId: jiraSavedId,
             metadataId: metadataSavedId,
+        }
+    }
+
+    /**
+     * Takes in a project id as input, checks against the db for next jira key sequence
+     *
+     * @param projectId
+     *
+     * @returns {Promise<number>}
+     *
+     * @throws {ErrorInterceptor} Error if there is a database error
+     */
+    static async generateJiraKeySequence(projectId) {
+        const getProjectKeyQuery = 'SELECT project_key FROM Project WHERE id = ?';
+        const getCurrentJiraSequenceQuery = 'SELECT COUNT(*) as count FROM Jira WHERE jira_key LIKE ?';
+
+        try {
+            const [resultsA] = await dbPromise.execute(getProjectKeyQuery, [projectId]);
+            const projectKey = resultsA[0].project_key;
+
+            const [results] = await dbPromise.execute(getCurrentJiraSequenceQuery, [`${projectKey}%`]);
+            return results[0].count;
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error executing query: ${err.message}`,
+            })
         }
     }
 }
