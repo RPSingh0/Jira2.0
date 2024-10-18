@@ -116,4 +116,28 @@
  *                 createdOn:
  *                   type: string
  *                   description: The data and time this jira is created on
+ *     UpdateJiraDescription:
+ *       required:
+ *         - jiraKey
+ *         - description
+ *       type: object
+ *       properties:
+ *         jiraKey:
+ *           type: string
+ *           description: The unique key to identify jira
+ *         description:
+ *           type: string
+ *           description: The description for the jira
+ *     UpdateJiraDescriptionSuccess:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *           description: The status for this request
+ *         data:
+ *           type: object
+ *           properties:
+ *             affectedRows:
+ *               type: number
+ *               description: The number of rows affected by this operation
  */

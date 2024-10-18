@@ -81,4 +81,39 @@ router.route('/create')
 router.route('/getJiraDetailsByJiraKey/:jiraKey')
     .get(jiraController.getJiraDetailsByJiraKey);
 
+/**
+ * @swagger
+ * /jira/updateJiraDescriptionByJiraKey:
+ *   patch:
+ *     summary: Update jira description by jira key
+ *     tags: [Jira]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateJiraDescription'
+ *     responses:
+ *       201:
+ *         description: Project created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UpdateJiraDescriptionSuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/updateJiraDescriptionByJiraKey')
+    .patch(jiraController.updateJiraDescription);
+
 module.exports = router;
