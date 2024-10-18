@@ -6,6 +6,7 @@ const URL = `${import.meta.env.VITE_BACKEND_URL}/api/v1/jira`;
  * @param {string} token
  * @param {string} summary
  * @param {string} jiraType
+ * @param {number} jiraPoint
  * @param {string} description
  * @param {number} projectId
  * @param {number} featureId
@@ -15,7 +16,7 @@ const URL = `${import.meta.env.VITE_BACKEND_URL}/api/v1/jira`;
  *
  * @throws {Error} Error if api call is unsuccessful
  */
-export async function createJiraService({token, summary, jiraType, description, projectId, featureId, assignedTo}) {
+export async function createJiraService({token, summary, jiraType, jiraPoint, description, projectId, featureId, assignedTo}) {
 
     let data = await fetch(`${URL}/create`, {
         method: 'POST',
@@ -27,10 +28,29 @@ export async function createJiraService({token, summary, jiraType, description, 
             summary: summary,
             jiraType: jiraType,
             description: description,
+            jiraPoint: jiraPoint,
             projectId: projectId,
             featureId: featureId,
             assignedTo: assignedTo,
         })
+    });
+
+    data = await data.json();
+
+    if (data && data.status === 'fail') {
+        throw new Error(data.message);
+    }
+
+    return data;
+}
+
+export async function getJiraDetailsByJiraKeyService({token, jiraKey}) {
+    let data = await fetch(`${URL}/getJiraDetailsByJiraKey/${jiraKey}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
     });
 
     data = await data.json();

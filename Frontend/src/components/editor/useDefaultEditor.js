@@ -4,7 +4,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import Highlight from "@tiptap/extension-highlight";
 
 function useDefaultEditor(content) {
-    return useEditor({
+    const editingOn = useEditor({
         extensions: [
             StarterKit,
             TextAlign.configure({
@@ -14,6 +14,20 @@ function useDefaultEditor(content) {
         ],
         content: content,
     });
+
+    const editingOff = useEditor({
+        extensions: [
+            StarterKit,
+            TextAlign.configure({
+                types: ['heading', 'paragraph']
+            }),
+            Highlight
+        ],
+        content: content,
+        editable: false
+    });
+
+    return {editingOn, editingOff};
 }
 
 export default useDefaultEditor;

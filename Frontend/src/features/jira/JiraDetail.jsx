@@ -1,6 +1,10 @@
-import {Box, Paper, styled, Typography} from "@mui/material";
+import {Box, Button, ButtonGroup, Paper, styled, Typography} from "@mui/material";
 import useDefaultEditor from "../../components/editor/useDefaultEditor.js";
 import TextEditor from "../../components/editor/Editor.jsx";
+import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
+import {getJiraDetailsByJiraKeyService} from "../../services/jira/jiraService.js";
+import {useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
 
 const StyledJiraDetailBox = styled(Box)(() => ({
     display: "flex",
@@ -26,7 +30,7 @@ const StyledProjectDetailMainSectionBox = styled(Box)(() => ({
 }));
 
 const StyledProjectDetailDescriptionBox = styled(Box)(() => ({
-    marginBottom: "2rem"
+    marginBottom: "2rem",
 }));
 
 const StyledProjectDetailAsideBox = styled(Paper)(({theme}) => ({
@@ -66,12 +70,32 @@ const StyledProjectDetailAsideItemBox = styled(Box)(() => ({
 
 function JiraDetail() {
 
-    const creatProjectEditor = useDefaultEditor(undefined);
+    const {editingOn, editingOff} = useDefaultEditor(undefined);
+    const [isEditing, setIsEditing] = useState(false);
+    const {jiraKey} = useParams();
+
+    const {
+        isLoading: isLoadingJiraDetails,
+        isFetching: isFetchingJiraDetails,
+        data: jiraDetailsData,
+        error: isErrorLoadingJiraDetails
+    } = useGetQueryHook({
+        key: [`${jiraKey}`],
+        fn: getJiraDetailsByJiraKeyService,
+        jiraKey: jiraKey
+    });
+
+    useEffect(() => {
+        if (!isLoadingJiraDetails && !isFetchingJiraDetails) {
+            editingOn.commands.setContent(jiraDetailsData.data.jiraDetails.description);
+            editingOff.commands.setContent(jiraDetailsData.data.jiraDetails.description);
+        }
+    }, [isLoadingJiraDetails, isFetchingJiraDetails]);
 
     return (
         <StyledJiraDetailBox>
             <StyledProjectDetailHeading variant="h5">
-                This is a placeholder for this jira summary and it will show here
+                {!isLoadingJiraDetails && jiraDetailsData.data.jiraDetails.summary}
             </StyledProjectDetailHeading>
 
             {/* Main content container */}
@@ -79,19 +103,39 @@ function JiraDetail() {
                 <StyledProjectDetailMainSectionBox>
 
                     {/* Description Box */}
-                    <StyledProjectDetailDescriptionBox>
-                        <TextEditor editor={creatProjectEditor} height={"20rem"}/>
+                    <StyledProjectDetailDescriptionBox
+                        onDoubleClick={() => setIsEditing(isEditing === false ? true : true)}>
+                        {isEditing ?
+                            <TextEditor editor={editingOn} height={"20rem"}/>
+                            :
+                            <TextEditor editor={editingOff} height={"20rem"}/>
+                        }
                     </StyledProjectDetailDescriptionBox>
-
+                    {isEditing &&
+                        <ButtonGroup variant={"outlined"}>
+                            <Button onClick={() => setIsEditing(false)}>
+                                Save
+                            </Button>
+                            <Button onClick={() => setIsEditing(false)}>
+                                Cancel
+                            </Button>
+                        </ButtonGroup>
+                    }
                 </StyledProjectDetailMainSectionBox>
 
                 <StyledProjectDetailAsideBox variant="outlined">
-                    <AsideItem itemKey={"Assigned To"} itemValue={'Xenovia Gremory'}/>
-                    <AsideItem itemKey={"Created By"} itemValue={'Eren Jager'}/>
-                    <AsideItem itemKey={"Points"} itemValue={5}/>
-                    <AsideItem itemKey={"Project"} itemValue={'MFP1'}/>
-                    <AsideItem itemKey={"Feature"} itemValue={'FTR-1'}/>
-                    <AsideItem itemKey={"Created On"} itemValue={'22/12/2024'}/>
+                    <AsideItem itemKey={"Assigned To"}
+                               itemValue={!isLoadingJiraDetails && jiraDetailsData.data.jiraDetails.userAssignedToName}/>
+                    <AsideItem itemKey={"Created By"}
+                               itemValue={!isLoadingJiraDetails && jiraDetailsData.data.jiraDetails.userCreatedByName}/>
+                    <AsideItem itemKey={"Points"}
+                               itemValue={!isLoadingJiraDetails && jiraDetailsData.data.jiraDetails.jiraPoint}/>
+                    <AsideItem itemKey={"Project"}
+                               itemValue={!isLoadingJiraDetails && jiraDetailsData.data.jiraDetails.projectKey}/>
+                    <AsideItem itemKey={"Feature"}
+                               itemValue={!isLoadingJiraDetails && jiraDetailsData.data.jiraDetails.featureKey}/>
+                    <AsideItem itemKey={"Created On"}
+                               itemValue={!isLoadingJiraDetails && jiraDetailsData.data.jiraDetails.createdOn}/>
                 </StyledProjectDetailAsideBox>
             </StyledProjectDetailContentBox>
         </StyledJiraDetailBox>

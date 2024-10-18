@@ -3,15 +3,22 @@ import {Paper, styled} from "@mui/material";
 import EditorToolbar from "./EditorToolbar.jsx";
 import {grey} from "@mui/material/colors";
 
-const StyledEditorPaper = styled(Paper)(({theme, height}) => ({
+const StyledEditorPaper = styled(Paper, {
+    shouldForwardProp: prop => prop !== 'isEditorMode'
+})(({theme, height, isEditorMode = false}) => ({
     padding: "0.5rem",
-    border: `1px solid ${grey["400"]}`,
+    border: isEditorMode ? `1px solid ${grey["400"]}` : '',
     color: theme.palette.defaultBlack.main,
+    transition: "all 0.2s ease",
+
+    "&:hover": {
+        backgroundColor: isEditorMode ? '' : grey["200"],
+    },
 
     "& .tiptap.ProseMirror": {
         outline: 'none',
         padding: '0.5rem',
-        height: height || "12rem",
+        height: isEditorMode ? height || "12rem" : 'max-content',
         maxWidth: "100%",
         wordWrap: "break-word",
         overflowWrap: "break-word",
@@ -94,13 +101,21 @@ const StyledEditorPaper = styled(Paper)(({theme, height}) => ({
         margin: '2rem 0'
     }
 
-}))
+}));
 
 function TextEditor({editor, height}) {
 
+    if (editor.isEditable) {
+        return (
+            <StyledEditorPaper elevation={0} height={height} isEditorMode={true}>
+                <EditorToolbar editor={editor}/>
+                <EditorContent editor={editor}/>
+            </StyledEditorPaper>
+        );
+    }
+
     return (
         <StyledEditorPaper elevation={0} height={height}>
-            <EditorToolbar editor={editor}/>
             <EditorContent editor={editor}/>
         </StyledEditorPaper>
     );

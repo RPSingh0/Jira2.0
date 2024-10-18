@@ -118,6 +118,7 @@ function CreateJira() {
             token: token,
             summary: summary,
             jiraType: jiraType,
+            jiraPoint: jiraPoint,
             description: createJiraEditor.getHTML(),
             projectId: pOption.id,
             featureId: fOption.id,
