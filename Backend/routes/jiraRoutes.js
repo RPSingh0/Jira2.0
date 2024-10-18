@@ -45,4 +45,40 @@ const jiraController = require('../controllers/jiraController');
 router.route('/create')
     .post(authenticationController.authenticate, jiraController.createJira);
 
+/**
+ * @swagger
+ * /jira/getJiraDetailsByJiraKey/{jiraKey}:
+ *   get:
+ *     summary: Get jira details by jira key
+ *     tags: [Jira]
+ *     parameters:
+ *       - in: path
+ *         name: jiraKey
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: The jira key
+ *     responses:
+ *       200:
+ *         description: All features by project key
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GetJiraDetailsByJiraKey'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/getJiraDetailsByJiraKey/:jiraKey')
+    .get(jiraController.getJiraDetailsByJiraKey);
+
 module.exports = router;

@@ -2,13 +2,14 @@ const ErrorInterceptor = require('../utils/errorInterceptor');
 const ErrorType = require('../utils/errorTypes');
 
 class Metadata {
-    constructor(jiraId, projectId, featureId, assignedTo, createdBy, status) {
+    constructor(jiraId, projectId, featureId, assignedTo, createdBy, status, jiraPoint) {
         this.jiraId = jiraId;
         this.projectId = projectId;
         this.featureId = featureId;
         this.assignedTo = assignedTo;
         this.createdBy = createdBy;
         this.status = status;
+        this.jiraPoint = jiraPoint;
     }
 
     /**
@@ -147,6 +148,27 @@ class Metadata {
     }
 
     /**
+     * Metadata jira point setter, validates for null values
+     *
+     * @param {number} jiraPoint
+     *
+     * @returns {Metadata}
+     *
+     * @throws {ErrorInterceptor} Error for field validations
+     */
+    setJiraPoint(jiraPoint) {
+        if (!jiraPoint) {
+            throw new ErrorInterceptor({
+                type: ErrorType.VALIDATION,
+                message: 'jiraPoint is required.'
+            })
+        }
+
+        this.jiraPoint = jiraPoint;
+        return this;
+    }
+
+    /**
      * Validates all required fields are present, finalize and returns the Metadata object
      *
      * @returns {Metadata}
@@ -154,7 +176,7 @@ class Metadata {
      * @throws {ErrorInterceptor} Error for field validation if any required field is missing
      */
     partialBuild() {
-        const requiredFields = ['projectId', 'featureId', 'assignedTo', 'createdBy', 'status'];
+        const requiredFields = ['projectId', 'featureId', 'assignedTo', 'createdBy', 'status', 'jiraPoint'];
 
         const validatedAllFields = requiredFields.reduce((acc, field) => {
             if (!this[field]) {

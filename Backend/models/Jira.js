@@ -246,8 +246,8 @@ class Jira {
         metadata.setJiraId(jiraSavedId);
 
         // save metadata object
-        const metadataQuery = 'INSERT INTO Metadata (jira_id, project_id, feature_id, assigned_to, created_by, status) VALUES (?, ?, ?, ?, ?, ?)';
-        const metadataValues = [metadata.jiraId, metadata.projectId, metadata.featureId, metadata.assignedTo, metadata.createdBy, metadata.status];
+        const metadataQuery = 'INSERT INTO Metadata (jira_id, jira_point, project_id, feature_id, assigned_to, created_by, status) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const metadataValues = [metadata.jiraId, metadata.jiraPoint, metadata.projectId, metadata.featureId, metadata.assignedTo, metadata.createdBy, metadata.status];
         let metadataSavedId = null;
 
         try {
@@ -293,6 +293,55 @@ class Jira {
 
             const [results] = await dbPromise.execute(getCurrentJiraSequenceQuery, [`${projectKey}%`]);
             return results[0].count;
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error executing query: ${err.message}`,
+            })
+        }
+    }
+
+    /**
+     * Takes in a jiraKey id as input and returns the jira details using jiraKey
+     *
+     * @param jiraKey
+     *
+     * @returns {Promise<number>}
+     *
+     * @throws {ErrorInterceptor} Error if there is a database error
+     */
+    static async getJiraDetailsByJiraKey(jiraKey) {
+
+        const query = `
+            SELECT J.summary,
+                   J.description,
+                   J.jira_key                                             AS jiraKey,
+                   M.jira_point                                           AS jiraPoint,
+                   UAT.id                                                 AS userAssignedToId,
+                   CONCAT(UAT.first_name, ' ', IFNULL(UAT.last_name, '')) AS userAssignedToName,
+                   UAT.email                                              AS userAssignedToEmail,
+                   UCB.id                                                 AS userCreatedById,
+                   CONCAT(UCB.first_name, ' ', IFNULL(UCB.last_name, '')) AS userCreatedByName,
+                   UCB.email                                              AS userCreatedByEmail,
+                   P.id                                                   AS projectId,
+                   P.project_key                                          AS projectKey,
+                   F.id                                                   AS featureId,
+                   F.feature_key                                          AS featureKey,
+                   S.id                                                   AS statusId,
+                   S.type                                                 AS statusType,
+                   M.created_on                                           AS createdOn
+            FROM Jira AS J
+                     INNER JOIN Metadata AS M ON J.id = M.jira_id
+                     INNER JOIN User AS UAT ON M.assigned_to = UAT.id
+                     INNER JOIN User AS UCB ON M.created_by = UCB.id
+                     INNER JOIN Project AS P ON M.project_id = P.id
+                     INNER JOIN Feature AS F ON M.feature_id = F.id
+                     INNER JOIN Status AS S ON M.status = S.id
+            WHERE J.jira_key = ?`
+
+        try {
+            const [results] = await dbPromise.execute(query, [jiraKey]);
+            return results[0];
         } catch (err) {
             throw new ErrorInterceptor({
                 type: ErrorType.DATABASE,
