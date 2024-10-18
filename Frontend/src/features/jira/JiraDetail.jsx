@@ -1,4 +1,4 @@
-import {Box, Button, ButtonGroup, Paper, styled, Typography} from "@mui/material";
+import {Box, Paper, styled, Typography} from "@mui/material";
 import useDefaultEditor from "../../components/editor/useDefaultEditor.js";
 import TextEditor from "../../components/editor/Editor.jsx";
 import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
@@ -7,6 +7,7 @@ import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {useUpdateJiraDescription} from "./hooks/useUpdateJiraDescription.js";
 import {useQueryClient} from "@tanstack/react-query";
+import {ContainedButton, OutlinedButton} from "../../components/button/Buttons.jsx";
 
 const StyledJiraDetailBox = styled(Box)(() => ({
     display: "flex",
@@ -123,20 +124,20 @@ function JiraDetail() {
                     <StyledProjectDetailDescriptionBox
                         onDoubleClick={() => setIsEditing(isEditing === false ? true : true)}>
                         {isEditing ?
-                            <TextEditor editor={editingOn} height={"20rem"}/>
+                            <TextEditor editor={editingOn} height={"min-content"}/>
                             :
-                            <TextEditor editor={editingOff} height={"20rem"}/>
+                            <TextEditor editor={editingOff} height={"min-content"}/>
                         }
                     </StyledProjectDetailDescriptionBox>
                     {isEditing &&
-                        <ButtonGroup variant={"outlined"}>
-                            <Button onClick={handleSaveDescription}>
-                                Save
-                            </Button>
-                            <Button onClick={() => setIsEditing(false)}>
-                                Cancel
-                            </Button>
-                        </ButtonGroup>
+                        <Box sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: "1rem"
+                        }}>
+                            <ContainedButton text={"Save"} onClickHandler={handleSaveDescription}/>
+                            <OutlinedButton text={"Cancel"} onClickHandler={() => setIsEditing(false)}/>
+                        </Box>
                     }
                 </StyledProjectDetailMainSectionBox>
 
