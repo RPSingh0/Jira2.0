@@ -61,3 +61,37 @@ export async function getJiraDetailsByJiraKeyService({token, jiraKey}) {
 
     return data;
 }
+
+/**
+ * This function takes jiraKey and description and updates a jira
+ *
+ * @param {string} token
+ * @param {string} jiraKey
+ * @param {string} description
+ *
+ * @returns {Promise<*>}
+ *
+ * @throws {Error} Error if api call is unsuccessful
+ */
+export async function updateJiraDescriptionService({token, jiraKey, description}) {
+
+    let data = await fetch(`${URL}/updateJiraDescriptionByJiraKey`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            jiraKey: jiraKey,
+            description: description
+        })
+    });
+
+    data = await data.json();
+
+    if (data && data.status === 'fail') {
+        throw new Error(data.message);
+    }
+
+    return data;
+}

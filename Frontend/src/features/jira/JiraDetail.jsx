@@ -5,6 +5,8 @@ import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
 import {getJiraDetailsByJiraKeyService} from "../../services/jira/jiraService.js";
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
+import {useUpdateJiraDescription} from "./hooks/useUpdateJiraDescription.js";
+import {useQueryClient} from "@tanstack/react-query";
 
 const StyledJiraDetailBox = styled(Box)(() => ({
     display: "flex",
@@ -85,12 +87,27 @@ function JiraDetail() {
         jiraKey: jiraKey
     });
 
+    const {updateJiraDescription, isUpdating} = useUpdateJiraDescription();
+    const queryClient = useQueryClient();
+
     useEffect(() => {
         if (!isLoadingJiraDetails && !isFetchingJiraDetails) {
             editingOn.commands.setContent(jiraDetailsData.data.jiraDetails.description);
             editingOff.commands.setContent(jiraDetailsData.data.jiraDetails.description);
         }
     }, [isLoadingJiraDetails, isFetchingJiraDetails]);
+
+    function handleSaveDescription() {
+        updateJiraDescription({
+            jiraKey: jiraKey,
+            description: editingOn.getHTML()
+        }, {
+            onSuccess: () => {
+                queryClient.invalidateQueries([`${jiraKey}`])
+                setIsEditing(false)
+            }
+        });
+    }
 
     return (
         <StyledJiraDetailBox>
@@ -113,7 +130,7 @@ function JiraDetail() {
                     </StyledProjectDetailDescriptionBox>
                     {isEditing &&
                         <ButtonGroup variant={"outlined"}>
-                            <Button onClick={() => setIsEditing(false)}>
+                            <Button onClick={handleSaveDescription}>
                                 Save
                             </Button>
                             <Button onClick={() => setIsEditing(false)}>
