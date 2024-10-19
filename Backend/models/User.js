@@ -4,10 +4,11 @@ const ErrorType = require('../utils/errorTypes');
 const bcrypt = require('bcryptjs');
 
 class User {
-    constructor(firstName, lastName, email, status, password) {
+    constructor(firstName, lastName, email, profileImage, status, password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.profileImage = profileImage;
         this.status = status;
         this.password = password;
     }
@@ -82,6 +83,27 @@ class User {
         }
 
         this.email = email;
+        return this;
+    }
+
+    /**
+     * Profile Image setter, validates for null values
+     *
+     * @param {string} profileImage
+     *
+     * @returns {User}
+     *
+     * @throws {ErrorInterceptor} Error for field validations
+     */
+    setProfileImage(profileImage) {
+        if (!profileImage) {
+            throw new ErrorInterceptor({
+                type: ErrorType.VALIDATION,
+                message: 'Profile image is required',
+            });
+        }
+
+        this.profileImage = profileImage;
         return this;
     }
 
@@ -195,8 +217,8 @@ class User {
         this.build();
         await this.hashPassword();
 
-        const query = 'INSERT INTO user (first_name, last_name, email, status, password) VALUES (?, ?, ?, ?, ?)';
-        const values = [this.firstName, this.lastName, this.email, this.status, this.password];
+        const query = 'INSERT INTO user (first_name, last_name, email, profile_image, status, password) VALUES (?, ?, ?, ?, ?, ?)';
+        const values = [this.firstName, this.lastName, this.email, this.profileImage, this.status, this.password];
 
         try {
             const [{insertId: id}] = await dbPromise.execute(query, values);
@@ -263,7 +285,7 @@ class User {
      * @throws {ErrorInterceptor} Throws error if there is a database error
      */
     static async getAllUsers() {
-        const query = 'SELECT id, CONCAT(first_name, \' \', IFNULL(last_name, \'\')) AS name, CONCAT(first_name, \' \', IFNULL(last_name, \'\')) AS optionText, CONCAT(\'https://avatar.iran.liara.run/username?username=\', first_name) AS profileImage, \'alt text\' as imageAltText, email FROM user WHERE status = 1;';
+        const query = 'SELECT id, CONCAT(first_name, \' \', IFNULL(last_name, \'\')) AS name, profile_image AS profileImage, email FROM user WHERE status = 1;';
 
         try {
             const [results] = await dbPromise.execute(query);

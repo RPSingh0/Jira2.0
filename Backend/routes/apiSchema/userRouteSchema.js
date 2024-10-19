@@ -79,6 +79,12 @@
  *                   id:
  *                     type: integer
  *                     description: The id of the user
+ *                   name:
+ *                     type: string
+ *                     description: The name of the user
+ *                   profileImage:
+ *                     type: string
+ *                     description: The user image of the user
  *                   email:
  *                     type: string
  *                     description: The email of the user
