@@ -46,44 +46,9 @@ router.route('/create')
 
 /**
  * @swagger
- * /feature/getFeatureKey:
- *   post:
- *     summary: Generates a new feature key using project id
- *     tags: [Feature]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/GetFeatureKey'
- *     responses:
- *       201:
- *         description: Feature key generated successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/GetFeatureKeySuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
- */
-router.route('/getFeatureKey')
-    .post(featureController.getFeatureKey);
-
-/**
- * @swagger
- * /feature/getAllFeaturesByProjectKey/{projectKey}:
+ * /feature/getFeaturesAsOptionsByProjectKey/{projectKey}:
  *   get:
- *     summary: Get all features by a project key
+ *     summary: Get features as option by a project key
  *     tags: [Feature]
  *     parameters:
  *       - in: path
@@ -98,7 +63,7 @@ router.route('/getFeatureKey')
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/GetAllFeaturesByProjectKeySuccess'
+ *               $ref: '#/components/schemas/GetFeaturesAsOptionsByProjectKeySuccess'
  *       400:
  *         description: Bad Request
  *         content:
@@ -112,7 +77,7 @@ router.route('/getFeatureKey')
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.route('/getAllFeaturesByProjectKey/:projectKey')
-    .get(featureController.getAllFeaturesByProjectKey);
+router.route('/getFeaturesAsOptionsByProjectKey/:projectKey')
+    .get(featureController.getFeaturesAsOptionsByProjectKey);
 
 module.exports = router;

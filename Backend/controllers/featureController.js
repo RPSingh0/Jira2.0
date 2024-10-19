@@ -2,32 +2,27 @@ const catchAsync = require('../utils/catchAsync');
 const Response = require('../utils/response');
 const Feature = require("../models/Feature");
 
-exports.getFeatureKey = catchAsync(async (req, res, next) => {
-    const {id} = req.body;
-
-    const featureKey = await Feature.generateFeatureKey(id);
-    const finalKey = 'FTR-' + (featureKey + 1);
-
-    Response.ok201(res, {featureKey: finalKey});
-});
-
 exports.createFeature = catchAsync(async (req, res, next) => {
-    const {name, featureKey, description, projectId} = req.body;
+    const {name, description, projectKey} = req.body;
+
+    // generate feature key
+    const featureKeySequence = await Feature.generateFeatureKeySequence(projectKey);
+    const generatedFeatureKey = 'FTR-' + (featureKeySequence + 1);
 
     // create the user object
     const newFeature = Feature.create()
         .setName(name)
-        .setFeatureKey(featureKey)
+        .setFeatureKey(generatedFeatureKey)
         .setDescription(description)
-        .setProjectId(projectId)
+        .setProjectKey(projectKey)
         .build();
 
-    const id = await newFeature.save();
+    await newFeature.save();
 
-    Response.ok201(res, {id: id});
+    Response.ok201(res, {featureKey: generatedFeatureKey});
 });
 
-exports.getAllFeaturesByProjectKey = catchAsync(async (req, res, next) => {
+exports.getFeaturesAsOptionsByProjectKey = catchAsync(async (req, res, next) => {
     let {projectKey} = req.params;
     projectKey = projectKey.trim().toUpperCase();
 
@@ -35,7 +30,7 @@ exports.getAllFeaturesByProjectKey = catchAsync(async (req, res, next) => {
         Response.badRequest400(res, {message: 'No project key provided'});
     }
 
-    const features = await Feature.findFeatureByProjectKey(projectKey);
+    const features = await Feature.getFeaturesAsOptionsByProjectKey(projectKey);
 
     Response.ok200(res, {features: features});
 })

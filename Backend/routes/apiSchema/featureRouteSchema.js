@@ -5,32 +5,20 @@
  *     FeatureCreate:
  *       required:
  *         - name
- *         - featureKey
  *         - description
- *         - projectId
+ *         - projectKey
  *       type: object
  *       properties:
  *         name:
  *           type: string
  *           description: The name of the feature
- *         featureKey:
- *           type: string
- *           description: The unique key to identify feature per project
  *         description:
  *           type: string
  *           description: The description of the feature
- *         projectId:
- *           type: number
+ *         projectKey:
+ *           type: string
  *           description: The project this feature belongs to
- *     GetFeatureKey:
- *       type: object
- *       required:
- *         - id
- *       properties:
- *         id:
- *           type: number
- *           description: The id of the project
- *     GetFeatureKeySuccess:
+ *     FeatureCreateSuccess:
  *       type: object
  *       properties:
  *         status:
@@ -41,20 +29,8 @@
  *           properties:
  *             featureKey:
  *               type: string
- *               description: The new feature key
- *     FeatureCreateSuccess:
- *       type: object
- *       properties:
- *         status:
- *           type: string
- *           description: The status for this request
- *         data:
- *           type: object
- *           properties:
- *             id:
- *               type: number
- *               description: The id of the feature created
- *     GetAllFeaturesByProjectKeySuccess:
+ *               description: The feature key of the feature created
+ *     GetFeaturesAsOptionsByProjectKeySuccess:
  *       type: object
  *       properties:
  *         status:
@@ -68,9 +44,6 @@
  *               items:
  *                 type: object
  *                 properties:
- *                   id:
- *                     type: integer
- *                     description: The id of the feature
  *                   featureKey:
  *                     type: string
  *                     description: The feature key for the feature

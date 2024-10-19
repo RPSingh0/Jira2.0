@@ -4,11 +4,11 @@ const ErrorType = require('../utils/errorTypes');
 const Project = require("./Project");
 
 class Feature {
-    constructor(name, featureKey, description, project_id) {
+    constructor(name, featureKey, description, projectKey) {
         this.name = name;
         this.featureKey = featureKey;
         this.description = description;
-        this.project_id = project_id;
+        this.projectKey = projectKey;
     }
 
     /**
@@ -84,24 +84,24 @@ class Feature {
     }
 
     /**
-     * Project id setter
+     * Project key setter
      *
-     * @param {number} projectId
+     * @param {string} projectKey
      *
      * @returns {Feature}
      *
      * @throws {ErrorInterceptor} Error for field validations
      */
-    setProjectId(projectId) {
+    setProjectKey(projectKey) {
 
-        if (!projectId) {
+        if (!projectKey) {
             throw new ErrorInterceptor({
                 type: ErrorType.VALIDATION,
-                message: 'Project id is required.'
+                message: 'Project key is required.'
             })
         }
 
-        this.project_id = projectId;
+        this.projectKey = projectKey;
         return this;
     }
 
@@ -113,7 +113,7 @@ class Feature {
      * @throws {ErrorInterceptor} Error for field validation if any required field is missing
      */
     build() {
-        const requiredFields = ['name', 'featureKey', 'description', 'project_id'];
+        const requiredFields = ['name', 'featureKey', 'description', 'projectKey'];
 
         const validatedAllFields = requiredFields.reduce((acc, field) => {
             if (!this[field]) {
@@ -143,8 +143,8 @@ class Feature {
     async save() {
         this.build();
 
-        // check for project lead
-        const project = await Project.findById(this.project_id);
+        // check for project existence
+        const project = await Project.findByProjectKey(this.projectKey);
 
         if (!project) {
             throw new ErrorInterceptor({
@@ -153,8 +153,8 @@ class Feature {
             });
         }
 
-        const query = 'INSERT INTO Feature (name, feature_key, description, project_id) VALUES (?, ?, ?, ?)';
-        const values = [this.name, this.featureKey, this.description, this.project_id];
+        const query = 'INSERT INTO Feature (name, feature_key, description, project_key) VALUES (?, ?, ?, ?)';
+        const values = [this.name, this.featureKey, this.description, this.projectKey];
 
         try {
             const [{insertId: id}] = await dbPromise.execute(query, values);
@@ -168,19 +168,19 @@ class Feature {
     }
 
     /**
-     * Takes in a project id as input, checks against the db for next feature key sequence
+     * Takes in a project key as input, checks against the db for next feature key sequence
      *
-     * @param projectId
+     * @param projectKey
      *
      * @returns {Promise<number>}
      *
      * @throws {ErrorInterceptor} Error if there is a database error
      */
-    static async generateFeatureKey(projectId) {
-        const query = 'SELECT COUNT(*) as count FROM Feature WHERE project_id = ?';
+    static async generateFeatureKeySequence(projectKey) {
+        const query = 'SELECT COUNT(*) as count FROM Feature WHERE project_key = ?';
 
         try {
-            const [results] = await dbPromise.execute(query, [projectId]);
+            const [results] = await dbPromise.execute(query, [projectKey]);
             return results[0].count;
         } catch (err) {
             throw new ErrorInterceptor({
@@ -199,8 +199,8 @@ class Feature {
      *
      * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
      */
-    static async findFeatureByProjectKey(projectKey) {
-        const query = 'SELECT F.id, F.feature_key AS featureKey, CONCAT(F.feature_key, \' | \', F.name) AS optionText FROM Feature AS F INNER JOIN project AS P ON F.project_id = P.id WHERE P.project_key = ?';
+    static async getFeaturesAsOptionsByProjectKey(projectKey) {
+        const query = 'SELECT feature_key AS featureKey, CONCAT(feature_key, \' | \', name) AS optionText FROM Feature AS F WHERE project_key = ?';
 
         try {
             const [results] = await dbPromise.execute(query, [projectKey]);

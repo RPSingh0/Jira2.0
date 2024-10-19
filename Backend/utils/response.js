@@ -7,7 +7,7 @@ class Response {
     }
 
     static ok201(res, data) {
-        res.status(200).json({
+        res.status(201).json({
             status: 'success',
             data: data
         });
