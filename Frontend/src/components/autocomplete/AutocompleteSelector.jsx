@@ -1,7 +1,7 @@
 import {Autocomplete} from "@mui/material";
 import {RenderInputMap, RenderOptionMap} from "./AutoCompleteComponentMap.jsx";
 
-function AutocompleteSelector({variant, name, label, options, isLoading, disabled, value, setValue}) {
+function AutocompleteSelector({variant, name, label, options, isLoading, disabled, value, setValue, defaultOption}) {
 
     return (
         <Autocomplete
@@ -10,9 +10,10 @@ function AutocompleteSelector({variant, name, label, options, isLoading, disable
             disabled={disabled}
             size={"small"}
             name={name}
+            freeSolo={true}
             value={value}
             onChange={(event, newValue) => {
-                setValue(newValue ? newValue : null);
+                setValue(newValue ? newValue : defaultOption);
             }}
             getOptionLabel={(option) => {
                 return option['optionText'] || ""

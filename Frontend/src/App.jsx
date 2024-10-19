@@ -11,6 +11,7 @@ import CreateProject from "./features/project/CreateProject.jsx";
 import ProjectDetail from "./features/project/ProjectDetail.jsx";
 import FeatureDetail from "./features/feature/FeatureDetail.jsx";
 import JiraDetail from "./features/jira/JiraDetail.jsx";
+import {JiraDetailContextProvider} from "./features/jira/JiraDetailContext.jsx";
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -36,7 +37,11 @@ function App() {
                             <Route path={"create"} element={<CreateProject/>}/>
                             <Route path={":projectKey"} element={<ProjectDetail/>}/>
                             <Route path={":projectKey/feature/:featureKey"} element={<FeatureDetail/>}/>
-                            <Route path={":projectKey/feature/:featureKey/:jiraKey"} element={<JiraDetail/>}/>
+                            <Route path={":projectKey/feature/:featureKey/:jiraKey"} element={
+                                <JiraDetailContextProvider>
+                                    <JiraDetail/>
+                                </JiraDetailContextProvider>
+                            }/>
                         </Route>
                     </Route>
                 </Routes>

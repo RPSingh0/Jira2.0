@@ -6,7 +6,7 @@ export function AutoCompleteRenderInputWithUserAvatar(params, label, isLoading, 
         <TextField
             {...params}
             label={label}
-            placeholder={"Unassigned"}
+            placeholder={value ? value["optionText"] : "Unassigned"}
             slotProps={{
                 input: {
                     ...params.InputProps,

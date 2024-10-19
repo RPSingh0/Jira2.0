@@ -1,7 +1,7 @@
 import {
     AutoStories,
     BugReport,
-    CheckCircle,
+    CheckCircle, Close, Done,
     FeaturedVideo,
     KeyboardArrowUp,
     KeyboardDoubleArrowUp,
@@ -23,5 +23,7 @@ export const IconMap = {
     'high': <PriorityHigh/>,
     'todo': <PlaylistAddCheck/>,
     'in-progress': <RadioButtonChecked/>,
-    'done': <CheckCircle/>
+    'done': <CheckCircle/>,
+    'save': <Done fontSize={"small"}/>,
+    'close': <Close fontSize={"small"}/>
 }
