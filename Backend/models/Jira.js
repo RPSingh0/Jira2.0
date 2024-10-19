@@ -136,7 +136,7 @@ class Jira {
      * @throws {ErrorInterceptor} Error for field validation if any required field is missing
      */
     build() {
-        const requiredFields = ['summary', 'type', 'description'];
+        const requiredFields = ['summary', 'type', 'description', 'jiraLink'];
 
         const validatedAllFields = requiredFields.reduce((acc, field) => {
             if (!this[field]) {
@@ -169,22 +169,22 @@ class Jira {
         this.build();
 
         // partialBuild the metadata object for null values check
-        metadata = metadata.partialBuild();
+        metadata = metadata.build();
 
-        // check for project id existence
-        const projectId = await Project.findById(metadata.projectId);
+        // check for project existence
+        const project = await Project.findByProjectKey(metadata.projectKey);
 
-        if (!projectId) {
+        if (!project) {
             throw new ErrorInterceptor({
                 type: ErrorType.VALIDATION,
                 message: 'No Such project available'
             });
         }
 
-        // check for feature id existence
-        const featureId = await Feature.findFeatureByProjectIdAndFeatureId(metadata.projectId, metadata.featureId);
+        // check for feature existence
+        const feature = await Feature.findFeatureByProjectKeyAndFeatureKey(metadata.projectKey, metadata.featureKey);
 
-        if (!featureId) {
+        if (!feature) {
             throw new ErrorInterceptor({
                 type: ErrorType.VALIDATION,
                 message: 'No Such feature available'
@@ -192,7 +192,7 @@ class Jira {
         }
 
         // check for assignedTo id existence
-        const assignedTo = await User.findById(metadata.assignedTo);
+        const assignedTo = await User.findByEmail(metadata.assignedTo);
 
         if (!assignedTo) {
             throw new ErrorInterceptor({
@@ -202,7 +202,7 @@ class Jira {
         }
 
         // check for createdBy id existence
-        const createdBy = await User.findById(metadata.createdBy);
+        const createdBy = await User.findByEmail(metadata.createdBy);
 
         if (!createdBy) {
             throw new ErrorInterceptor({
@@ -210,15 +210,6 @@ class Jira {
                 message: 'No Such user available (created by)'
             });
         }
-
-        // get next jira key
-        let jiraKeySequence = await Jira.generateJiraKeySequence(metadata.projectId);
-
-        // set jira key
-        this.setJiraKey(`${projectId.project_key}-${jiraKeySequence + 1}`);
-
-        // set the jira link
-        this.setJiraLink(`/project/${projectId.project_key}/feature/${featureId.feature_key}/${this.jiraKey}`);
 
         // start transaction
         await dbPromise.beginTransaction();
@@ -242,12 +233,9 @@ class Jira {
             });
         }
 
-        // add created jira id to metadata object
-        metadata.setJiraId(jiraSavedId);
-
         // save metadata object
-        const metadataQuery = 'INSERT INTO Metadata (jira_id, jira_point, project_id, feature_id, assigned_to, created_by, status) VALUES (?, ?, ?, ?, ?, ?, ?)';
-        const metadataValues = [metadata.jiraId, metadata.jiraPoint, metadata.projectId, metadata.featureId, metadata.assignedTo, metadata.createdBy, metadata.status];
+        const metadataQuery = 'INSERT INTO Metadata (jira_key, jira_point, project_key, feature_key, assigned_to, created_by, status) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const metadataValues = [metadata.jiraKey, metadata.jiraPoint, metadata.projectKey, metadata.featureKey, metadata.assignedTo, metadata.createdBy, metadata.status];
         let metadataSavedId = null;
 
         try {
@@ -275,23 +263,19 @@ class Jira {
     }
 
     /**
-     * Takes in a project id as input, checks against the db for next jira key sequence
+     * Takes in a project key as input, checks against the db for next jira key sequence
      *
-     * @param projectId
+     * @param projectKey
      *
      * @returns {Promise<number>}
      *
      * @throws {ErrorInterceptor} Error if there is a database error
      */
-    static async generateJiraKeySequence(projectId) {
-        const getProjectKeyQuery = 'SELECT project_key FROM Project WHERE id = ?';
-        const getCurrentJiraSequenceQuery = 'SELECT COUNT(*) as count FROM Jira WHERE jira_key LIKE ?';
+    static async generateJiraKeySequence(projectKey) {
+        const query = 'SELECT COUNT(*) as count FROM Jira WHERE jira_key LIKE ?';
 
         try {
-            const [resultsA] = await dbPromise.execute(getProjectKeyQuery, [projectId]);
-            const projectKey = resultsA[0].project_key;
-
-            const [results] = await dbPromise.execute(getCurrentJiraSequenceQuery, [`${projectKey}%`]);
+            const [results] = await dbPromise.execute(query, [`${projectKey}%`]);
             return results[0].count;
         } catch (err) {
             throw new ErrorInterceptor({
@@ -302,7 +286,7 @@ class Jira {
     }
 
     /**
-     * Takes in a jiraKey id as input and returns the jira details using jiraKey
+     * Takes in a jiraKey key as input and returns the jira details using jiraKey
      *
      * @param jiraKey
      *
@@ -312,32 +296,7 @@ class Jira {
      */
     static async getJiraDetailsByJiraKey(jiraKey) {
 
-        const query = `
-            SELECT J.summary,
-                   J.description,
-                   J.jira_key                                             AS jiraKey,
-                   M.jira_point                                           AS jiraPoint,
-                   UAT.id                                                 AS userAssignedToId,
-                   CONCAT(UAT.first_name, ' ', IFNULL(UAT.last_name, '')) AS userAssignedToName,
-                   UAT.email                                              AS userAssignedToEmail,
-                   UCB.id                                                 AS userCreatedById,
-                   CONCAT(UCB.first_name, ' ', IFNULL(UCB.last_name, '')) AS userCreatedByName,
-                   UCB.email                                              AS userCreatedByEmail,
-                   P.id                                                   AS projectId,
-                   P.project_key                                          AS projectKey,
-                   F.id                                                   AS featureId,
-                   F.feature_key                                          AS featureKey,
-                   S.id                                                   AS statusId,
-                   S.type                                                 AS statusType,
-                   M.created_on                                           AS createdOn
-            FROM Jira AS J
-                     INNER JOIN Metadata AS M ON J.id = M.jira_id
-                     INNER JOIN User AS UAT ON M.assigned_to = UAT.id
-                     INNER JOIN User AS UCB ON M.created_by = UCB.id
-                     INNER JOIN Project AS P ON M.project_id = P.id
-                     INNER JOIN Feature AS F ON M.feature_id = F.id
-                     INNER JOIN Status AS S ON M.status = S.id
-            WHERE J.jira_key = ?`
+        const query = 'SELECT summary, jira_key AS jiraKey, jira_type as jiraType, description, jira_link AS jiraLink FROM Jira WHERE jira_key = ?';
 
         try {
             const [results] = await dbPromise.execute(query, [jiraKey]);
@@ -372,31 +331,6 @@ class Jira {
             throw new ErrorInterceptor({
                 type: ErrorType.DATABASE,
                 message: `Error updating jira description: ${err.message}`,
-            })
-        }
-    }
-
-    /**
-     * Get jira id by jira key
-     *
-     * @param jiraKey
-     *
-     * @returns {Promise<number>}
-     *
-     * @throws {ErrorInterceptor} Error if there is a database error
-     */
-    static async getJiraIdByJiraKey(jiraKey) {
-
-        const query = 'SELECT id FROM Jira where jira_key = ?';
-
-        try {
-            const [results] = await dbPromise.execute(query, [jiraKey]);
-            return results[0];
-
-        } catch (err) {
-            throw new ErrorInterceptor({
-                type: ErrorType.DATABASE,
-                message: `Error fetching jira id: ${err.message}`,
             })
         }
     }

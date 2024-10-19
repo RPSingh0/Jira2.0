@@ -14,6 +14,8 @@ const jiraController = require('../controllers/jiraController');
  * @swagger
  * /jira/create:
  *   post:
+ *     security:
+ *       - Authorization: []
  *     summary: Creates a new jira for the application
  *     tags: [Jira]
  *     requestBody:
@@ -64,7 +66,7 @@ router.route('/create')
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/GetJiraDetailsByJiraKey'
+ *               $ref: '#/components/schemas/GetJiraDetailsByJiraKeySuccess'
  *       400:
  *         description: Bad Request
  *         content:
@@ -83,23 +85,24 @@ router.route('/getJiraDetailsByJiraKey/:jiraKey')
 
 /**
  * @swagger
- * /jira/updateJiraDescriptionByJiraKey:
- *   patch:
- *     summary: Update jira description by jira key
+ * /jira/getJiraMetadataByJiraKey/{jiraKey}:
+ *   get:
+ *     summary: Get jira metadata by jira key
  *     tags: [Jira]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UpdateJiraDescription'
+ *     parameters:
+ *       - in: path
+ *         name: jiraKey
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: The jira key
  *     responses:
- *       201:
- *         description: Project created successfully
+ *       200:
+ *         description: All features by project key
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UpdateJiraDescriptionSuccess'
+ *               $ref: '#/components/schemas/GetJiraMetadataByJiraKeySuccess'
  *       400:
  *         description: Bad Request
  *         content:
@@ -113,12 +116,47 @@ router.route('/getJiraDetailsByJiraKey/:jiraKey')
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.route('/updateJiraDescriptionByJiraKey')
-    .patch(jiraController.updateJiraDescription);
+router.route('/getJiraMetadataByJiraKey/:jiraKey')
+    .get(jiraController.getJiraMetadataByJiraKey);
 
 /**
  * @swagger
- * /jira/updateJiraAssignedTo:
+ * /jira/updateDescription:
+ *   patch:
+ *     summary: Update jira description
+ *     tags: [Jira]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateDescription'
+ *     responses:
+ *       200:
+ *         description: Description updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UpdateDescriptionSuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/updateDescription')
+    .patch(jiraController.updateDescription);
+
+/**
+ * @swagger
+ * /jira/updateAssignedTo:
  *   patch:
  *     summary: Update jira assigned to
  *     tags: [Jira]
@@ -127,14 +165,14 @@ router.route('/updateJiraDescriptionByJiraKey')
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UpdateJiraAssignedTo'
+ *             $ref: '#/components/schemas/UpdateAssignedTo'
  *     responses:
- *       201:
- *         description: Project created successfully
+ *       200:
+ *         description: Assigned to updated successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UpdateJiraAssignedToSuccess'
+ *               $ref: '#/components/schemas/UpdateAssignedToSuccess'
  *       400:
  *         description: Bad Request
  *         content:
@@ -148,7 +186,7 @@ router.route('/updateJiraDescriptionByJiraKey')
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.route('/updateJiraAssignedTo')
-    .patch(jiraController.updateJiraAssignedTo);
+router.route('/updateAssignedTo')
+    .patch(jiraController.updateAssignedTo);
 
 module.exports = router;

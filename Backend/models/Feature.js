@@ -214,20 +214,20 @@ class Feature {
     }
 
     /**
-     * Fetches and returns features from database by project id and feature id
+     * Fetches and returns features from database by project key and feature key
      *
-     * @param projectId
-     * @param featureId
+     * @param projectKey
+     * @param featureKey
      *
      * @returns {Promise<Object>} A promise that resolves with the result of database select operation
      *
      * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
      */
-    static async findFeatureByProjectIdAndFeatureId(projectId, featureId) {
-        const query = 'SELECT id, name, feature_key FROM Feature WHERE project_id = ? AND id = ?';
+    static async findFeatureByProjectKeyAndFeatureKey(projectKey, featureKey) {
+        const query = 'SELECT id, name, feature_key FROM Feature WHERE project_key = ? AND feature_key = ?';
 
         try {
-            const [results] = await dbPromise.execute(query, [projectId, featureId]);
+            const [results] = await dbPromise.execute(query, [projectKey, featureKey]);
             return results[0];
         } catch (err) {
             throw new ErrorInterceptor({
