@@ -140,4 +140,28 @@
  *             affectedRows:
  *               type: number
  *               description: The number of rows affected by this operation
+ *     UpdateJiraAssignedTo:
+ *       required:
+ *         - jiraKey
+ *         - assignedTo
+ *       type: object
+ *       properties:
+ *         jiraKey:
+ *           type: string
+ *           description: The unique key to identify jira
+ *         assignedTo:
+ *           type: number
+ *           description: The updated user id
+ *     UpdateJiraAssignedToSuccess:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *           description: The status for this request
+ *         data:
+ *           type: object
+ *           properties:
+ *             affectedRows:
+ *               type: number
+ *               description: The number of rows affected by this operation
  */

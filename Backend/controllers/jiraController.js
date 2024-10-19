@@ -49,3 +49,17 @@ exports.updateJiraDescription = catchAsync(async (req, res, next) => {
 
     Response.ok200(res, {affectedRows: affectedRows});
 });
+
+exports.updateJiraAssignedTo = catchAsync(async (req, res, next) => {
+    const {jiraKey, assignedTo} = req.body;
+
+    const affectedRows = await Metadata.updateAssignedTo(jiraKey, assignedTo);
+
+    if (affectedRows === 0) {
+        return Response.notFound404(res, {
+            message: 'No such jira or user'
+        });
+    }
+
+    Response.ok200(res, {affectedRows: affectedRows});
+});

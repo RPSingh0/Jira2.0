@@ -116,4 +116,39 @@ router.route('/getJiraDetailsByJiraKey/:jiraKey')
 router.route('/updateJiraDescriptionByJiraKey')
     .patch(jiraController.updateJiraDescription);
 
+/**
+ * @swagger
+ * /jira/updateJiraAssignedTo:
+ *   patch:
+ *     summary: Update jira assigned to
+ *     tags: [Jira]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateJiraAssignedTo'
+ *     responses:
+ *       201:
+ *         description: Project created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UpdateJiraAssignedToSuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/updateJiraAssignedTo')
+    .patch(jiraController.updateJiraAssignedTo);
+
 module.exports = router;

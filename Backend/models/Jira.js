@@ -375,6 +375,31 @@ class Jira {
             })
         }
     }
+
+    /**
+     * Get jira id by jira key
+     *
+     * @param jiraKey
+     *
+     * @returns {Promise<number>}
+     *
+     * @throws {ErrorInterceptor} Error if there is a database error
+     */
+    static async getJiraIdByJiraKey(jiraKey) {
+
+        const query = 'SELECT id FROM Jira where jira_key = ?';
+
+        try {
+            const [results] = await dbPromise.execute(query, [jiraKey]);
+            return results[0];
+
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error fetching jira id: ${err.message}`,
+            })
+        }
+    }
 }
 
 module.exports = Jira;

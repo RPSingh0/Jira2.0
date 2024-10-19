@@ -1,5 +1,8 @@
 const ErrorInterceptor = require('../utils/errorInterceptor');
 const ErrorType = require('../utils/errorTypes');
+const {dbPromise} = require("../db");
+const Jira = require("./Jira");
+const User = require("./User");
 
 class Metadata {
     constructor(jiraId, projectId, featureId, assignedTo, createdBy, status, jiraPoint) {
@@ -194,6 +197,52 @@ class Metadata {
         }
 
         return this;
+    }
+
+    /**
+     * Takes in a jiraKey and assigned id as input and updates jira metadata
+     *
+     * @param jiraKey
+     * @param assignedTo
+     *
+     * @returns {Promise<number>}
+     *
+     * @throws {ErrorInterceptor} Error if there is a database error
+     */
+    static async updateAssignedTo(jiraKey, assignedTo) {
+
+        // get jira id by jira key
+        const jira = await Jira.getJiraIdByJiraKey(jiraKey);
+
+        if (!jira) {
+            throw new ErrorInterceptor({
+                type: ErrorType.VALIDATION,
+                message: 'No Such jira available'
+            });
+        }
+
+        // check for user existence
+        const user = await User.findById(assignedTo);
+
+        if (!user) {
+            throw new ErrorInterceptor({
+                type: ErrorType.VALIDATION,
+                message: 'No Such user available (assigned to)'
+            });
+        }
+
+        const query = 'UPDATE Metadata SET assigned_to = ? WHERE jira_id = ?';
+
+        try {
+            const [results] = await dbPromise.execute(query, [assignedTo, jira.id]);
+            return results.affectedRows;
+
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error updating metadata: ${err.message}`,
+            })
+        }
     }
 }
 
