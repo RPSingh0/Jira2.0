@@ -48,7 +48,7 @@ router.route('/create')
  * @swagger
  * /feature/getFeaturesAsOptionsByProjectKey/{projectKey}:
  *   get:
- *     summary: Get features as option by a project key
+ *     summary: Get features as options by a project key
  *     tags: [Feature]
  *     parameters:
  *       - in: path
@@ -59,7 +59,7 @@ router.route('/create')
  *           description: The project key
  *     responses:
  *       200:
- *         description: All features by project key
+ *         description: Features retrieved successfully
  *         content:
  *           application/json:
  *             schema:

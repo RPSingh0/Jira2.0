@@ -83,11 +83,11 @@ router.route('/generateProjectKey')
  * @swagger
  * /project/getAllProjectsAsOptions:
  *   get:
- *     summary: Get all projects from db
+ *     summary: Get all projects as options
  *     tags: [Project]
  *     responses:
  *       200:
- *         description: Get all projects from db
+ *         description: Projects retrieved successfully
  *         content:
  *           application/json:
  *             schema:

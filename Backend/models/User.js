@@ -285,7 +285,7 @@ class User {
      * @throws {ErrorInterceptor} Throws error if there is a database error
      */
     static async getAllUsers() {
-        const query = 'SELECT id, CONCAT(first_name, \' \', IFNULL(last_name, \'\')) AS name, profile_image AS profileImage, email FROM user WHERE status = 1;';
+        const query = 'SELECT CONCAT(first_name, \' \', IFNULL(last_name, \'\')) AS name, profile_image AS profileImage, email FROM user WHERE status = 1;';
 
         try {
             const [results] = await dbPromise.execute(query);

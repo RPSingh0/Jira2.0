@@ -76,9 +76,6 @@
  *               items:
  *                 type: object
  *                 properties:
- *                   id:
- *                     type: integer
- *                     description: The id of the user
  *                   name:
  *                     type: string
  *                     description: The name of the user

@@ -26,7 +26,7 @@ const jiraController = require('../controllers/jiraController');
  *             $ref: '#/components/schemas/JiraCreate'
  *     responses:
  *       201:
- *         description: Project created successfully
+ *         description: Jira created successfully
  *         content:
  *           application/json:
  *             schema:
@@ -62,7 +62,7 @@ router.route('/create')
  *           description: The jira key
  *     responses:
  *       200:
- *         description: All features by project key
+ *         description: Jira details retrieved successfully
  *         content:
  *           application/json:
  *             schema:
@@ -98,7 +98,7 @@ router.route('/getJiraDetailsByJiraKey/:jiraKey')
  *           description: The jira key
  *     responses:
  *       200:
- *         description: All features by project key
+ *         description: Jira metadata retrieved successfully
  *         content:
  *           application/json:
  *             schema:
