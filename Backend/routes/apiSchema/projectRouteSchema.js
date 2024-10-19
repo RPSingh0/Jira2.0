@@ -5,7 +5,6 @@
  *     ProjectCreate:
  *       required:
  *         - name
- *         - projectKey
  *         - description
  *         - projectLeadBy
  *         - startDate
@@ -15,14 +14,11 @@
  *         name:
  *           type: string
  *           description: The name of the project
- *         projectKey:
- *           type: string
- *           description: The unique key to identify project
  *         description:
  *           type: string
  *           description: The description of the project
  *         projectLeadBy:
- *           type: number
+ *           type: string
  *           description: The user leading / managing the project
  *         startDate:
  *           type: string
@@ -32,7 +28,7 @@
  *           type: string
  *           description: The expected end date for project
  *           example: "dd/mm/yyyy"
- *     GetProjectKey:
+ *     GenerateProjectKey:
  *       type: object
  *       required:
  *         - name
@@ -40,7 +36,7 @@
  *         name:
  *           type: string
  *           description: The name of the project
- *     GetProjectKeySuccess:
+ *     GenerateProjectKeySuccess:
  *       type: object
  *       properties:
  *         status:
@@ -61,10 +57,10 @@
  *       data:
  *         type: object
  *         properties:
- *           id:
- *             type: number
- *             description: The id of the project created
- *     GetAllProjectsSuccess:
+ *           projectKey:
+ *             type: string
+ *             description: The project key of the project created
+ *     GetAllProjectsAsOptionSuccess:
  *       type: object
  *       properties:
  *         status:
@@ -78,9 +74,6 @@
  *               items:
  *                 type: object
  *                 properties:
- *                   id:
- *                     type: integer
- *                     description: The id of the project
  *                   projectKey:
  *                     type: string
  *                     description: The project key for the project

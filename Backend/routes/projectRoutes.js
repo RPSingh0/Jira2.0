@@ -1,6 +1,5 @@
 const express = require('express');
 const projectController = require('../controllers/projectController');
-const authenticationController = require("../controllers/authenticationController");
 const router = express.Router();
 
 /**
@@ -47,7 +46,7 @@ router.route('/create')
 
 /**
  * @swagger
- * /project/getProjectKey:
+ * /project/generateProjectKey:
  *   post:
  *     summary: Generates a new project key using project name
  *     tags: [Project]
@@ -56,14 +55,14 @@ router.route('/create')
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/GetProjectKey'
+ *             $ref: '#/components/schemas/GenerateProjectKey'
  *     responses:
  *       201:
  *         description: Project key generated successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/GetProjectKeySuccess'
+ *               $ref: '#/components/schemas/GenerateProjectKeySuccess'
  *       400:
  *         description: Bad Request
  *         content:
@@ -77,12 +76,12 @@ router.route('/create')
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.route('/getProjectKey')
-    .post(projectController.getProjectKey);
+router.route('/generateProjectKey')
+    .post(projectController.generateProjectKey);
 
 /**
  * @swagger
- * /project/getAllProjects:
+ * /project/getAllProjectsAsOptions:
  *   get:
  *     summary: Get all projects from db
  *     tags: [Project]
@@ -92,7 +91,7 @@ router.route('/getProjectKey')
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/GetAllProjectsSuccess'
+ *               $ref: '#/components/schemas/GetAllProjectsAsOptionSuccess'
  *       400:
  *         description: Bad Request
  *         content:
@@ -106,7 +105,7 @@ router.route('/getProjectKey')
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.route('/getAllProjects')
-    .get(projectController.getAllProjects);
+router.route('/getAllProjectsAsOptions')
+    .get(projectController.getAllProjectsAsOptions);
 
 module.exports = router;

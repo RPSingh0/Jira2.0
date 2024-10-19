@@ -182,7 +182,7 @@ class Project {
      * @throws {ErrorInterceptor} Error for field validation if any required field is missing
      */
     build() {
-        const requiredFields = ['name', 'key', 'description', 'project_lead_by', 'start_date', 'expected_end_date'];
+        const requiredFields = ['name', 'description', 'project_lead_by', 'start_date', 'expected_end_date'];
 
         const validatedAllFields = requiredFields.reduce((acc, field) => {
             if (!this[field]) {
@@ -220,7 +220,7 @@ class Project {
         this.build();
 
         // check for project lead
-        const projectLead = await User.findById(this.project_lead_by);
+        const projectLead = await User.findByEmail(this.project_lead_by);
 
         if (!projectLead) {
             throw new ErrorInterceptor({
@@ -259,7 +259,7 @@ class Project {
      *
      * @throws {ErrorInterceptor} Error if there is a database error
      */
-    static async generateProjectKey(name) {
+    static async generateProjectKeySequence(name) {
         const query = 'SELECT COUNT(*) as count FROM Project WHERE project_key LIKE ?';
 
         try {
@@ -297,14 +297,14 @@ class Project {
     }
 
     /**
-     * Fetches and returns all projects from database
+     * Fetches and returns all projects as option from database
      *
      * @returns {Promise<Object>} A promise that resolves with the result of database select operation
      *
      * @throws {ErrorInterceptor} Throws error if there is a database error
      */
-    static async getAllProjects() {
-        const query = 'SELECT id, project_key as projectKey, CONCAT(project_key, \' | \', name) AS optionText FROM project';
+    static async getAllProjectsAsOptions() {
+        const query = 'SELECT project_key as projectKey, CONCAT(project_key, \' | \', name) AS optionText FROM project';
 
         try {
             const [results] = await dbPromise.execute(query);
