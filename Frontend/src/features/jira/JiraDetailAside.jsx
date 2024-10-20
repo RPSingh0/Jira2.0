@@ -29,7 +29,7 @@ const StyledProjectDetailAsideBox = styled(Paper)(({theme}) => ({
         gridAutoFlow: "column"
     },
 
-    [theme.breakpoints.down('c660')]: {
+    [theme.breakpoints.down('c600')]: {
         display: "flex",
     }
 

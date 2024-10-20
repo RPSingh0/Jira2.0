@@ -124,7 +124,8 @@ function JiraDetailAssignedTo() {
                         backgroundColor: grey["200"]
                     }
                 }} onDoubleClick={() => setIsEditing(true)}>
-                    <Avatar src={jiraMetadata?.data.jiraMetadata.userAssignedToProfileImage} alt="assignedTo"/>
+                    <Avatar src={jiraMetadata?.data.jiraMetadata.userAssignedToProfileImage} alt="assignedTo"
+                            sx={{height: 24, width: 24}}/>
                     <Typography variant="body1">
                         {jiraMetadata?.data.jiraMetadata.userAssignedToName}
                     </Typography>

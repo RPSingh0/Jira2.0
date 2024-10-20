@@ -17,7 +17,7 @@ export function AutoCompleteRenderOptionWithUserAvatar(props, option) {
     return (
         <ListItem key={option['email']} {...other}>
             <ListItemAvatar>
-                <Avatar alt={option['name']} src={option['profileImage']}/>
+                <Avatar alt={option['name']} src={option['profileImage']} sx={{height: 24, width: 24}}/>
             </ListItemAvatar>
             <ListItemText primary={option['name']}/>
         </ListItem>

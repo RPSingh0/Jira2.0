@@ -27,7 +27,7 @@ function JiraDetailCreatedBy() {
                     backgroundColor: grey["200"]
                 }
             }}>
-                <Avatar src={jiraMetadata?.data.jiraMetadata.userCreatedByProfileImage} alt="createdBy"/>
+                <Avatar src={jiraMetadata?.data.jiraMetadata.userCreatedByProfileImage} alt="createdBy" sx={{height: 24, width: 24}}/>
                 <Typography variant="body1">
                     {jiraMetadata?.data.jiraMetadata.userCreatedByName}
                 </Typography>

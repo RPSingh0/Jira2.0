@@ -21,6 +21,7 @@ export function AutoCompleteRenderInputWithUserAvatar(params, label, isLoading, 
                             <Avatar
                                 src={value?.['profileImage']}
                                 alt={value?.['name']}
+                                sx={{height: 24, width: 24}}
                             />
                         </>
                     ),

@@ -13,7 +13,7 @@ export const StyledProjectDetailContentBox = styled(Box)(({theme}) => ({
     justifyContent: "space-between",
 
     [theme.breakpoints.down('c1000')]: {
-        flexDirection: "column-reverse",
+        flexDirection: "column",
         gap: "1rem"
     }
 }));
