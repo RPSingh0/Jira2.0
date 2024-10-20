@@ -6,7 +6,7 @@ export function AutoCompleteRenderInputWithUserAvatar(params, label, isLoading, 
         <TextField
             {...params}
             label={label}
-            placeholder={value ? value["optionText"] : "Unassigned"}
+            placeholder={value ? value["name"] : "Unassigned"}
             slotProps={{
                 input: {
                     ...params.InputProps,
@@ -20,7 +20,7 @@ export function AutoCompleteRenderInputWithUserAvatar(params, label, isLoading, 
                         <>
                             <Avatar
                                 src={value?.['profileImage']}
-                                alt={value?.['imageAltText']}
+                                alt={value?.['name']}
                             />
                         </>
                     ),

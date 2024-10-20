@@ -1,5 +1,9 @@
 import {Paper, styled} from "@mui/material";
 import JiraDetailAssignedTo from "./JiraDetailAssignedTo.jsx";
+import JiraDetailCreatedBy from "./JiraDetailCreatedBy.jsx";
+import JiraDetailPoints from "./JiraDetailPoints.jsx";
+import JiraDetailProject from "./JiraDetailProject.jsx";
+import JiraDetailFeature from "./JiraDetailFeature.jsx";
 
 const StyledProjectDetailAsideBox = styled(Paper)(({theme}) => ({
     width: "20%",
@@ -36,6 +40,10 @@ function JiraDetailAside() {
     return (
         <StyledProjectDetailAsideBox variant="outlined">
             <JiraDetailAssignedTo/>
+            <JiraDetailCreatedBy/>
+            <JiraDetailPoints/>
+            <JiraDetailProject/>
+            <JiraDetailFeature/>
         </StyledProjectDetailAsideBox>
     );
 }

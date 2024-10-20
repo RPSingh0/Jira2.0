@@ -15,11 +15,11 @@ import {Avatar, ListItem, ListItemAvatar, ListItemText} from "@mui/material";
 export function AutoCompleteRenderOptionWithUserAvatar(props, option) {
     const {key, ...other} = props;
     return (
-        <ListItem key={key} {...other}>
+        <ListItem key={option['email']} {...other}>
             <ListItemAvatar>
-                <Avatar alt={option['imageAltText']} src={option['profileImage']}/>
+                <Avatar alt={option['name']} src={option['profileImage']}/>
             </ListItemAvatar>
-            <ListItemText primary={option['optionText']}/>
+            <ListItemText primary={option['name']}/>
         </ListItem>
     );
 }

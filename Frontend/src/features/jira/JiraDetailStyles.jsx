@@ -1,4 +1,4 @@
-import {Box, styled, Typography} from "@mui/material";
+import {Box, styled} from "@mui/material";
 
 export const StyledJiraDetailBox = styled(Box)(() => ({
     display: "flex",
@@ -6,8 +6,6 @@ export const StyledJiraDetailBox = styled(Box)(() => ({
     gap: "1rem",
     padding: "2rem"
 }));
-
-export const StyledProjectDetailHeading = styled(Typography)(() => ({}));
 
 export const StyledProjectDetailContentBox = styled(Box)(({theme}) => ({
     display: "flex",

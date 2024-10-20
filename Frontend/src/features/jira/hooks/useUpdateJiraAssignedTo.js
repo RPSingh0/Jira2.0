@@ -2,7 +2,7 @@ import {useMutation} from "@tanstack/react-query";
 import {toast} from "react-toastify";
 import {updateJiraAssignedService} from "../../../services/jira/jiraService.js";
 
-export function useUpdateJiraDescription() {
+export function useUpdateJiraAssignedTo() {
 
     const {mutate: updateJiraAssignedTo, isPending: isUpdating} = useMutation({
         mutationFn: updateJiraAssignedService,

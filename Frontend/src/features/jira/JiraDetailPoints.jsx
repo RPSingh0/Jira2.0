@@ -1,16 +1,14 @@
-import AutocompleteSelector from "../../components/autocomplete/AutocompleteSelector.jsx";
-import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
-import {getAllUsersService} from "../../services/user/userService.js";
 import {useEffect, useState} from "react";
-import {Avatar, Box, IconButton, Typography} from "@mui/material";
+import {Box, IconButton, Typography} from "@mui/material";
 import {grey} from "@mui/material/colors";
 import {IconMap} from "../../utils/IconMap.jsx";
-import {useUpdateJiraAssignedTo} from "./hooks/useUpdateJiraAssignedTo.js";
 import {toast} from "react-toastify";
 import {useQueryClient} from "@tanstack/react-query";
 import {useJiraMetadataContext} from "./JiraMetadataContext.jsx";
+import {useUpdateJiraPoints} from "./hooks/useUpdateJiraPoints.js";
+import InputSelectField from "../../components/input/InputSelectField.jsx";
 
-function JiraDetailAssignedTo() {
+function JiraDetailPoints() {
 
     // context states
     const {
@@ -23,51 +21,40 @@ function JiraDetailAssignedTo() {
 
     // react query hooks
     const queryClient = useQueryClient();
-    const {updateJiraAssignedTo, isUpdating} = useUpdateJiraAssignedTo();
+    const {updateJiraPoints, isUpdating} = useUpdateJiraPoints();
 
     // local states
-    const [assignedTo, setAssignedTo] = useState(null);
+    const [jiraPoint, setJiraPoint] = useState(0);
     const [isEditing, setIsEditing] = useState(false);
 
-    // load all the users
-    const {isLoading: isLoadingUsers, data: usersForLead, error: usersForLeadError} = useGetQueryHook({
-        key: ['usersForLead'],
-        fn: getAllUsersService
-    });
-
-    // once the jira details are loaded, set the user assigned to from jira
+    // once the jira metadata is loaded, set the jira point
     useEffect(() => {
-        // if jira details are loaded
+        // if jira metadata is loaded
         if (!loadingJiraMetadata && !fetchingJiraMetadata) {
-            // set the user
-            setAssignedTo({
-                name: jiraMetadata.data.jiraMetadata.userAssignedToName,
-                email: jiraMetadata.data.jiraMetadata.userAssignedToEmail,
-                profileImage: jiraMetadata.data.jiraMetadata.userAssignedToProfileImage,
-                imageAltText: jiraMetadata.data.jiraMetadata.userAssignedToName
-            });
+            // set the jira point
+            setJiraPoint(jiraMetadata.data.jiraMetadata.jiraPoint);
         }
-    }, [loadingJiraMetadata, fetchingJiraMetadata, isLoadingUsers]);
+    }, [loadingJiraMetadata, fetchingJiraMetadata]);
 
     // handler functions
-    function handleUpdateAssignedTo() {
+    function handleUpdateJiraPoint() {
 
-        if (!assignedTo) {
-            toast.error('Please select a user');
+        if (!jiraPoint) {
+            toast.error('Please select a point');
             return;
         }
 
-        if (assignedTo.email === jiraMetadata.data.jiraMetadata.userAssignedToEmail) {
+        if (jiraPoint === jiraMetadata.data.jiraMetadata.jiraPoint) {
             return;
         }
 
-        updateJiraAssignedTo({
+        updateJiraPoints({
             jiraKey: jiraKey,
-            assignedTo: assignedTo.email
+            jiraPoint: jiraPoint
         }, {
             onSuccess: () => {
                 setIsEditing(false);
-                queryClient.invalidateQueries([jiraKey]);
+                queryClient.invalidateQueries([`${jiraKey}-metadata`]);
             }
         });
     }
@@ -76,7 +63,7 @@ function JiraDetailAssignedTo() {
 
         <Box>
             <Typography variant="overline" gutterBottom sx={{paddingLeft: "0.5rem"}}>
-                Assigned To
+                Points
             </Typography>
             {isEditing ?
                 <Box sx={{
@@ -85,13 +72,17 @@ function JiraDetailAssignedTo() {
                     alignItems: "end",
                     gap: "0.5rem"
                 }}>
-                    <AutocompleteSelector
-                        variant={'user-avatar'}
-                        name={"assignedTo"}
-                        options={(isLoadingUsers || usersForLeadError) ? [] : usersForLead.data.users}
-                        isLoading={isLoadingUsers}
-                        value={assignedTo}
-                        setValue={setAssignedTo}
+                    <InputSelectField
+                        name={"jiraPoint"}
+                        value={jiraPoint}
+                        onChange={(event) => setJiraPoint(event.target.value)}
+                        options={[
+                            {text: "1", value: 1},
+                            {text: "2", value: 2},
+                            {text: "3", value: 3},
+                            {text: "5", value: 5},
+                            {text: "8", value: 8},
+                        ]}
                     />
                     <Box sx={{
                         display: "flex",
@@ -100,7 +91,7 @@ function JiraDetailAssignedTo() {
                     }}>
                         <IconButton size={"small"} disableFocusRipple disableTouchRipple sx={{
                             borderRadius: "9px"
-                        }} onClick={handleUpdateAssignedTo}>
+                        }} onClick={handleUpdateJiraPoint}>
                             {IconMap['save']}
                         </IconButton>
                         <IconButton size={"small"} disableFocusRipple disableTouchRipple sx={{
@@ -124,9 +115,8 @@ function JiraDetailAssignedTo() {
                         backgroundColor: grey["200"]
                     }
                 }} onDoubleClick={() => setIsEditing(true)}>
-                    <Avatar src={jiraMetadata?.data.jiraMetadata.userAssignedToProfileImage} alt="assignedTo"/>
                     <Typography variant="body1">
-                        {jiraMetadata?.data.jiraMetadata.userAssignedToName}
+                        {jiraMetadata?.data.jiraMetadata.jiraPoint}
                     </Typography>
                 </Box>
             }
@@ -134,4 +124,4 @@ function JiraDetailAssignedTo() {
     );
 }
 
-export default JiraDetailAssignedTo;
+export default JiraDetailPoints;

@@ -2,7 +2,7 @@ import {FormControl, InputLabel, MenuItem, Select} from "@mui/material";
 
 function InputSelectField({options, name, label, value, required, onChange}) {
     return (
-        <FormControl size={"small"} required={required}>
+        <FormControl size={"small"} required={required} fullWidth>
             <InputLabel id={label}>{label}</InputLabel>
             <Select
                 name={name}

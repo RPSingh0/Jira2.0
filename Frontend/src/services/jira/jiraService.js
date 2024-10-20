@@ -44,8 +44,46 @@ export async function createJiraService({token, summary, jiraType, jiraPoint, de
     return data;
 }
 
+/**
+ * This function takes jira key and returns jira details
+ *
+ * @param {string} token
+ * @param {string} jirakey
+ *
+ * @returns {Promise<*>}
+ *
+ * @throws {Error} Error if api call is unsuccessful
+ */
 export async function getJiraDetailsByJiraKeyService({token, jiraKey}) {
     let data = await fetch(`${URL}/getJiraDetailsByJiraKey/${jiraKey}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    data = await data.json();
+
+    if (data && data.status === 'fail') {
+        throw new Error(data.message);
+    }
+
+    return data;
+}
+
+/**
+ * This function takes jira key and returns jira metadata
+ *
+ * @param {string} token
+ * @param {string} jiraKey
+ *
+ * @returns {Promise<*>}
+ *
+ * @throws {Error} Error if api call is unsuccessful
+ */
+export async function getJiraMetadataByJiraKeyService({token, jiraKey}) {
+    let data = await fetch(`${URL}/getJiraMetadataByJiraKey/${jiraKey}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -75,7 +113,7 @@ export async function getJiraDetailsByJiraKeyService({token, jiraKey}) {
  */
 export async function updateJiraDescriptionService({token, jiraKey, description}) {
 
-    let data = await fetch(`${URL}/updateJiraDescriptionByJiraKey`, {
+    let data = await fetch(`${URL}/updateDescription`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -109,7 +147,7 @@ export async function updateJiraDescriptionService({token, jiraKey, description}
  */
 export async function updateJiraAssignedService({token, jiraKey, assignedTo}) {
 
-    let data = await fetch(`${URL}/updateJiraAssignedTo`, {
+    let data = await fetch(`${URL}/updateAssignedTo`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -118,6 +156,76 @@ export async function updateJiraAssignedService({token, jiraKey, assignedTo}) {
         body: JSON.stringify({
             jiraKey: jiraKey,
             assignedTo: assignedTo
+        })
+    });
+
+    data = await data.json();
+
+    if (data && data.status === 'fail') {
+        throw new Error(data.message);
+    }
+
+    return data;
+}
+
+/**
+ * This function takes jiraKey and jira points and updates a jira
+ *
+ * @param {string} token
+ * @param {string} jiraKey
+ * @param {number} jiraPoint
+ *
+ * @returns {Promise<*>}
+ *
+ * @throws {Error} Error if api call is unsuccessful
+ */
+export async function updateJiraPointsService({token, jiraKey, jiraPoint}) {
+
+    let data = await fetch(`${URL}/updatePoints`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            jiraKey: jiraKey,
+            jiraPoint: jiraPoint
+        })
+    });
+
+    data = await data.json();
+
+    if (data && data.status === 'fail') {
+        throw new Error(data.message);
+    }
+
+    return data;
+}
+
+/**
+ * This function updates a feature
+ *
+ * @param {string} token
+ * @param {string} jiraKey
+ * @param {string} projectKey
+ * @param {number} featureKey
+ *
+ * @returns {Promise<*>}
+ *
+ * @throws {Error} Error if api call is unsuccessful
+ */
+export async function updateJiraFeatureService({token, jiraKey, projectKey, featureKey}) {
+
+    let data = await fetch(`${URL}/updateFeature`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            jiraKey: jiraKey,
+            projectKey: projectKey,
+            featureKey: featureKey
         })
     });
 

@@ -10,7 +10,7 @@ function JiraDetailContextProvider({children}) {
     // get jira key from url
     const {jiraKey} = useParams();
 
-    // use jira details using custom hook
+    // load jira details using custom hook
     const {
         isLoading: loadingJiraDetail,
         isFetching: fetchingJiraDetail,

@@ -8,7 +8,7 @@ function AutocompleteSelector({variant, name, label, options, isLoading, disable
             fullWidth={true}
             options={options}
             disabled={disabled}
-            size={"small"}
+            size="small"
             name={name}
             freeSolo={true}
             value={value}
@@ -16,7 +16,7 @@ function AutocompleteSelector({variant, name, label, options, isLoading, disable
                 setValue(newValue ? newValue : defaultOption);
             }}
             getOptionLabel={(option) => {
-                return option['optionText'] || ""
+                return option[variant === 'user-avatar' ? 'name' : 'optionText'] || ""
             }}
             renderOption={RenderOptionMap[variant]}
             renderInput={(params) => RenderInputMap[variant](params, label, isLoading, value)}

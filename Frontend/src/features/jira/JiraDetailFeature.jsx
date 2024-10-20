@@ -1,16 +1,16 @@
 import AutocompleteSelector from "../../components/autocomplete/AutocompleteSelector.jsx";
 import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
-import {getAllUsersService} from "../../services/user/userService.js";
 import {useEffect, useState} from "react";
-import {Avatar, Box, IconButton, Typography} from "@mui/material";
+import {Box, IconButton, Typography} from "@mui/material";
 import {grey} from "@mui/material/colors";
 import {IconMap} from "../../utils/IconMap.jsx";
-import {useUpdateJiraAssignedTo} from "./hooks/useUpdateJiraAssignedTo.js";
 import {toast} from "react-toastify";
 import {useQueryClient} from "@tanstack/react-query";
 import {useJiraMetadataContext} from "./JiraMetadataContext.jsx";
+import {getFeaturesAsOptionsByProjectKey} from "../../services/feature/featureService.js";
+import {useUpdateJiraFeature} from "./hooks/useUpdateJiraFeature.js";
 
-function JiraDetailAssignedTo() {
+function JiraDetailFeature() {
 
     // context states
     const {
@@ -23,16 +23,18 @@ function JiraDetailAssignedTo() {
 
     // react query hooks
     const queryClient = useQueryClient();
-    const {updateJiraAssignedTo, isUpdating} = useUpdateJiraAssignedTo();
+    const {updateJiraFeature, isUpdating} = useUpdateJiraFeature();
 
     // local states
-    const [assignedTo, setAssignedTo] = useState(null);
+    const [feature, setFeature] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
 
-    // load all the users
-    const {isLoading: isLoadingUsers, data: usersForLead, error: usersForLeadError} = useGetQueryHook({
-        key: ['usersForLead'],
-        fn: getAllUsersService
+    // Fetch all features related to project
+    const {isLoading: isLoadingFeatures, isFetching: isFetchingFeatures, data: featureOptions} = useGetQueryHook({
+        key: ['featureOptions'],
+        fn: getFeaturesAsOptionsByProjectKey,
+        projectKey: jiraMetadata?.data.jiraMetadata.projectKey,
+        enabledDependency: [!loadingJiraMetadata, !fetchingJiraMetadata]
     });
 
     // once the jira details are loaded, set the user assigned to from jira
@@ -40,34 +42,33 @@ function JiraDetailAssignedTo() {
         // if jira details are loaded
         if (!loadingJiraMetadata && !fetchingJiraMetadata) {
             // set the user
-            setAssignedTo({
-                name: jiraMetadata.data.jiraMetadata.userAssignedToName,
-                email: jiraMetadata.data.jiraMetadata.userAssignedToEmail,
-                profileImage: jiraMetadata.data.jiraMetadata.userAssignedToProfileImage,
-                imageAltText: jiraMetadata.data.jiraMetadata.userAssignedToName
+            setFeature({
+                featureKey: jiraMetadata.data.jiraMetadata.featureKey,
+                optionText: `${jiraMetadata.data.jiraMetadata.featureKey} | ${jiraMetadata.data.jiraMetadata.featureName}`
             });
         }
-    }, [loadingJiraMetadata, fetchingJiraMetadata, isLoadingUsers]);
+    }, [loadingJiraMetadata, fetchingJiraMetadata, isLoadingFeatures]);
 
     // handler functions
-    function handleUpdateAssignedTo() {
+    function handleUpdateFeature() {
 
-        if (!assignedTo) {
-            toast.error('Please select a user');
+        if (!feature) {
+            toast.error('Please select a feature');
             return;
         }
 
-        if (assignedTo.email === jiraMetadata.data.jiraMetadata.userAssignedToEmail) {
+        if (feature.featureKey === jiraMetadata.data.jiraMetadata.featureKey) {
             return;
         }
 
-        updateJiraAssignedTo({
+        updateJiraFeature({
             jiraKey: jiraKey,
-            assignedTo: assignedTo.email
+            projectKey: jiraMetadata.data.jiraMetadata.projectKey,
+            featureKey: feature.featureKey
         }, {
             onSuccess: () => {
                 setIsEditing(false);
-                queryClient.invalidateQueries([jiraKey]);
+                queryClient.invalidateQueries([`${jiraKey}-metadata`]);
             }
         });
     }
@@ -76,7 +77,7 @@ function JiraDetailAssignedTo() {
 
         <Box>
             <Typography variant="overline" gutterBottom sx={{paddingLeft: "0.5rem"}}>
-                Assigned To
+                Feature
             </Typography>
             {isEditing ?
                 <Box sx={{
@@ -86,12 +87,12 @@ function JiraDetailAssignedTo() {
                     gap: "0.5rem"
                 }}>
                     <AutocompleteSelector
-                        variant={'user-avatar'}
+                        variant={'default'}
                         name={"assignedTo"}
-                        options={(isLoadingUsers || usersForLeadError) ? [] : usersForLead.data.users}
-                        isLoading={isLoadingUsers}
-                        value={assignedTo}
-                        setValue={setAssignedTo}
+                        options={isLoadingFeatures ? [] : featureOptions.data.features}
+                        isLoading={isLoadingFeatures}
+                        value={feature}
+                        setValue={setFeature}
                     />
                     <Box sx={{
                         display: "flex",
@@ -100,7 +101,7 @@ function JiraDetailAssignedTo() {
                     }}>
                         <IconButton size={"small"} disableFocusRipple disableTouchRipple sx={{
                             borderRadius: "9px"
-                        }} onClick={handleUpdateAssignedTo}>
+                        }} onClick={handleUpdateFeature}>
                             {IconMap['save']}
                         </IconButton>
                         <IconButton size={"small"} disableFocusRipple disableTouchRipple sx={{
@@ -124,9 +125,8 @@ function JiraDetailAssignedTo() {
                         backgroundColor: grey["200"]
                     }
                 }} onDoubleClick={() => setIsEditing(true)}>
-                    <Avatar src={jiraMetadata?.data.jiraMetadata.userAssignedToProfileImage} alt="assignedTo"/>
                     <Typography variant="body1">
-                        {jiraMetadata?.data.jiraMetadata.userAssignedToName}
+                        {`${jiraMetadata?.data.jiraMetadata.featureKey} | ${jiraMetadata?.data.jiraMetadata.featureName}`}
                     </Typography>
                 </Box>
             }
@@ -134,4 +134,4 @@ function JiraDetailAssignedTo() {
     );
 }
 
-export default JiraDetailAssignedTo;
+export default JiraDetailFeature;

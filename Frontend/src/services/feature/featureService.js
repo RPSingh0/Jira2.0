@@ -92,3 +92,30 @@ export async function getAllFeaturesByProjectKey({projectKey}) {
 
     return data;
 }
+
+/**
+ * This function takes project key and returns all features as options
+ *
+ * @param projectKey
+ *
+ * @returns {Promise<*>}
+ *
+ * @throws {Error} Error if api call is unsuccessful
+ */
+export async function getFeaturesAsOptionsByProjectKey({projectKey}) {
+
+    let data = await fetch(`${URL}/getFeaturesAsOptionsByProjectKey/${projectKey}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    data = await data.json();
+
+    if (data && data.status === 'fail') {
+        throw new Error(data.message);
+    }
+
+    return data;
+}
