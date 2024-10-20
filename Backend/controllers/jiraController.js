@@ -90,3 +90,25 @@ exports.updateAssignedTo = catchAsync(async (req, res, next) => {
 
     Response.ok200(res);
 });
+
+exports.updatePoints = catchAsync(async (req, res, next) => {
+    const {jiraKey, jiraPoint} = req.body;
+
+    const affectedRows = await Metadata.updatePoints(jiraKey, jiraPoint);
+
+    if (affectedRows === 0) {
+        return Response.notFound404(res, {
+            message: `No such jira by key: ${jiraKey}`
+        });
+    }
+
+    Response.ok200(res);
+});
+
+exports.updateFeature = catchAsync(async (req, res, next) => {
+    const {jiraKey, projectKey, featureKey} = req.body;
+
+    await Metadata.updateFeature(jiraKey, projectKey, featureKey);
+
+    Response.ok200(res);
+});

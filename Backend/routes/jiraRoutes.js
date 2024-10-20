@@ -189,4 +189,74 @@ router.route('/updateDescription')
 router.route('/updateAssignedTo')
     .patch(jiraController.updateAssignedTo);
 
+/**
+ * @swagger
+ * /jira/updatePoints:
+ *   patch:
+ *     summary: Update jira points
+ *     tags: [Jira]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdatePoints'
+ *     responses:
+ *       200:
+ *         description: Jira point updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UpdatePointsSuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/updatePoints')
+    .patch(jiraController.updatePoints);
+
+/**
+ * @swagger
+ * /jira/updateFeature:
+ *   patch:
+ *     summary: Update linked feature to a jira
+ *     tags: [Jira]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateFeature'
+ *     responses:
+ *       200:
+ *         description: Jira feature updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UpdateFeatureSuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/updateFeature')
+    .patch(jiraController.updateFeature);
+
 module.exports = router;

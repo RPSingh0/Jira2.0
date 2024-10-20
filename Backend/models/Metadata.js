@@ -2,6 +2,7 @@ const ErrorInterceptor = require('../utils/errorInterceptor');
 const ErrorType = require('../utils/errorTypes');
 const {dbPromise} = require("../db");
 const User = require("./User");
+const Feature = require("./Feature");
 
 class Metadata {
     constructor(jiraKey, projectKey, featureKey, assignedTo, createdBy, status, jiraPoint) {
@@ -214,8 +215,10 @@ class Metadata {
                    M.jira_point                                           AS jiraPoint,
                    CONCAT(UAT.first_name, ' ', IFNULL(UAT.last_name, '')) AS userAssignedToName,
                    UAT.email                                              AS userAssignedToEmail,
+                   UAT.profile_image                                      AS userAssignedToProfileImage,
                    CONCAT(UCB.first_name, ' ', IFNULL(UCB.last_name, '')) AS userCreatedByName,
                    UCB.email                                              AS userCreatedByEmail,
+                   UCB.profile_image                                      AS userCreatedByProfileImage,
                    P.project_key                                          AS projectKey,
                    P.name                                                 AS projectName,
                    F.feature_key                                          AS featureKey,
@@ -275,6 +278,114 @@ class Metadata {
                 message: `Error updating metadata: ${err.message}`,
             })
         }
+    }
+
+    /**
+     * Takes in a jiraKey and jiraPoint as input and updates jira metadata
+     *
+     * @param jiraKey
+     * @param jiraPoint
+     *
+     * @returns {Promise<number>}
+     *
+     * @throws {ErrorInterceptor} Error if there is a database error
+     */
+    static async updatePoints(jiraKey, jiraPoint) {
+
+        const query = 'UPDATE Metadata SET jira_point = ? WHERE jira_key = ?';
+
+        try {
+            const [results] = await dbPromise.execute(query, [jiraPoint, jiraKey]);
+            return results.affectedRows;
+
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error updating metadata: ${err.message}`,
+            })
+        }
+    }
+
+    /**
+     * Takes function moves jira from one feature to other feature
+     *
+     * @param jiraKey
+     * @param projectKey
+     * @param featureKey
+     *
+     * @returns {Promise<*>}
+     *
+     * @throws {ErrorInterceptor} Error if there is a database error
+     */
+    static async updateFeature(jiraKey, projectKey, featureKey) {
+
+        // check if provided feature is in project
+        const feature = await Feature.findFeatureByProjectKeyAndFeatureKey(projectKey, featureKey);
+
+        if (!feature) {
+            throw new ErrorInterceptor({
+                type: ErrorType.VALIDATION,
+                message: 'No Such project or feature available'
+            });
+        }
+
+        await dbPromise.beginTransaction();
+
+        // start by updating metadata
+        const queryUpdateMetadata = 'UPDATE Metadata SET feature_key = ? WHERE jira_key = ?';
+        let metadataAffectedRows = 0;
+
+        try {
+            const [results] = await dbPromise.execute(queryUpdateMetadata, [featureKey, jiraKey]);
+            metadataAffectedRows = results.affectedRows;
+
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error updating metadata: ${err.message}`,
+            })
+        }
+
+        if (metadataAffectedRows === 0) {
+            await dbPromise.rollback();
+
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `No such jira by key: ${jiraKey}`,
+            })
+        }
+
+        // update jira link
+        const queryUpdateJira = 'UPDATE Jira SET jira_link = ? WHERE jira_key = ?';
+        const jiraLink = `/project/${projectKey}/feature/${featureKey}/${jiraKey}`;
+        let jiraAffectedRows = 0;
+
+        try {
+            const [results] = await dbPromise.execute(queryUpdateJira, [jiraLink, jiraKey]);
+            jiraAffectedRows = results.affectedRows;
+
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error updating metadata: ${err.message}`,
+            })
+        }
+
+        if (jiraAffectedRows === 0) {
+            await dbPromise.rollback();
+
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `No such jira by key: ${jiraKey}`,
+            })
+        }
+
+        await dbPromise.commit();
+
+        return {
+            jiraAffectedRows: jiraAffectedRows,
+            metadataAffectedRows: metadataAffectedRows,
+        };
     }
 }
 

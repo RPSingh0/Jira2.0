@@ -98,12 +98,18 @@
  *                 userAssignedToEmail:
  *                   type: string
  *                   description: The user email of user this jira is assigned to
+ *                 userAssignedToProfileImage:
+ *                   type: string
+ *                   description: The profile image of user this jira is assigned to
  *                 userCreatedByName:
  *                   type: string
  *                   description: The user name of user created this jira
  *                 userCreatedByEmail:
  *                   type: string
  *                   description: The user email of user created this jira
+ *                 userCreatedByProfileImage:
+ *                   type: string
+ *                   description: The profile image of user this jira is created by
  *                 projectKey:
  *                   type: string
  *                   description: The project key this jira is linked to
@@ -153,6 +159,46 @@
  *           type: string
  *           description: The updated user email
  *     UpdateAssignedToSuccess:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *           description: The status for this request
+ *     UpdatePoints:
+ *       required:
+ *         - jiraKey
+ *         - jiraPoint
+ *       type: object
+ *       properties:
+ *         jiraKey:
+ *           type: string
+ *           description: The unique key to identify jira
+ *         jiraPoint:
+ *           type: number
+ *           description: The updated jira point
+ *     UpdatePointsSuccess:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *           description: The status for this request
+ *     UpdateFeature:
+ *       required:
+ *         - jiraKey
+ *         - projectKey
+ *         - featureKey
+ *       type: object
+ *       properties:
+ *         jiraKey:
+ *           type: string
+ *           description: The unique key to identify jira
+ *         projectKey:
+ *           type: string
+ *           description: The project key this jira is linked to
+ *         featureKey:
+ *           type: string
+ *           description: The updated feature key this jira is linked to
+ *     UpdateFeatureSuccess:
  *       type: object
  *       properties:
  *         status:
