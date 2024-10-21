@@ -334,6 +334,32 @@ class Jira {
             })
         }
     }
+
+    /**
+     * Takes in a jiraKey and summary as input and updates jira summary
+     *
+     * @param jiraKey
+     * @param summary
+     *
+     * @returns {Promise<number>}
+     *
+     * @throws {ErrorInterceptor} Error if there is a database error
+     */
+    static async updateJiraSummaryByJiraKey(jiraKey, summary) {
+
+        const query = 'UPDATE Jira SET summary = ? WHERE jira_key = ?';
+
+        try {
+            const [results] = await dbPromise.execute(query, [summary, jiraKey]);
+            return results.affectedRows;
+
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error updating jira summary: ${err.message}`,
+            })
+        }
+    }
 }
 
 module.exports = Jira;

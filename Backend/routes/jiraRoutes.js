@@ -156,6 +156,41 @@ router.route('/updateDescription')
 
 /**
  * @swagger
+ * /jira/updateSummary:
+ *   patch:
+ *     summary: Update jira summary
+ *     tags: [Jira]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateSummary'
+ *     responses:
+ *       200:
+ *         description: Summary updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UpdateSummarySuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/updateSummary')
+    .patch(jiraController.updateSummary);
+
+/**
+ * @swagger
  * /jira/updateAssignedTo:
  *   patch:
  *     summary: Update jira assigned to

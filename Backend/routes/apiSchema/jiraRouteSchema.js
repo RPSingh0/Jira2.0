@@ -146,6 +146,24 @@
  *         status:
  *           type: string
  *           description: The status for this request
+ *     UpdateSummary:
+ *       required:
+ *         - jiraKey
+ *         - summary
+ *       type: object
+ *       properties:
+ *         jiraKey:
+ *           type: string
+ *           description: The unique key to identify jira
+ *         summary:
+ *           type: string
+ *           description: The summary for the jira
+ *     UpdateSummarySuccess:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *           description: The status for this request
  *     UpdateAssignedTo:
  *       required:
  *         - jiraKey

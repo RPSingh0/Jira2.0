@@ -63,6 +63,20 @@ exports.getJiraMetadataByJiraKey = catchAsync(async (req, res, next) => {
     Response.ok200(res, {jiraMetadata: jiraMetadata});
 });
 
+exports.updateSummary = catchAsync(async (req, res, next) => {
+    const {jiraKey, summary} = req.body;
+
+    const affectedRows = await Jira.updateJiraSummaryByJiraKey(jiraKey, summary);
+
+    if (affectedRows === 0) {
+        return Response.notFound404(res, {
+            message: `No such jira by key: ${jiraKey}`
+        });
+    }
+
+    Response.ok200(res);
+});
+
 exports.updateDescription = catchAsync(async (req, res, next) => {
     const {jiraKey, description} = req.body;
 
