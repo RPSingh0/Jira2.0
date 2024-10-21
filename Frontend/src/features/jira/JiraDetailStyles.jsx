@@ -35,7 +35,7 @@ export const StyledProjectDetailMainSectionBox = styled(Box)(({theme}) => ({
 }));
 
 export const StyledProjectDetailDescriptionBox = styled(Box)(() => ({
-    marginBottom: "2rem",
+    marginBottom: "1rem",
 }));
 
 export const StyledEditingSaveAndCancelBox = styled(Box)(() => ({

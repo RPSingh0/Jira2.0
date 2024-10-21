@@ -10,7 +10,8 @@ import {
     StyledProjectDetailDescriptionBox,
     StyledProjectDetailMainSectionBox
 } from "./JiraDetailStyles.jsx";
-import {Box, Typography} from "@mui/material";
+import {Box} from "@mui/material";
+import JiraDetailSummary from "./JiraDetailSummary.jsx";
 
 
 function JiraDetailMain() {
@@ -58,9 +59,7 @@ function JiraDetailMain() {
 
     return (
         <StyledProjectDetailMainSectionBox>
-            <Typography variant="h5" gutterBottom>
-                {!loadingJiraDetail && jiraDetailData.data.jiraDetails.summary}
-            </Typography>
+            <JiraDetailSummary/>
             <Box>
 
                 {/* Description Box */}
