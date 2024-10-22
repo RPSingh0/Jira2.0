@@ -2,24 +2,24 @@ import AutocompleteSelector from "../../components/autocomplete/AutocompleteSele
 import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
 import {getAllUsersService} from "../../services/user/userService.js";
 import {useEffect, useState} from "react";
-import {Avatar, Box, IconButton, Typography} from "@mui/material";
-import {grey} from "@mui/material/colors";
-import {IconMap} from "../../utils/IconMap.jsx";
+import {Box, Typography} from "@mui/material";
 import {useUpdateJiraAssignedTo} from "./hooks/useUpdateJiraAssignedTo.js";
 import {toast} from "react-toastify";
 import {useQueryClient} from "@tanstack/react-query";
 import {useJiraMetadataContext} from "./JiraMetadataContext.jsx";
+import {PaperCancelButton, PaperOkButton, StaticAvatarAndText} from "./JiraDetailAsideComponents.jsx";
+import LoadOrFetchWrapper from "../../components/loader/LoadOrFetchWrapper.jsx";
+import {Rounded2Half} from "../../components/loader/Loader.jsx";
+import {
+    StyledAutoCompleteWithButtonBox,
+    StyledItemValueStaticBox,
+    StyledOkCancelPaperButtonBox
+} from "./JiraDetailAsideStyles.jsx";
 
 function JiraDetailAssignedTo() {
 
     // context states
-    const {
-        jiraKey,
-        loadingJiraMetadata,
-        fetchingJiraMetadata,
-        jiraMetadata,
-        errorJiraMetadata
-    } = useJiraMetadataContext();
+    const {jiraKey, loadingJiraMetadata, fetchingJiraMetadata, jiraMetadata} = useJiraMetadataContext();
 
     // react query hooks
     const queryClient = useQueryClient();
@@ -30,8 +30,8 @@ function JiraDetailAssignedTo() {
     const [isEditing, setIsEditing] = useState(false);
 
     // load all the users
-    const {isLoading: isLoadingUsers, data: usersForLead, error: usersForLeadError} = useGetQueryHook({
-        key: ['usersForLead'],
+    const {isLoading: isLoadingUsers, data: users, error: usersError} = useGetQueryHook({
+        key: ['users-assigned-to'],
         fn: getAllUsersService
     });
 
@@ -41,10 +41,10 @@ function JiraDetailAssignedTo() {
         if (!loadingJiraMetadata && !fetchingJiraMetadata) {
             // set the user
             setAssignedTo({
-                name: jiraMetadata.data.jiraMetadata.userAssignedToName,
-                email: jiraMetadata.data.jiraMetadata.userAssignedToEmail,
-                profileImage: jiraMetadata.data.jiraMetadata.userAssignedToProfileImage,
-                imageAltText: jiraMetadata.data.jiraMetadata.userAssignedToName
+                name: jiraMetadata.userAssignedToName,
+                email: jiraMetadata.userAssignedToEmail,
+                profileImage: jiraMetadata.userAssignedToProfileImage,
+                imageAltText: jiraMetadata.userAssignedToName
             });
         }
     }, [loadingJiraMetadata, fetchingJiraMetadata, isLoadingUsers]);
@@ -57,7 +57,7 @@ function JiraDetailAssignedTo() {
             return;
         }
 
-        if (assignedTo.email === jiraMetadata.data.jiraMetadata.userAssignedToEmail) {
+        if (assignedTo.email === jiraMetadata.userAssignedToEmail) {
             return;
         }
 
@@ -67,70 +67,45 @@ function JiraDetailAssignedTo() {
         }, {
             onSuccess: () => {
                 setIsEditing(false);
-                queryClient.invalidateQueries([jiraKey]);
+                queryClient.invalidateQueries([`${jiraKey}-metadata`]);
             }
         });
     }
 
     return (
-
         <Box>
             <Typography variant="overline" gutterBottom sx={{paddingLeft: "0.5rem"}}>
                 Assigned To
             </Typography>
-            {isEditing ?
-                <Box sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "end",
-                    gap: "0.5rem"
-                }}>
-                    <AutocompleteSelector
-                        variant={'user-avatar'}
-                        name={"assignedTo"}
-                        options={(isLoadingUsers || usersForLeadError) ? [] : usersForLead.data.users}
-                        isLoading={isLoadingUsers}
-                        value={assignedTo}
-                        setValue={setAssignedTo}
-                    />
-                    <Box sx={{
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: "0.5rem"
-                    }}>
-                        <IconButton size={"small"} disableFocusRipple disableTouchRipple sx={{
-                            borderRadius: "9px"
-                        }} onClick={handleUpdateAssignedTo}>
-                            {IconMap['save']}
-                        </IconButton>
-                        <IconButton size={"small"} disableFocusRipple disableTouchRipple sx={{
-                            borderRadius: "9px"
-                        }} onClick={() => setIsEditing(false)}>
-                            {IconMap['close']}
-                        </IconButton>
-                    </Box>
-                </Box>
-                :
-                <Box sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: "1rem",
-                    padding: "0.5rem",
-                    borderRadius: "9px",
-                    transition: "background-color 0.2s ease",
-
-                    "&:hover": {
-                        backgroundColor: grey["200"]
-                    }
-                }} onDoubleClick={() => setIsEditing(true)}>
-                    <Avatar src={jiraMetadata?.data.jiraMetadata.userAssignedToProfileImage} alt="assignedTo"
-                            sx={{height: 24, width: 24}}/>
-                    <Typography variant="body1">
-                        {jiraMetadata?.data.jiraMetadata.userAssignedToName}
-                    </Typography>
-                </Box>
-            }
+            <LoadOrFetchWrapper
+                loading={loadingJiraMetadata}
+                fetching={fetchingJiraMetadata}
+                loader={<Rounded2Half/>}>
+                {isEditing ?
+                    <StyledAutoCompleteWithButtonBox>
+                        <AutocompleteSelector
+                            variant={'user-avatar'}
+                            name={"assignedTo"}
+                            options={(isLoadingUsers || usersError) ? [] : users}
+                            isLoading={isLoadingUsers}
+                            value={assignedTo}
+                            setValue={setAssignedTo}
+                        />
+                        <StyledOkCancelPaperButtonBox>
+                            <PaperOkButton onClickHandler={handleUpdateAssignedTo} disabled={isUpdating}/>
+                            <PaperCancelButton onClickHandler={() => setIsEditing(false)} disabled={isUpdating}/>
+                        </StyledOkCancelPaperButtonBox>
+                    </StyledAutoCompleteWithButtonBox>
+                    :
+                    <StyledItemValueStaticBox onDoubleClick={() => setIsEditing(true)}>
+                        <StaticAvatarAndText
+                            src={jiraMetadata?.userAssignedToProfileImage}
+                            alt={"assignedTo"}
+                            text={jiraMetadata?.userAssignedToName}
+                        />
+                    </StyledItemValueStaticBox>
+                }
+            </LoadOrFetchWrapper>
         </Box>
     );
 }

@@ -8,6 +8,7 @@ function AutocompleteSelector({variant, name, label, options, isLoading, disable
             fullWidth={true}
             options={options}
             disabled={disabled}
+            disableClearable
             size="small"
             name={name}
             freeSolo={true}

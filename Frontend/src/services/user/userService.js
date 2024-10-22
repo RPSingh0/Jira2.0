@@ -76,5 +76,5 @@ export async function getAllUsersService({token}) {
         throw new Error(data.message);
     }
 
-    return data;
+    return data.data.users;
 }

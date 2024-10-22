@@ -97,7 +97,7 @@ export async function getJiraMetadataByJiraKeyService({token, jiraKey}) {
         throw new Error(data.message);
     }
 
-    return data;
+    return data.data.jiraMetadata;
 }
 
 /**

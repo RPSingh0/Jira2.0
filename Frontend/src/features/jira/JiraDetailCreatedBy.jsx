@@ -1,12 +1,14 @@
-import {Avatar, Box, Typography} from "@mui/material";
-import {grey} from "@mui/material/colors";
+import {Box, Typography} from "@mui/material";
 import {useJiraMetadataContext} from "./JiraMetadataContext.jsx";
+import {StaticAvatarAndText} from "./JiraDetailAsideComponents.jsx";
+import {StyledItemValueStaticBox} from "./JiraDetailAsideStyles.jsx";
+import {Rounded2Half} from "../../components/loader/Loader.jsx";
+import LoadOrFetchWrapper from "../../components/loader/LoadOrFetchWrapper.jsx";
 
 function JiraDetailCreatedBy() {
 
     // context states
-    const {jiraMetadata} = useJiraMetadataContext();
-
+    const {loadingJiraMetadata, fetchingJiraMetadata, jiraMetadata} = useJiraMetadataContext();
 
     return (
 
@@ -14,25 +16,18 @@ function JiraDetailCreatedBy() {
             <Typography variant="overline" gutterBottom sx={{paddingLeft: "0.5rem"}}>
                 Created By
             </Typography>
-            <Box sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                gap: "1rem",
-                padding: "0.5rem",
-                borderRadius: "9px",
-                transition: "background-color 0.2s ease",
-
-                "&:hover": {
-                    backgroundColor: grey["200"]
-                }
-            }}>
-                <Avatar src={jiraMetadata?.data.jiraMetadata.userCreatedByProfileImage} alt="createdBy" sx={{height: 24, width: 24}}/>
-                <Typography variant="body1">
-                    {jiraMetadata?.data.jiraMetadata.userCreatedByName}
-                </Typography>
-            </Box>
-
+            <LoadOrFetchWrapper
+                loading={loadingJiraMetadata}
+                fetching={fetchingJiraMetadata}
+                loader={<Rounded2Half/>}>
+                <StyledItemValueStaticBox>
+                    <StaticAvatarAndText
+                        src={jiraMetadata?.userCreatedByProfileImage}
+                        alt={"createdBy"}
+                        text={jiraMetadata?.userCreatedByName}
+                    />
+                </StyledItemValueStaticBox>
+            </LoadOrFetchWrapper>
         </Box>
     );
 }

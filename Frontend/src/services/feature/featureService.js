@@ -117,5 +117,5 @@ export async function getFeaturesAsOptionsByProjectKey({projectKey}) {
         throw new Error(data.message);
     }
 
-    return data;
+    return data.data.features;
 }
