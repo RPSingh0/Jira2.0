@@ -7,7 +7,8 @@ export const StyledOkCancelPaperButtonBox = styled(Box)(() => ({
     gap: "0.5rem",
     position: "absolute",
     bottom: "-2rem",
-    right: 0
+    right: 0,
+    zIndex: 1000
 }));
 
 export const StyledItemValueStaticBox = styled(Box)(() => ({

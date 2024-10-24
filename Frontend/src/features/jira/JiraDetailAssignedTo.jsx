@@ -67,7 +67,7 @@ function JiraDetailAssignedTo() {
         }, {
             onSuccess: () => {
                 setIsEditing(false);
-                queryClient.invalidateQueries([`${jiraKey}-metadata`]);
+                queryClient.invalidateQueries({queryKey: [`${jiraKey}-metadata`]});
             }
         });
     }

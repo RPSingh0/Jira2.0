@@ -1,11 +1,16 @@
 import {useEffect, useState} from "react";
 import {useQueryClient} from "@tanstack/react-query";
 import {useJiraDetailContext} from "./JiraDetailContext.jsx";
-import {Box, TextField, Typography} from "@mui/material";
+import {Box, styled, TextField, Typography} from "@mui/material";
 import {useUpdateJiraSummary} from "./hooks/useUpdateJiraSummary.js";
-import {StyledEditingSaveAndCancelBox} from "./JiraDetailStyles.jsx";
-import {ContainedButton, OutlinedButton} from "../../components/button/Buttons.jsx";
+import {PaperCancelButton, PaperOkButton} from "./JiraDetailAsideComponents.jsx";
+import {StyledOkCancelPaperButtonBox} from "./JiraDetailAsideStyles.jsx";
+import {RoundedText1Half2Lines} from "../../components/loader/Loader.jsx";
+import LoadOrFetchWrapper from "../../components/loader/LoadOrFetchWrapper.jsx";
 
+const StyledJiraSummaryBox = styled(Box)(() => ({
+    position: "relative"
+}));
 
 function JiraDetailSummary() {
 
@@ -17,7 +22,7 @@ function JiraDetailSummary() {
     const [isEditing, setIsEditing] = useState(false);
 
     // React query hooks
-    const {updateJiraSummary} = useUpdateJiraSummary();
+    const {updateJiraSummary, isUpdating} = useUpdateJiraSummary();
     const queryClient = useQueryClient();
 
     // Effects
@@ -34,7 +39,7 @@ function JiraDetailSummary() {
             summary: summary,
         }, {
             onSuccess: () => {
-                queryClient.invalidateQueries([jiraKey])
+                queryClient.invalidateQueries({queryKey: [`${jiraKey}`]})
                 setIsEditing(false)
             }
         });
@@ -48,28 +53,42 @@ function JiraDetailSummary() {
     }
 
     return (
-        <Box onDoubleClick={handleDoubleClickOnSummaryBox}>
-            {isEditing ?
-                <Box>
-                    <TextField
-                        fullWidth={true}
-                        multiline
-                        maxRows={2}
-                        value={summary}
-                        onChange={(event) => setSummary(event.target.value)}
-                    />
-                    {isEditing &&
-                        <StyledEditingSaveAndCancelBox>
-                            <ContainedButton text={"Save"} onClickHandler={handleSaveSummary}/>
-                            <OutlinedButton text={"Cancel"} onClickHandler={() => setIsEditing(false)}/>
-                        </StyledEditingSaveAndCancelBox>
-                    }
-                </Box>
-                :
-                <Typography variant="h5" gutterBottom>
-                    {!loadingJiraDetail && jiraDetailData.data.jiraDetails.summary}
-                </Typography>
-            }
+        <Box onDoubleClick={handleDoubleClickOnSummaryBox} sx={{marginBottom: "2rem"}}>
+            <LoadOrFetchWrapper
+                loading={loadingJiraDetail}
+                fetching={fetchingJiraDetail}
+                loader={<RoundedText1Half2Lines/>}>
+                {isEditing ?
+                    <StyledJiraSummaryBox>
+                        <TextField
+                            fullWidth={true}
+                            multiline
+                            maxRows={2}
+                            value={summary}
+                            onChange={(event) => setSummary(event.target.value)}
+                            slotProps={{
+                                input: {
+                                    style: {
+                                        padding: "0 0.5rem",
+                                        fontSize: "1.5rem"
+                                    }
+                                }
+                            }}
+                            sx={{marginBottom: "1rem"}}
+                        />
+                        {isEditing &&
+                            <StyledOkCancelPaperButtonBox>
+                                <PaperOkButton onClickHandler={handleSaveSummary} disabled={isUpdating}/>
+                                <PaperCancelButton onClickHandler={() => setIsEditing(false)} disabled={isUpdating}/>
+                            </StyledOkCancelPaperButtonBox>
+                        }
+                    </StyledJiraSummaryBox>
+                    :
+                    <Typography variant="h5" gutterBottom>
+                        {!loadingJiraDetail && jiraDetailData.data.jiraDetails.summary}
+                    </Typography>
+                }
+            </LoadOrFetchWrapper>
         </Box>
 
     );
