@@ -7,9 +7,20 @@ import {PaperCancelButton, PaperOkButton} from "./JiraDetailAsideComponents.jsx"
 import {StyledOkCancelPaperButtonBox} from "./JiraDetailAsideStyles.jsx";
 import {RoundedText1Half2Lines} from "../../components/loader/Loader.jsx";
 import LoadOrFetchWrapper from "../../components/loader/LoadOrFetchWrapper.jsx";
+import {grey} from "@mui/material/colors";
 
 const StyledJiraSummaryBox = styled(Box)(() => ({
     position: "relative"
+}));
+
+const StyledStaticJiraSummaryTypography = styled(Typography)(() => ({
+    transition: "all 0.2s ease",
+    borderRadius: "9px",
+    padding: "0 0.5rem",
+
+    "&:hover": {
+        backgroundColor: grey["200"]
+    }
 }));
 
 function JiraDetailSummary() {
@@ -53,7 +64,9 @@ function JiraDetailSummary() {
     }
 
     return (
-        <Box onDoubleClick={handleDoubleClickOnSummaryBox} sx={{marginBottom: "2rem"}}>
+        <Box onDoubleClick={handleDoubleClickOnSummaryBox} sx={{
+            marginBottom: "2rem"
+        }}>
             <LoadOrFetchWrapper
                 loading={loadingJiraDetail}
                 fetching={fetchingJiraDetail}
@@ -74,7 +87,6 @@ function JiraDetailSummary() {
                                     }
                                 }
                             }}
-                            sx={{marginBottom: "1rem"}}
                         />
                         {isEditing &&
                             <StyledOkCancelPaperButtonBox>
@@ -84,9 +96,9 @@ function JiraDetailSummary() {
                         }
                     </StyledJiraSummaryBox>
                     :
-                    <Typography variant="h5" gutterBottom>
+                    <StyledStaticJiraSummaryTypography variant="h5" gutterBottom>
                         {!loadingJiraDetail && jiraDetailData.data.jiraDetails.summary}
-                    </Typography>
+                    </StyledStaticJiraSummaryTypography>
                 }
             </LoadOrFetchWrapper>
         </Box>
