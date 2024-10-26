@@ -224,7 +224,7 @@ class Feature {
      * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
      */
     static async findFeatureByProjectKeyAndFeatureKey(projectKey, featureKey) {
-        const query = 'SELECT id, name, feature_key FROM Feature WHERE project_key = ? AND feature_key = ?';
+        const query = 'SELECT name, feature_key AS featureKey, project_key AS projectKey, description FROM Feature WHERE project_key = ? AND feature_key = ?';
 
         try {
             const [results] = await dbPromise.execute(query, [projectKey, featureKey]);
@@ -233,6 +233,60 @@ class Feature {
             throw new ErrorInterceptor({
                 type: ErrorType.DATABASE,
                 message: `Error fetching features: ${err.message}`,
+            })
+        }
+    }
+
+    /**
+     * Takes in projectKey, feature key and updates description for a feature
+     *
+     * @param projectKey
+     * @param featureKey
+     * @param description
+     *
+     * @returns {Promise<number>}
+     *
+     * @throws {ErrorInterceptor} Error if there is a database error
+     */
+    static async updateFeatureDescription(projectKey, featureKey, description) {
+
+        const query = 'UPDATE Feature SET description = ? WHERE project_key = ? AND feature_key = ?';
+
+        try {
+            const [results] = await dbPromise.execute(query, [description, projectKey, featureKey]);
+            return results.affectedRows;
+
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error updating feature description: ${err.message}`,
+            })
+        }
+    }
+
+    /**
+     * Takes in project key, feature key and updates a feature name
+     *
+     * @param projectKey
+     * @param featureKey
+     * @param name
+     *
+     * @returns {Promise<number>}
+     *
+     * @throws {ErrorInterceptor} Error if there is a database error
+     */
+    static async updateFeatureName(projectKey, featureKey, name) {
+
+        const query = 'UPDATE Feature SET name = ? WHERE project_key = ? AND feature_key = ?';
+
+        try {
+            const [results] = await dbPromise.execute(query, [name, projectKey, featureKey]);
+            return results.affectedRows;
+
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error updating feature summary: ${err.message}`,
             })
         }
     }

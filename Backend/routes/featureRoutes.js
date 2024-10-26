@@ -46,6 +46,48 @@ router.route('/create')
 
 /**
  * @swagger
+ * /feature/getFeature/{projectKey}/{featureKey}:
+ *   get:
+ *     summary: Get feature by projectKey and featureKey
+ *     tags: [Feature]
+ *     parameters:
+ *       - in: path
+ *         name: projectKey
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: The project key
+ *       - in: path
+ *         name: featureKey
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: The feature key
+ *     responses:
+ *       200:
+ *         description: Feature retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GetFeatureByProjectKeyAndFeatureKeySuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/getFeature/:projectKey/:featureKey')
+    .get(featureController.getFeatureByProjectKeyAndFeatureKey);
+
+/**
+ * @swagger
  * /feature/getFeaturesAsOptionsByProjectKey/{projectKey}:
  *   get:
  *     summary: Get features as options by a project key
@@ -79,5 +121,117 @@ router.route('/create')
  */
 router.route('/getFeaturesAsOptionsByProjectKey/:projectKey')
     .get(featureController.getFeaturesAsOptionsByProjectKey);
+
+/**
+ * @swagger
+ * /feature/getJira/{projectKey}/{featureKey}:
+ *   get:
+ *     summary: Get jira under a certain feature
+ *     tags: [Feature]
+ *     parameters:
+ *       - in: path
+ *         name: projectKey
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: The project key
+ *       - in: path
+ *         name: featureKey
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: The feature key
+ *     responses:
+ *       200:
+ *         description: Jira retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GetJiraUnderFeatureSuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/getJira/:projectKey/:featureKey')
+    .get(featureController.getJiraUnderFeature);
+
+/**
+ * @swagger
+ * /feature/updateName:
+ *   patch:
+ *     summary: Updates a feature's name
+ *     tags: [Feature]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateFeatureName'
+ *     responses:
+ *       200:
+ *         description: Feature name updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UpdateFeatureNameSuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/updateName')
+    .patch(featureController.updateName);
+
+/**
+ * @swagger
+ * /feature/updateDescription:
+ *   patch:
+ *     summary: Update a feature's description
+ *     tags: [Feature]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateFeatureDescription'
+ *     responses:
+ *       200:
+ *         description: Feature description updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UpdateFeatureDescriptionSuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/updateDescription')
+    .patch(featureController.updateDescription);
 
 module.exports = router;

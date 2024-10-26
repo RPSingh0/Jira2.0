@@ -1,6 +1,7 @@
 const catchAsync = require('../utils/catchAsync');
 const Response = require('../utils/response');
 const Feature = require("../models/Feature");
+const Jira = require("../models/Jira");
 
 exports.createFeature = catchAsync(async (req, res, next) => {
     const {name, description, projectKey} = req.body;
@@ -22,6 +23,33 @@ exports.createFeature = catchAsync(async (req, res, next) => {
     Response.ok201(res, {featureKey: generatedFeatureKey});
 });
 
+exports.getFeatureByProjectKeyAndFeatureKey = catchAsync(async (req, res, next) => {
+    const {projectKey, featureKey} = req.params;
+
+    const feature = await Feature.findFeatureByProjectKeyAndFeatureKey(projectKey, featureKey);
+
+    if (!feature) {
+        return Response.notFound404(res, {message: `No feature with key: ${featureKey} within ${projectKey}`});
+    }
+
+    // remove id from feature response
+    feature.id = undefined;
+
+    Response.ok200(res, {feature: feature});
+});
+
+exports.getJiraUnderFeature = catchAsync(async (req, res, next) => {
+    const {projectKey, featureKey} = req.params;
+
+    const jira = await Jira.getJiraByProjectKeyAndFeatureKey(projectKey, featureKey);
+
+    if (!jira || jira.length === 0) {
+        return Response.notFound404(res, {message: `No jira under project: ${projectKey} and feature : ${featureKey}`});
+    }
+
+    Response.ok200(res, {jira: jira});
+});
+
 exports.getFeaturesAsOptionsByProjectKey = catchAsync(async (req, res, next) => {
     let {projectKey} = req.params;
     projectKey = projectKey.trim().toUpperCase();
@@ -34,3 +62,31 @@ exports.getFeaturesAsOptionsByProjectKey = catchAsync(async (req, res, next) => 
 
     Response.ok200(res, {features: features});
 })
+
+exports.updateName = catchAsync(async (req, res, next) => {
+    const {projectKey, featureKey, name} = req.body;
+
+    const affectedRows = await Feature.updateFeatureName(projectKey, featureKey, name);
+
+    if (affectedRows === 0) {
+        return Response.notFound404(res, {
+            message: `No such feature under project: ${projectKey} by feature: ${featureKey}`,
+        });
+    }
+
+    Response.ok200(res);
+});
+
+exports.updateDescription = catchAsync(async (req, res, next) => {
+    const {projectKey, featureKey, description} = req.body;
+
+    const affectedRows = await Feature.updateFeatureDescription(projectKey, featureKey, description);
+
+    if (affectedRows === 0) {
+        return Response.notFound404(res, {
+            message: `No such feature under project: ${projectKey} by feature: ${featureKey}`
+        });
+    }
+
+    Response.ok200(res);
+});

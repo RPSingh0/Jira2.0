@@ -310,6 +310,43 @@ class Jira {
     }
 
     /**
+     * Takes in a project key and feature key to return all the jira present
+     *
+     * @param projectKey
+     * @param featureKey
+     *
+     * @returns {Promise<*>}
+     *
+     * @throws {ErrorInterceptor} Error if there is a database error
+     */
+    static async getJiraByProjectKeyAndFeatureKey(projectKey, featureKey) {
+
+        const query = `SELECT J.summary,
+                              J.jira_type                                            AS jiraType,
+                              J.jira_key                                             AS jiraKey,
+                              J.jira_link                                            AS jiraLink,
+                              CONCAT(UAT.first_name, ' ', IFNULL(UAT.last_name, '')) AS userAssignedToName,
+                              UAT.email                                              AS userAssignedToEmail,
+                              S.type                                                 AS statusType
+                       FROM Jira AS J
+                                INNER JOIN Metadata AS M ON J.jira_key = M.jira_key
+                                INNER JOIN User AS UAT ON M.assigned_to = UAT.email
+                                INNER JOIN Status AS S ON M.status = S.id
+                       WHERE M.project_key = ?
+                         AND M.feature_key = ?`;
+
+        try {
+            const [results] = await dbPromise.execute(query, [projectKey, featureKey]);
+            return results;
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error executing query: ${err.message}`,
+            })
+        }
+    }
+
+    /**
      * Takes in a jiraKey and description as input and updates jira description
      *
      * @param jiraKey
