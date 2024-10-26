@@ -124,48 +124,6 @@ router.route('/getFeaturesAsOptionsByProjectKey/:projectKey')
 
 /**
  * @swagger
- * /feature/getJira/{projectKey}/{featureKey}:
- *   get:
- *     summary: Get jira under a certain feature
- *     tags: [Feature]
- *     parameters:
- *       - in: path
- *         name: projectKey
- *         required: true
- *         schema:
- *           type: string
- *           description: The project key
- *       - in: path
- *         name: featureKey
- *         required: true
- *         schema:
- *           type: string
- *           description: The feature key
- *     responses:
- *       200:
- *         description: Jira retrieved successfully
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/GetJiraUnderFeatureSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
- */
-router.route('/getJira/:projectKey/:featureKey')
-    .get(featureController.getJiraUnderFeature);
-
-/**
- * @swagger
  * /feature/updateName:
  *   patch:
  *     summary: Updates a feature's name

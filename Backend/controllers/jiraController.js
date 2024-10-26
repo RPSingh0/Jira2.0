@@ -63,6 +63,18 @@ exports.getJiraMetadataByJiraKey = catchAsync(async (req, res, next) => {
     Response.ok200(res, {jiraMetadata: jiraMetadata});
 });
 
+exports.getJiraUnderFeature = catchAsync(async (req, res, next) => {
+    const {projectKey, featureKey} = req.params;
+
+    const jira = await Jira.getJiraByProjectKeyAndFeatureKey(projectKey, featureKey);
+
+    if (!jira || jira.length === 0) {
+        return Response.notFound404(res, {message: `No jira under project: ${projectKey} and feature : ${featureKey}`});
+    }
+
+    Response.ok200(res, {jira: jira});
+});
+
 exports.updateSummary = catchAsync(async (req, res, next) => {
     const {jiraKey, summary} = req.body;
 

@@ -121,6 +121,48 @@ router.route('/getJiraMetadataByJiraKey/:jiraKey')
 
 /**
  * @swagger
+ * /jira/getJira/{projectKey}/{featureKey}:
+ *   get:
+ *     summary: Get jira under a certain feature
+ *     tags: [Jira]
+ *     parameters:
+ *       - in: path
+ *         name: projectKey
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: The project key
+ *       - in: path
+ *         name: featureKey
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: The feature key
+ *     responses:
+ *       200:
+ *         description: Jira retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GetJiraUnderFeatureSuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/getJira/:projectKey/:featureKey')
+    .get(jiraController.getJiraUnderFeature);
+
+/**
+ * @swagger
  * /jira/updateDescription:
  *   patch:
  *     summary: Update jira description
