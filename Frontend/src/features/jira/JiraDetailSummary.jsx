@@ -5,7 +5,7 @@ import {Box, styled, TextField, Typography} from "@mui/material";
 import {useUpdateJiraSummary} from "./hooks/useUpdateJiraSummary.js";
 import {PaperCancelButton, PaperOkButton} from "./JiraDetailAsideComponents.jsx";
 import {StyledOkCancelPaperButtonBox} from "./JiraDetailAsideStyles.jsx";
-import {RoundedText1Half2Lines} from "../../components/loader/Loader.jsx";
+import {Rounded2Half} from "../../components/loader/Loader.jsx";
 import LoadOrFetchWrapper from "../../components/loader/LoadOrFetchWrapper.jsx";
 import {grey} from "@mui/material/colors";
 
@@ -70,7 +70,7 @@ function JiraDetailSummary() {
             <LoadOrFetchWrapper
                 loading={loadingJiraDetail}
                 fetching={fetchingJiraDetail}
-                loader={<RoundedText1Half2Lines/>}>
+                loader={<Rounded2Half/>}>
                 {isEditing ?
                     <StyledJiraSummaryBox>
                         <TextField

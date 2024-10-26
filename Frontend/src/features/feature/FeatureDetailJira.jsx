@@ -28,6 +28,7 @@ function FeatureDetailJira() {
                             key={item.jiraKey}
                             type={item.jiraType}
                             jiraKey={item.jiraKey}
+                            jiraLink={item.jiraLink}
                             title={item.summary}
                             user={item.userAssignedToName}
                             status={item.statusType.toLowerCase()}

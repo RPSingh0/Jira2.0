@@ -1,5 +1,7 @@
 import {Avatar, Box, Paper, styled, Typography} from "@mui/material";
 import {IconMap} from "../../utils/IconMap.jsx";
+import {grey} from "@mui/material/colors";
+import {useNavigate} from "react-router-dom";
 
 const StyledFeatureDetailItemCardPaper = styled(Paper)(() => ({
     display: "flex",
@@ -7,7 +9,13 @@ const StyledFeatureDetailItemCardPaper = styled(Paper)(() => ({
     gap: "0.5rem",
     padding: "0.5rem",
     overflow: "hidden",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    transition: "all 0.5s ease",
+
+    "&:hover": {
+        backgroundColor: grey[200],
+        cursor: "pointer",
+    }
 }));
 
 const StyledFeatureDetailItemCardHeader = styled(Box)(() => ({
@@ -42,9 +50,16 @@ const StyledFeatureDetailItemStatusBox = styled(Box)(() => ({
     gap: "0.5rem"
 }));
 
-function FeatureDetailItemCard({type, jiraKey, title, user, status, priority}) {
+function FeatureDetailItemCard({type, jiraKey, jiraLink, title, user, status, priority}) {
+
+    const navigate = useNavigate();
+
+    function handleNavigateToJira() {
+        navigate(jiraLink);
+    }
+
     return (
-        <StyledFeatureDetailItemCardPaper variant="outlined">
+        <StyledFeatureDetailItemCardPaper variant="outlined" onClick={handleNavigateToJira}>
             {/* Header */}
             <StyledFeatureDetailItemCardHeader>
                 {IconMap[type]}
