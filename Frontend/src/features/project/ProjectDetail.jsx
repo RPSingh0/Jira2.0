@@ -33,14 +33,17 @@ function ProjectDetail() {
             <ProjectDetailTitle/>
             <ProjectDetailToolbar/>
 
-            {/* Main content container */}
             <StyledProjectDetailContentBox>
+
                 <StyledProjectDetailMainSectionBox>
                     <ProjectDetailDescription/>
                     <ProjectDetailFeature/>
                 </StyledProjectDetailMainSectionBox>
+
                 <ProjectDetailAside/>
+
             </StyledProjectDetailContentBox>
+
         </StyledProjectDetailBox>
     );
 }

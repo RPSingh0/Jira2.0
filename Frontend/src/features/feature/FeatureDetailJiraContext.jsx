@@ -1,7 +1,7 @@
 import {createContext, useContext} from "react";
 import {useParams} from "react-router-dom";
 import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
-import {getJiraUnderFeatureService} from "../../services/feature/featureService.js";
+import {getJiraUnderFeatureService} from "../../services/jira/jiraService.js";
 
 const FeatureJiraContext = createContext();
 

@@ -95,34 +95,6 @@ export async function getFeatureDetailService({projectKey, featureKey}) {
 }
 
 /**
- * This function takes projectKey along with featureKey and returns jira under that feature
- *
- * @param projectKey
- * @param featureKey
- *
- * @returns {Promise<*>}
- *
- * @throws {Error} Error if api call is unsuccessful
- */
-export async function getJiraUnderFeatureService({projectKey, featureKey}) {
-
-    let data = await fetch(`${URL}/getJira/${projectKey}/${featureKey}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    });
-
-    data = await data.json();
-
-    if (data && data.status === 'fail') {
-        throw new Error(data.message);
-    }
-
-    return data.data.jira;
-}
-
-/**
  * This function takes project key and returns all features
  *
  * @param projectKey
