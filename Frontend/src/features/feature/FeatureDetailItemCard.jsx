@@ -3,34 +3,36 @@ import {IconMap} from "../../utils/IconMap.jsx";
 
 const StyledFeatureDetailItemCardPaper = styled(Paper)(() => ({
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "row",
     gap: "0.5rem",
-    width: "15rem",
     padding: "0.5rem",
-    overflow: "hidden"
+    overflow: "hidden",
+    justifyContent: "space-between"
 }));
 
 const StyledFeatureDetailItemCardHeader = styled(Box)(() => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    gap: "0.5rem"
+    gap: "0.5rem",
+    flexGrow: 1
 }));
 
 const StyledFeatureDetailItemTitle = styled(Typography)(() => ({
     display: "-webkit-box",
-    WebkitLineClamp: 2,
+    WebkitLineClamp: 1,
     WebkitBoxOrient: "vertical",
     overflow: "hidden",
     textOverflow: "ellipsis",
-    lineClamp: 2
+    lineClamp: 1
 }));
 
 const StyledFeatureDetailItemAssignAndStatusBox = styled(Box)(() => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    gap: "1rem"
 }));
 
 const StyledFeatureDetailItemStatusBox = styled(Box)(() => ({
@@ -49,22 +51,21 @@ function FeatureDetailItemCard({type, jiraKey, title, user, status, priority}) {
                 <Typography variant="overline">
                     {jiraKey}
                 </Typography>
+                {/* Title */}
+                <StyledFeatureDetailItemTitle variant="body2">
+                    {title}
+                </StyledFeatureDetailItemTitle>
             </StyledFeatureDetailItemCardHeader>
-
-            {/* Title */}
-            <StyledFeatureDetailItemTitle variant="caption" gutterBottom>
-                {title}
-            </StyledFeatureDetailItemTitle>
 
             {/* Assign and Status */}
             <StyledFeatureDetailItemAssignAndStatusBox>
+                <StyledFeatureDetailItemStatusBox>
+                    {IconMap[priority]}
+                    {IconMap[status]}
+                </StyledFeatureDetailItemStatusBox>
                 <Avatar>
                     {user}
                 </Avatar>
-                <StyledFeatureDetailItemStatusBox>
-                    {IconMap[status]}
-                    {IconMap[priority]}
-                </StyledFeatureDetailItemStatusBox>
             </StyledFeatureDetailItemAssignAndStatusBox>
         </StyledFeatureDetailItemCardPaper>
     );
