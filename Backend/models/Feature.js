@@ -238,6 +238,29 @@ class Feature {
     }
 
     /**
+     * Fetches and returns features from database by project key
+     *
+     * @param projectKey
+     *
+     * @returns {Promise<Object>} A promise that resolves with the result of database select operation
+     *
+     * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
+     */
+    static async findFeatureByProjectKey(projectKey) {
+        const query = 'SELECT name, feature_key AS featureKey, project_key AS projectKey, description FROM Feature WHERE project_key = ?';
+
+        try {
+            const [results] = await dbPromise.execute(query, [projectKey]);
+            return results;
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error fetching features: ${err.message}`,
+            })
+        }
+    }
+
+    /**
      * Takes in projectKey, feature key and updates description for a feature
      *
      * @param projectKey

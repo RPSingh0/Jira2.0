@@ -339,6 +339,39 @@ class Project {
             })
         }
     }
+
+    /**
+     * Fetches and return a project using project key
+     *
+     * @param projectKey
+     *
+     * @returns {Promise<Object>} A promise that resolves with the result of database select operation
+     *
+     * @throws {ErrorInterceptor} Throws error if there is a database error
+     */
+    static async getProjectByProjectKey(projectKey) {
+        const query = `SELECT P.name,
+                              P.project_key                                      AS projectKey,
+                              P.description,
+                              U.email                                            AS leadEmail,
+                              CONCAT(U.first_name, ' ', IFNULL(U.last_name, '')) AS leadName,
+                              P.start_date                                       AS startDate,
+                              P.expected_end_date                                AS expectedEndDate,
+                              DATEDIFF(P.expected_end_date, P.start_date)        AS daysSpent
+                       FROM project AS P
+                                INNER JOIN User AS U ON U.email = P.project_lead_by
+                       WHERE P.project_key = ?`;
+
+        try {
+            const [results] = await dbPromise.execute(query, [projectKey]);
+            return results[0];
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error fetching project: ${err.message}`,
+            })
+        }
+    }
 }
 
 module.exports = Project;

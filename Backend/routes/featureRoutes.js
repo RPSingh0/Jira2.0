@@ -46,6 +46,42 @@ router.route('/create')
 
 /**
  * @swagger
+ * /feature/getFeature/{projectKey}:
+ *   get:
+ *     summary: Get feature by projectKey
+ *     tags: [Feature]
+ *     parameters:
+ *       - in: path
+ *         name: projectKey
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: The project key
+ *     responses:
+ *       200:
+ *         description: Features retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GetFeatureByProjectKeySuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/getFeature/:projectKey')
+    .get(featureController.getFeatureByProjectKey);
+
+/**
+ * @swagger
  * /feature/getFeature/{projectKey}/{featureKey}:
  *   get:
  *     summary: Get feature by projectKey and featureKey

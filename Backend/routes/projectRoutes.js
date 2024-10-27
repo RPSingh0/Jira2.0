@@ -108,4 +108,40 @@ router.route('/generateProjectKey')
 router.route('/getAllProjectsAsOptions')
     .get(projectController.getAllProjectsAsOptions);
 
+/**
+ * @swagger
+ * /project/getProject/{projectKey}:
+ *   get:
+ *     summary: Get a project by project key
+ *     tags: [Project]
+ *     parameters:
+ *       - in: path
+ *         name: projectKey
+ *         required: true
+ *         schema:
+ *           type: string
+ *           description: The project key
+ *     responses:
+ *       200:
+ *         description: Project retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GetProjectByProjectKeySuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/getProject/:projectKey')
+    .get(projectController.getProjectByProjectKey);
+
 module.exports = router;

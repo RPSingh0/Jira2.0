@@ -32,8 +32,17 @@ exports.getFeatureByProjectKeyAndFeatureKey = catchAsync(async (req, res, next) 
         return Response.notFound404(res, {message: `No feature with key: ${featureKey} within ${projectKey}`});
     }
 
-    // remove id from feature response
-    feature.id = undefined;
+    Response.ok200(res, {feature: feature});
+});
+
+exports.getFeatureByProjectKey = catchAsync(async (req, res, next) => {
+    const {projectKey} = req.params;
+
+    const feature = await Feature.findFeatureByProjectKey(projectKey);
+
+    if (!feature || feature.length === 0) {
+        return Response.notFound404(res, {message: `No features found under project: ${projectKey}`});
+    }
 
     Response.ok200(res, {feature: feature});
 });

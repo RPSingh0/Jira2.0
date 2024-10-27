@@ -80,4 +80,42 @@
  *                   optionText:
  *                     type: string
  *                     description: The option text to show for frontend
+ *     GetProjectByProjectKeySuccess:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *           description: The status for this request
+ *         data:
+ *           type: object
+ *           properties:
+ *             project:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                     description: The name of the feature
+ *                   projectKey:
+ *                     type: string
+ *                     description: The project key for project this feature is under
+ *                   description:
+ *                     type: string
+ *                     description: The description about the feature
+ *                   leadEmail:
+ *                     type: string
+ *                     description: The email of user leading the  project
+ *                   leadName:
+ *                     type: string
+ *                     description: The name of user leading the project
+ *                   startDate:
+ *                     type: string
+ *                     description: The start date of this project
+ *                   expectedEndDate:
+ *                     type: string
+ *                     description: The end date of this project
+ *                   daysSpent:
+ *                     type: number
+ *                     description: The number of days spent till now in this project
  */

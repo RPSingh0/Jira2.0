@@ -39,3 +39,14 @@ exports.getAllProjectsAsOptions = catchAsync(async (req, res, next) => {
     const projects = await Project.getAllProjectsAsOptions();
     Response.ok200(res, {projects: projects});
 });
+
+exports.getProjectByProjectKey = catchAsync(async (req, res, next) => {
+    const {projectKey} = req.params;
+    const project = await Project.getProjectByProjectKey(projectKey);
+
+    if (!project) {
+        return Response.notFound404(res, {message: `No project found with key: ${projectKey}`});
+    }
+
+    Response.ok200(res, {project: project});
+});

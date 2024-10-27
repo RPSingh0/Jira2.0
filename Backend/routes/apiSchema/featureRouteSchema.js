@@ -76,6 +76,32 @@
  *                   description:
  *                     type: string
  *                     description: The description about the feature
+ *     GetFeatureByProjectKeySuccess:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *           description: The status for this request
+ *         data:
+ *           type: object
+ *           properties:
+ *             feature:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   name:
+ *                     type: string
+ *                     description: The name of the feature
+ *                   featureKey:
+ *                     type: string
+ *                     description: The feature key for feature
+ *                   projectKey:
+ *                     type: string
+ *                     description: The project key for project this feature is under
+ *                   description:
+ *                     type: string
+ *                     description: The description about the feature
  *     UpdateFeatureName:
  *       required:
  *         - projectKey
