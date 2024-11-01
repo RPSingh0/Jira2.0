@@ -1,9 +1,10 @@
 import {Box, styled} from "@mui/material";
-import ProjectDetailTitle from "./ProjectDetailTitle.jsx";
+import ProjectDetailName from "./ProjectDetailName.jsx";
 import ProjectDetailToolbar from "./ProjectDetailToolbar.jsx";
 import ProjectDetailDescription from "./ProjectDetailDescription.jsx";
 import ProjectDetailFeature from "./ProjectDetailFeature.jsx";
 import ProjectDetailAside from "./ProjectDetailAside.jsx";
+import {ProjectDetailContextProvider} from "./ProjectDetailContext.jsx";
 
 const StyledProjectDetailBox = styled(Box)(() => ({
     display: "flex",
@@ -30,13 +31,17 @@ function ProjectDetail() {
 
     return (
         <StyledProjectDetailBox>
-            <ProjectDetailTitle/>
+            <ProjectDetailContextProvider>
+                <ProjectDetailName/>
+            </ProjectDetailContextProvider>
             <ProjectDetailToolbar/>
 
             <StyledProjectDetailContentBox>
 
                 <StyledProjectDetailMainSectionBox>
-                    <ProjectDetailDescription/>
+                    <ProjectDetailContextProvider>
+                        <ProjectDetailDescription/>
+                    </ProjectDetailContextProvider>
                     <ProjectDetailFeature/>
                 </StyledProjectDetailMainSectionBox>
 

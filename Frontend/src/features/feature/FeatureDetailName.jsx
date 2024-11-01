@@ -77,7 +77,7 @@ function FeatureDetailName() {
                             value={name}
                             onChange={(event) => setName(event.target.value)}
                             slotProps={{
-                                input: {
+                                htmlInput: {
                                     style: {
                                         padding: "0 0.5rem",
                                         fontSize: "1.5rem"

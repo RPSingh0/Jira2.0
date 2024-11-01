@@ -96,3 +96,64 @@ export async function getAllProjectsService({token}) {
 
     return data;
 }
+
+/**
+ * This function takes projectKey and returns a project detail
+ *
+ * @param projectKey
+ *
+ * @returns {Promise<*>}
+ *
+ * @throws {Error} Error if api call is unsuccessful
+ */
+export async function getProjectDetailService({projectKey}) {
+
+    let data = await fetch(`${URL}/getProject/${projectKey}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    });
+
+    data = await data.json();
+
+    if (data && data.status === 'fail') {
+        throw new Error(data.message);
+    }
+
+    return data.data.project;
+}
+
+/**
+ * This function updates a project's description
+ *
+ * @param {string} token
+ * @param {string} projectKey
+ * @param {string} description
+ *
+ * @returns {Promise<*>}
+ *
+ * @throws {Error} Error if api call is unsuccessful
+ */
+export async function updateProjectDescriptionService({token, projectKey, description}) {
+
+    let data = await fetch(`${URL}/updateDescription`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            projectKey: projectKey,
+            description: description
+        })
+    });
+
+    data = await data.json();
+
+    if (data && data.status === 'fail') {
+        throw new Error(data.message);
+    }
+
+    return data;
+}
