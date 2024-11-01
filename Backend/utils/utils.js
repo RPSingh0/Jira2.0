@@ -3,7 +3,7 @@ exports.cleanProjectName = function (projectName) {
         .trim()
         .replace(/\s+/g, ' ')
         .split(' ')
-        .map(word => word[0].toUpperCase())
+        .map(word => word[0].toLowerCase())
         .join('');
 }
 

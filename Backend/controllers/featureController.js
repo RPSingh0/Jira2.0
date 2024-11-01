@@ -1,14 +1,13 @@
 const catchAsync = require('../utils/catchAsync');
 const Response = require('../utils/response');
 const Feature = require("../models/Feature");
-const Jira = require("../models/Jira");
 
 exports.createFeature = catchAsync(async (req, res, next) => {
     const {name, description, projectKey} = req.body;
 
     // generate feature key
     const featureKeySequence = await Feature.generateFeatureKeySequence(projectKey);
-    const generatedFeatureKey = 'FTR-' + (featureKeySequence + 1);
+    const generatedFeatureKey = 'ftr-' + (featureKeySequence + 1);
 
     // create the user object
     const newFeature = Feature.create()

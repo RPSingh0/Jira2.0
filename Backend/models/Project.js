@@ -372,6 +372,32 @@ class Project {
             })
         }
     }
+
+    /**
+     * Takes in projectKey, and updates description for a project
+     *
+     * @param projectKey
+     * @param description
+     *
+     * @returns {Promise<number>}
+     *
+     * @throws {ErrorInterceptor} Error if there is a database error
+     */
+    static async updateProjectDescription(projectKey, description) {
+
+        const query = 'UPDATE Project SET description = ? WHERE project_key = ?';
+
+        try {
+            const [results] = await dbPromise.execute(query, [description, projectKey]);
+            return results.affectedRows;
+
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error updating project description: ${err.message}`,
+            })
+        }
+    }
 }
 
 module.exports = Project;

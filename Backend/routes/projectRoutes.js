@@ -144,4 +144,39 @@ router.route('/getAllProjectsAsOptions')
 router.route('/getProject/:projectKey')
     .get(projectController.getProjectByProjectKey);
 
+/**
+ * @swagger
+ * /project/updateDescription:
+ *   patch:
+ *     summary: Update a project's description
+ *     tags: [Project]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateProjectDescription'
+ *     responses:
+ *       200:
+ *         description: Project description updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UpdateProjectDescriptionSuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/updateDescription')
+    .patch(projectController.updateDescription);
+
 module.exports = router;

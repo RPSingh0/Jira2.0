@@ -118,4 +118,22 @@
  *                   daysSpent:
  *                     type: number
  *                     description: The number of days spent till now in this project
+ *     UpdateProjectDescription:
+ *       required:
+ *         - projectKey
+ *         - description
+ *       type: object
+ *       properties:
+ *         projectKey:
+ *           type: string
+ *           description: The project key
+ *         description:
+ *           type: string
+ *           description: The updated description
+ *     UpdateProjectDescriptionSuccess:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *           description: The status for this request
  */

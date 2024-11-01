@@ -50,3 +50,17 @@ exports.getProjectByProjectKey = catchAsync(async (req, res, next) => {
 
     Response.ok200(res, {project: project});
 });
+
+exports.updateDescription = catchAsync(async (req, res, next) => {
+    const {projectKey, description} = req.body;
+
+    const affectedRows = await Project.updateProjectDescription(projectKey, description);
+
+    if (affectedRows === 0) {
+        return Response.notFound404(res, {
+            message: `No such project found by key: ${projectKey}`,
+        });
+    }
+
+    Response.ok200(res);
+});
