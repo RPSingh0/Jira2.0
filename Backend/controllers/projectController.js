@@ -44,15 +44,11 @@ exports.getProjectByProjectKey = catchAsync(async (req, res, next) => {
     const {projectKey} = req.params;
     const project = await Project.getProjectByProjectKey(projectKey);
 
-    if (!project || !project.project) {
+    if (!project) {
         return Response.notFound404(res, {message: `No project found with key: ${projectKey}`});
     }
 
-    const response = project.project;
-    response.doneIssues = project.doneStatus;
-    response.openIssues = project.restStatus;
-
-    Response.ok200(res, {project: response});
+    Response.ok200(res, {project: project});
 });
 
 exports.updateDescription = catchAsync(async (req, res, next) => {

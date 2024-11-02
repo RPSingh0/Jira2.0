@@ -350,40 +350,40 @@ class Project {
      * @throws {ErrorInterceptor} Throws error if there is a database error
      */
     static async getProjectByProjectKey(projectKey) {
-        const query = `SELECT P.name,
-                              P.project_key                                      AS projectKey,
-                              P.description,
-                              U.email                                            AS leadEmail,
-                              CONCAT(U.first_name, ' ', IFNULL(U.last_name, '')) AS leadName,
-                              U.profile_image                                    AS leadProfileImage,
-                              P.start_date                                       AS startDate,
-                              P.expected_end_date                                AS expectedEndDate,
-                              DATEDIFF(P.expected_end_date, P.start_date)        AS daysSpent
-                       FROM project AS P
-                                INNER JOIN User AS U ON U.email = P.project_lead_by
-                       WHERE P.project_key = ?`;
-
-        const queryGetDoneStatus = `SELECT COUNT(*) AS count
-                                    FROM metadata AS M
-                                             INNER JOIN status AS S ON S.id = M.status
-                                    WHERE S.type = 3
-                                      AND M.project_key = ?`;
-
-        const queryGetRestStatus = `SELECT COUNT(*) AS count
-                                    FROM metadata AS M
-                                             INNER JOIN status AS S ON S.id = M.status
-                                    WHERE S.type != 3
-                                      AND M.project_key = ?`;
+        const query = `
+            SELECT P.name,
+                   P.project_key                                      AS projectKey,
+                   P.description,
+                   U.email                                            AS leadEmail,
+                   CONCAT(U.first_name, ' ', IFNULL(U.last_name, '')) AS leadName,
+                   U.profile_image                                    AS leadProfileImage,
+                   P.start_date                                       AS startDate,
+                   P.expected_end_date                                AS expectedEndDate,
+                   DATEDIFF(P.expected_end_date, P.start_date)        AS daysSpent,
+                   COUNT(CASE WHEN S.type = 'DONE' THEN 1 END)        AS doneIssues,
+                   COUNT(CASE WHEN S.type != 'DONE' THEN 1 END)       AS openIssues,
+                   ROUND(
+                           IFNULL(
+                                   (COUNT(CASE WHEN S.type = 'DONE' THEN 1 END) /
+                                    NULLIF((COUNT(CASE WHEN S.type != 'DONE' THEN 1 END) +
+                                            COUNT(CASE WHEN S.type = 'DONE' THEN 1 END)), 0)) * 100,
+                                   0
+                           )
+                   )                                                  AS completionPercentage
+            FROM project AS P
+                     INNER JOIN
+                 User AS U ON U.email = P.project_lead_by
+                     LEFT JOIN
+                 metadata AS M ON P.project_key = M.project_key
+                     LEFT JOIN
+                 status AS S ON S.id = M.status
+            WHERE P.project_key = ?
+            GROUP BY P.name, P.project_key, P.description, U.email, U.first_name, U.last_name, U.profile_image,
+                     P.start_date, P.expected_end_date;`;
 
         try {
             const [results] = await dbPromise.execute(query, [projectKey]);
-            const [doneStatus] = await dbPromise.execute(queryGetDoneStatus, [projectKey]);
-            const [restStatus] = await dbPromise.execute(queryGetRestStatus, [projectKey]);
-            return {
-                project: results[0],
-                doneStatus: doneStatus[0]?.count,
-                restStatus: restStatus[0]?.count
-            };
+            return results[0]
         } catch (err) {
             throw new ErrorInterceptor({
                 type: ErrorType.DATABASE,
