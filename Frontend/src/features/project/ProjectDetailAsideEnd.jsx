@@ -3,6 +3,7 @@ import {Box, Typography} from "@mui/material";
 import LoadOrFetchWrapper from "../../components/loader/LoadOrFetchWrapper.jsx";
 import {Rounded2Half} from "../../components/loader/Loader.jsx";
 import {StyledItemValueStaticBox} from "../jira/JiraDetailAsideStyles.jsx";
+import {formatDateToLocale} from "../../utils/utils.js";
 
 function ProjectDetailAsideEnd() {
 
@@ -19,7 +20,7 @@ function ProjectDetailAsideEnd() {
                 loader={<Rounded2Half/>}>
                 <StyledItemValueStaticBox>
                     <Typography variant="body1">
-                        {projectDetail?.expectedEndDate}
+                        {formatDateToLocale(projectDetail?.expectedEndDate)}
                     </Typography>
                 </StyledItemValueStaticBox>
             </LoadOrFetchWrapper>

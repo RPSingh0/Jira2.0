@@ -36,3 +36,8 @@ export function getFeatureIfLoaded(isLoading, data, key) {
 
     return value;
 }
+
+export function formatDateToLocale(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString();
+}
