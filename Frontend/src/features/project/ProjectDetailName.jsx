@@ -14,7 +14,7 @@ function ProjectDetailName() {
             fetching={fetchingProjectDetail}
             loader={<Rounded2Half/>}>
             <Typography variant={"h5"} gutterBottom>
-                {projectDetail?.name}
+                {projectDetail?.name} ({projectDetail?.completionPercentage}% complete)
             </Typography>
         </LoadOrFetchWrapper>
     );
