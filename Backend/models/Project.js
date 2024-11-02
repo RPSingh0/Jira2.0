@@ -355,6 +355,7 @@ class Project {
                               P.description,
                               U.email                                            AS leadEmail,
                               CONCAT(U.first_name, ' ', IFNULL(U.last_name, '')) AS leadName,
+                              U.profile_image                                    AS leadProfileImage,
                               P.start_date                                       AS startDate,
                               P.expected_end_date                                AS expectedEndDate,
                               DATEDIFF(P.expected_end_date, P.start_date)        AS daysSpent
@@ -362,9 +363,27 @@ class Project {
                                 INNER JOIN User AS U ON U.email = P.project_lead_by
                        WHERE P.project_key = ?`;
 
+        const queryGetDoneStatus = `SELECT COUNT(*) AS count
+                                    FROM metadata AS M
+                                             INNER JOIN status AS S ON S.id = M.status
+                                    WHERE S.type = 3
+                                      AND M.project_key = ?`;
+
+        const queryGetRestStatus = `SELECT COUNT(*) AS count
+                                    FROM metadata AS M
+                                             INNER JOIN status AS S ON S.id = M.status
+                                    WHERE S.type != 3
+                                      AND M.project_key = ?`;
+
         try {
             const [results] = await dbPromise.execute(query, [projectKey]);
-            return results[0];
+            const [doneStatus] = await dbPromise.execute(queryGetDoneStatus, [projectKey]);
+            const [restStatus] = await dbPromise.execute(queryGetRestStatus, [projectKey]);
+            return {
+                project: results[0],
+                doneStatus: doneStatus[0]?.count,
+                restStatus: restStatus[0]?.count
+            };
         } catch (err) {
             throw new ErrorInterceptor({
                 type: ErrorType.DATABASE,
@@ -395,6 +414,42 @@ class Project {
             throw new ErrorInterceptor({
                 type: ErrorType.DATABASE,
                 message: `Error updating project description: ${err.message}`,
+            })
+        }
+    }
+
+    /**
+     * Takes in a project key and an email and updates project's lead to that email
+     *
+     * @param projectKey
+     * @param leadBy
+     *
+     * @returns {Promise<number>}
+     *
+     * @throws {ErrorInterceptor} Error if there is a database error
+     */
+    static async updateLeadBy(projectKey, leadBy) {
+
+        // check for user existence
+        const user = await User.findByEmail(leadBy);
+
+        if (!user) {
+            throw new ErrorInterceptor({
+                type: ErrorType.VALIDATION,
+                message: 'No Such user available (lead by)'
+            });
+        }
+
+        const query = 'UPDATE Project SET project_lead_by = ? WHERE project_key = ?';
+
+        try {
+            const [results] = await dbPromise.execute(query, [leadBy, projectKey]);
+            return results.affectedRows;
+
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error updating project: ${err.message}`,
             })
         }
     }

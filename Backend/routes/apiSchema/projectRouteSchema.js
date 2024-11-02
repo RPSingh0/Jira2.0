@@ -136,4 +136,22 @@
  *         status:
  *           type: string
  *           description: The status for this request
+ *     UpdateLeadBy:
+ *       required:
+ *         - projectKey
+ *         - leadBy
+ *       type: object
+ *       properties:
+ *         projectKey:
+ *           type: string
+ *           description: The unique key to identify project
+ *         leadBy:
+ *           type: string
+ *           description: The updated project lead email
+ *     UpdateLeadBySuccess:
+ *       type: object
+ *       properties:
+ *         status:
+ *           type: string
+ *           description: The status for this request
  */

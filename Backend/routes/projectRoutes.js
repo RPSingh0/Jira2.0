@@ -179,4 +179,39 @@ router.route('/getProject/:projectKey')
 router.route('/updateDescription')
     .patch(projectController.updateDescription);
 
+/**
+ * @swagger
+ * /project/updateLeadBy:
+ *   patch:
+ *     summary: Update project lead by
+ *     tags: [Project]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateLeadBy'
+ *     responses:
+ *       200:
+ *         description: Project lead updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UpdateLeadBySuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/updateLeadBy')
+    .patch(projectController.updateLeadBy);
+
 module.exports = router;

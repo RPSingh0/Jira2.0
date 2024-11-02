@@ -44,11 +44,15 @@ exports.getProjectByProjectKey = catchAsync(async (req, res, next) => {
     const {projectKey} = req.params;
     const project = await Project.getProjectByProjectKey(projectKey);
 
-    if (!project) {
+    if (!project || !project.project) {
         return Response.notFound404(res, {message: `No project found with key: ${projectKey}`});
     }
 
-    Response.ok200(res, {project: project});
+    const response = project.project;
+    response.doneIssues = project.doneStatus;
+    response.openIssues = project.restStatus;
+
+    Response.ok200(res, {project: response});
 });
 
 exports.updateDescription = catchAsync(async (req, res, next) => {
@@ -59,6 +63,20 @@ exports.updateDescription = catchAsync(async (req, res, next) => {
     if (affectedRows === 0) {
         return Response.notFound404(res, {
             message: `No such project found by key: ${projectKey}`,
+        });
+    }
+
+    Response.ok200(res);
+});
+
+exports.updateLeadBy = catchAsync(async (req, res, next) => {
+    const {projectKey, leadBy} = req.body;
+
+    const affectedRows = await Project.updateLeadBy(projectKey, leadBy);
+
+    if (affectedRows === 0) {
+        return Response.notFound404(res, {
+            message: `No such project by key: ${projectKey}`
         });
     }
 
