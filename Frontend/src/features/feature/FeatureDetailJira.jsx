@@ -37,8 +37,7 @@ function FeatureDetailJira() {
                 </Box>
             </LoadOrFetchWrapper>
         </StyledFeatureDetailJiraBox>
-    )
-        ;
+    );
 }
 
 export default FeatureDetailJira;

@@ -4,15 +4,14 @@ const URL = `${import.meta.env.VITE_BACKEND_URL}/api/v1/feature`;
  * This function takes feature data and creates a feature
  *
  * @param {string} name
- * @param {string} featureKey
  * @param {string} description
- * @param {number} projectId
+ * @param {number} projectKey
  *
  * @returns {Promise<*>}
  *
  * @throws {Error} Error if api call is unsuccessful
  */
-export async function createFeatureService({name, featureKey, description, projectId}) {
+export async function createFeatureService({name, description, projectKey}) {
 
     let data = await fetch(`${URL}/create`, {
         method: 'POST',
@@ -21,9 +20,8 @@ export async function createFeatureService({name, featureKey, description, proje
         },
         body: JSON.stringify({
             name: name,
-            featureKey: featureKey,
             description: description,
-            projectId: projectId
+            projectKey: projectKey
         })
     });
 

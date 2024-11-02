@@ -1,7 +1,13 @@
-import {Box, Paper, styled, Typography} from "@mui/material";
+import {Paper, styled} from "@mui/material";
+import ProjectDetailLeadBy from "./ProjectDetailLeadBy.jsx";
+import ProjectDetailAsideOpenIssue from "./ProjectDetailAsideOpenIssue.jsx";
+import ProjectDetailAsideDoneIssue from "./ProjectDetailAsideDoneIssue.jsx";
+import ProjectDetailAsideStarted from "./ProjectDetailAsideStarted.jsx";
+import ProjectDetailAsideEnd from "./ProjectDetailAsideEnd.jsx";
+import ProjectDetailAsideDaySpent from "./ProjectDetailAsideDaySpent.jsx";
 
 const StyledProjectDetailAsideBox = styled(Paper)(({theme}) => ({
-    width: "23%",
+    width: "20%",
     padding: "1rem",
     display: "flex",
     flexDirection: "column",
@@ -29,49 +35,17 @@ const StyledProjectDetailAsideBox = styled(Paper)(({theme}) => ({
     }
 }));
 
-const StyledProjectDetailAsideItemBox = styled(Box)(() => ({
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-}));
-
-const StyledProjectDetailAsideLeadByBox = styled(Box)(() => ({
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between"
-}));
-
 function ProjectDetailAside() {
 
     return (
         <StyledProjectDetailAsideBox variant="outlined">
-            <StyledProjectDetailAsideLeadByBox>
-                <Typography variant="body1" gutterBottom>
-                    Lead By
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                    Xenovia Gremory
-                </Typography>
-            </StyledProjectDetailAsideLeadByBox>
-            <AsideItem itemKey={"Open Issues"} itemValue={30}/>
-            <AsideItem itemKey={"Done Issues"} itemValue={400}/>
-            <AsideItem itemKey={"Started"} itemValue={"22/12/2024"}/>
-            <AsideItem itemKey={"End (Expected)"} itemValue={"26/12/2024"}/>
-            <AsideItem itemKey={"Day Spent"} itemValue={"500 Days"}/>
+            <ProjectDetailLeadBy/>
+            <ProjectDetailAsideOpenIssue/>
+            <ProjectDetailAsideDoneIssue/>
+            <ProjectDetailAsideStarted/>
+            <ProjectDetailAsideEnd/>
+            <ProjectDetailAsideDaySpent/>
         </StyledProjectDetailAsideBox>
-    );
-}
-
-function AsideItem({itemKey, itemValue}) {
-    return (
-        <StyledProjectDetailAsideItemBox>
-            <Typography variant="body1" gutterBottom>
-                {itemKey}
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-                {itemValue}
-            </Typography>
-        </StyledProjectDetailAsideItemBox>
     );
 }
 

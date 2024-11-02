@@ -157,3 +157,37 @@ export async function updateProjectDescriptionService({token, projectKey, descri
 
     return data;
 }
+
+/**
+ * This function takes a project key and an email and updated project lead to passed email user
+ *
+ * @param {string} token
+ * @param {string} projectKey
+ * @param {string} leadBy
+ *
+ * @returns {Promise<*>}
+ *
+ * @throws {Error} Error if api call is unsuccessful
+ */
+export async function updateProjectLeadByService({token, projectKey, leadBy}) {
+
+    let data = await fetch(`${URL}/updateLeadBy`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            projectKey: projectKey,
+            leadBy: leadBy
+        })
+    });
+
+    data = await data.json();
+
+    if (data && data.status === 'fail') {
+        throw new Error(data.message);
+    }
+
+    return data;
+}

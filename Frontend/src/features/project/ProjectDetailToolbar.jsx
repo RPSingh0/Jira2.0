@@ -12,8 +12,7 @@ function ProjectDetailToolbar() {
     return (
         <StyledProjectDetailToolbar>
             <OutlinedButton text={"Add Feature"} onClickHandler={() => setOpenCreateFeature(true)}/>
-            <CreateFeature open={openCreateFeature} setOpen={setOpenCreateFeature} projectId={2}
-                           key={openCreateFeature}/>
+            <CreateFeature open={openCreateFeature} setOpen={setOpenCreateFeature} key={openCreateFeature}/>
         </StyledProjectDetailToolbar>
     );
 }

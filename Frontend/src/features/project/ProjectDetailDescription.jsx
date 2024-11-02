@@ -63,7 +63,7 @@ function ProjectDetailDescription() {
                     <TextEditor editor={editingOff} height={"min-content"}/>
                 }
                 {/* Button Save and Cancel */}
-                <Box sx={{marginTop: "1rem"}}>
+                <Box sx={{marginTop: "1rem", marginBottom: "1rem"}}>
                     {isEditing &&
                         <StyledEditingSaveAndCancelBox>
                             <ContainedButton text={"Save"} onClickHandler={handleSaveDescription}/>

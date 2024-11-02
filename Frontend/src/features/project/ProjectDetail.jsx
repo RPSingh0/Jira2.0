@@ -5,6 +5,7 @@ import ProjectDetailDescription from "./ProjectDetailDescription.jsx";
 import ProjectDetailFeature from "./ProjectDetailFeature.jsx";
 import ProjectDetailAside from "./ProjectDetailAside.jsx";
 import {ProjectDetailContextProvider} from "./ProjectDetailContext.jsx";
+import {ProjectDetailFeatureContextProvider} from "./ProjectDetailFeatureContext.jsx";
 
 const StyledProjectDetailBox = styled(Box)(() => ({
     display: "flex",
@@ -16,36 +17,58 @@ const StyledProjectDetailBox = styled(Box)(() => ({
 const StyledProjectDetailContentBox = styled(Box)(({theme}) => ({
     display: "flex",
     flexDirection: "row",
-    gap: "2rem",
+    justifyContent: "space-between",
 
     [theme.breakpoints.down('c1000')]: {
         flexDirection: "column-reverse",
+        gap: "1rem"
     }
 }));
 
-const StyledProjectDetailMainSectionBox = styled(Box)(() => ({
-    flexGrow: 1
+const StyledProjectDetailMainSectionBox = styled(Box)(({theme}) => ({
+    width: "78%",
+
+    [theme.breakpoints.down('c1360')]: {
+        width: "73%"
+    },
+
+    [theme.breakpoints.down('lg')]: {
+        width: "68%"
+    },
+
+    [theme.breakpoints.down('c1000')]: {
+        width: "100%",
+    }
 }));
 
 function ProjectDetail() {
 
     return (
         <StyledProjectDetailBox>
+
             <ProjectDetailContextProvider>
                 <ProjectDetailName/>
             </ProjectDetailContextProvider>
+
             <ProjectDetailToolbar/>
 
             <StyledProjectDetailContentBox>
 
                 <StyledProjectDetailMainSectionBox>
+
                     <ProjectDetailContextProvider>
                         <ProjectDetailDescription/>
                     </ProjectDetailContextProvider>
-                    <ProjectDetailFeature/>
+
+                    <ProjectDetailFeatureContextProvider>
+                        <ProjectDetailFeature/>
+                    </ProjectDetailFeatureContextProvider>
+
                 </StyledProjectDetailMainSectionBox>
 
-                <ProjectDetailAside/>
+                <ProjectDetailContextProvider>
+                    <ProjectDetailAside/>
+                </ProjectDetailContextProvider>
 
             </StyledProjectDetailContentBox>
 

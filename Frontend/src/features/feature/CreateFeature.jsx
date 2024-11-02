@@ -1,32 +1,23 @@
 import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import {TextFieldInput} from "./CreateFeatureComponents.jsx";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import useDefaultEditor from "../../components/editor/useDefaultEditor.js";
 import Editor from "../../components/editor/Editor.jsx";
-import {useGetFeatureKey} from "./hooks/useGetFeatureKey.js";
 import {toast} from "react-toastify";
 import {useCreateFeature} from "./hooks/useCreateFeature.js";
+import {useParams} from "react-router-dom";
 
-function CreateFeature({projectId, open, setOpen}) {
+function CreateFeature({open, setOpen}) {
 
     // Initializing editor
-    const createFeatureEditor = useDefaultEditor('Description for feature');
+    const {editingOn} = useDefaultEditor('Description for feature');
 
     // Local states for form input management
     const [featureName, setFeatureName] = useState('');
-    const [featureKey, setFeatureKey] = useState('');
+    const {projectKey} = useParams();
 
     // React query custom hooks
-    const {getFeatureKey, isFetchingFeatureKey} = useGetFeatureKey();
     const {createFeature, isCreating} = useCreateFeature();
-
-    useEffect(() => {
-        getFeatureKey({id: projectId}, {
-            onSuccess: (data) => {
-                setFeatureKey(data.data.featureKey);
-            }
-        })
-    }, [open]);
 
     function handleSubmit(event) {
         event.preventDefault();
@@ -37,13 +28,12 @@ function CreateFeature({projectId, open, setOpen}) {
         }
 
         // Description editor data
-        const editorData = createFeatureEditor.getHTML();
+        const editorData = editingOn.getHTML();
 
         createFeature({
             name: featureName,
             description: editorData,
-            featureKey: featureKey,
-            projectId: projectId
+            projectKey: projectKey
         }, {
             onSuccess: () => setOpen(false)
         });
@@ -51,9 +41,9 @@ function CreateFeature({projectId, open, setOpen}) {
 
 
     return (
-        <Dialog open={open} scroll={"paper"}>
+        <Dialog open={open} scroll={"paper"} maxWidth={'md'} fullWidth={true}>
             <DialogTitle>
-                Create Feature (MFP2)
+                Create Feature
             </DialogTitle>
             <DialogContent>
                 <Box id={"create-feature-form"} component={'form'} sx={{
@@ -68,18 +58,7 @@ function CreateFeature({projectId, open, setOpen}) {
                         value={featureName}
                         onChange={(event) => setFeatureName(event.target.value.trimStart())}
                     />
-                    <TextFieldInput
-                        name={"featureKey"}
-                        label={"Feature Key"}
-                        value={featureKey}
-                        slotProps={{
-                            input: {
-                                readOnly: true,
-                            },
-                        }}
-                        disabled={isFetchingFeatureKey}
-                    />
-                    <Editor editor={createFeatureEditor} height={"12rem"}/>
+                    <Editor editor={editingOn} height={"12rem"}/>
                 </Box>
             </DialogContent>
             <DialogActions>
@@ -88,7 +67,7 @@ function CreateFeature({projectId, open, setOpen}) {
                     type={"submit"}
                     form={"create-feature-form"}
                     onClick={handleSubmit}
-                    disabled={isFetchingFeatureKey || isCreating}
+                    disabled={isCreating}
                 >
                     Create
                 </Button>
