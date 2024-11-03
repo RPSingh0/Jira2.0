@@ -51,6 +51,7 @@ exports.getAllProjects = catchAsync(async (req, res, next) => {
         if (!team) {
             return {
                 ...project,
+                completionPercentage: parseInt(project.completionPercentage),
                 team: []
             }
         }
@@ -67,6 +68,7 @@ exports.getAllProjects = catchAsync(async (req, res, next) => {
 
         return {
             ...project,
+            completionPercentage: parseInt(project.completionPercentage),
             team: finalUsers
         }
     })
