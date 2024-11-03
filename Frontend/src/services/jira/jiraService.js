@@ -8,15 +8,15 @@ const URL = `${import.meta.env.VITE_BACKEND_URL}/api/v1/jira`;
  * @param {string} jiraType
  * @param {number} jiraPoint
  * @param {string} description
- * @param {number} projectId
- * @param {number} featureId
+ * @param {number} projectKey
+ * @param {number} featureKey
  * @param {number} assignedTo
  *
  * @returns {Promise<*>}
  *
  * @throws {Error} Error if api call is unsuccessful
  */
-export async function createJiraService({token, summary, jiraType, jiraPoint, description, projectId, featureId, assignedTo}) {
+export async function createJiraService({token, summary, jiraType, jiraPoint, description, projectKey, featureKey, assignedTo}) {
 
     let data = await fetch(`${URL}/create`, {
         method: 'POST',
@@ -29,8 +29,8 @@ export async function createJiraService({token, summary, jiraType, jiraPoint, de
             jiraType: jiraType,
             description: description,
             jiraPoint: jiraPoint,
-            projectId: projectId,
-            featureId: featureId,
+            projectKey: projectKey,
+            featureKey: featureKey,
             assignedTo: assignedTo,
         })
     });

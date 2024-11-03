@@ -8,7 +8,7 @@ export function getProjectIfLoaded(isLoading, data, key) {
         return {loading: true, optionText: "Loading..."};
     }
 
-    let value = data.data.projects.filter(item => item.projectKey === key.toUpperCase())[0];
+    let value = data.filter(item => item.projectKey === key)[0];
 
     if (value === undefined) {
         return {optionText: "Select project"};
@@ -27,7 +27,7 @@ export function getFeatureIfLoaded(isLoading, data, key) {
         return {loading: true, optionText: "Loading..."};
     }
 
-    let value = data.data.features.filter(item => item.featureKey === key.toUpperCase())[0];
+    let value = data.filter(item => item.featureKey === key)[0];
 
     if (value === undefined) {
         console.log('here')

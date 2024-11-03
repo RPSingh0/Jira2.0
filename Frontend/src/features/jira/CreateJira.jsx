@@ -8,9 +8,9 @@ import AutocompleteSelector from "../../components/autocomplete/AutocompleteSele
 import {getFormData} from "../../utils/FormUtils.js";
 import {useParams} from "react-router-dom";
 import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
-import {getAllProjectsService} from "../../services/project/projectService.js";
+import {getAllProjectsAsOptionsService} from "../../services/project/projectService.js";
 import {getFeatureIfLoaded, getProjectIfLoaded} from "../../utils/utils.js";
-import {getAllFeaturesByProjectKey} from "../../services/feature/featureService.js";
+import {getFeaturesAsOptionsByProjectKey} from "../../services/feature/featureService.js";
 import {useQueryClient} from "@tanstack/react-query";
 import {getAllUsersService} from "../../services/user/userService.js";
 import {toast} from "react-toastify";
@@ -18,10 +18,10 @@ import {useCreateJira} from "./hooks/useCreateJira.js";
 import {getAuthToken} from "../../services/user/authenticationSlice.js";
 import {useSelector} from "react-redux";
 
-function CreateJira() {
+function CreateJira({open, setOpen}) {
 
     // Initializing editor
-    const createJiraEditor = useDefaultEditor('Description for the jira goes here...');
+    const {editingOn} = useDefaultEditor('Description for the jira goes here...');
 
     // Using params for project and feature pre-selection
     const {projectKey, featureKey} = useParams();
@@ -41,13 +41,13 @@ function CreateJira() {
     // Fetch all the projects
     const {isLoading: isLoadingProjects, data: projectOptions} = useGetQueryHook({
         key: ['projectOptions'],
-        fn: getAllProjectsService
+        fn: getAllProjectsAsOptionsService
     });
 
     // Fetch all features related to projects
     const {isLoading: isLoadingFeatures, isFetching: isFetchingFeatures, data: featureOptions} = useGetQueryHook({
         key: ['featureOptions'],
-        fn: getAllFeaturesByProjectKey,
+        fn: getFeaturesAsOptionsByProjectKey,
         projectKey: pOption.projectKey,
         enabledDependency: [!pOption.loading]
     });
@@ -98,17 +98,17 @@ function CreateJira() {
             return;
         }
 
-        if (!pOption.id) {
+        if (!pOption.projectKey) {
             toast.error('Please select a project');
             return;
         }
 
-        if (!fOption.id) {
+        if (!fOption.featureKey) {
             toast.error('Please select a feature');
             return;
         }
 
-        if (!uOption?.id) {
+        if (!uOption?.email) {
             toast.error('Please assign it to a user');
             return;
         }
@@ -119,15 +119,17 @@ function CreateJira() {
             summary: summary,
             jiraType: jiraType,
             jiraPoint: jiraPoint,
-            description: createJiraEditor.getHTML(),
-            projectId: pOption.id,
-            featureId: fOption.id,
-            assignedTo: uOption.id
+            description: editingOn.getHTML(),
+            projectKey: pOption.projectKey,
+            featureKey: fOption.featureKey,
+            assignedTo: uOption.email
+        }, {
+            onSuccess: () => setOpen(false)
         });
     }
 
     return (
-        <Dialog open={true} scroll={"paper"} fullWidth={true} maxWidth={"md"}>
+        <Dialog open={open} scroll={"paper"} fullWidth={true} maxWidth={"lg"}>
             <DialogTitle>
                 Create Jira
             </DialogTitle>
@@ -153,7 +155,7 @@ function CreateJira() {
                         name={"summary"}
                         label={"Summary"}
                     />
-                    <TextEditor editor={createJiraEditor} height={"15rem"}/>
+                    <TextEditor editor={editingOn} height={"15rem"}/>
                     <InputSelectField
                         name={"point"}
                         label={"Point"}
@@ -172,7 +174,7 @@ function CreateJira() {
                         variant={"default"}
                         name={"projectId"}
                         label={"Project"}
-                        options={isLoadingProjects ? [] : projectOptions.data.projects}
+                        options={isLoadingProjects ? [] : projectOptions}
                         isLoading={isLoadingProjects}
                         disabled={isLoadingProjects}
                         value={pOption}
@@ -182,7 +184,7 @@ function CreateJira() {
                         variant={"default"}
                         name={"featureId"}
                         label={"Feature"}
-                        options={isLoadingFeatures ? [] : featureOptions.data.features}
+                        options={isLoadingFeatures ? [] : featureOptions}
                         isLoading={isLoadingFeatures || isFetchingFeatures}
                         disabled={isLoadingFeatures || isFetchingFeatures}
                         value={fOption}
@@ -192,7 +194,7 @@ function CreateJira() {
                         variant={"user-avatar"}
                         name={"assignedTo"}
                         label={"Assigned To"}
-                        options={isLoadingUsers ? [] : userOptions.data.users}
+                        options={isLoadingUsers ? [] : userOptions}
                         isLoading={isLoadingUsers}
                         disabled={isLoadingUsers}
                         value={uOption}
@@ -215,8 +217,7 @@ function CreateJira() {
                     type={"submit"}
                     form={"create-feature-form"}
                     disabled={isCreating}
-                    onClick={() => {
-                    }}
+                    onClick={() => setOpen(false)}
                 >
                     Cancel
                 </Button>

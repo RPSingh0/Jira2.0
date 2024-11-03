@@ -98,6 +98,33 @@ export async function getAllProjectsService({token}) {
 }
 
 /**
+ * Get all projects in system as dropdown options
+ *
+ * @param {string} token
+ *
+ * @returns {Promise<*>}
+ *
+ * @throws {Error} Error if unable to fetch or if token is invalid
+ */
+export async function getAllProjectsAsOptionsService({token}) {
+    let data = await fetch(`${URL}/getAllProjectsAsOptions`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    data = await data.json();
+
+    if (data && data.status === 'fail') {
+        throw new Error(data.message);
+    }
+
+    return data.data.projects;
+}
+
+/**
  * This function takes projectKey and returns a project detail
  *
  * @param projectKey

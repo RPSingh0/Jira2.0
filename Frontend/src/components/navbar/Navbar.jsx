@@ -1,6 +1,8 @@
 import {AppBar, Avatar, Box, IconButton, styled, Toolbar, Tooltip, useMediaQuery, useTheme} from "@mui/material";
 import Logo from "../logo/Logo.jsx";
 import {ContainedButton, NavLinkButton, TextButton} from "../button/Buttons.jsx";
+import {useState} from "react";
+import CreateJira from "../../features/jira/CreateJira.jsx";
 
 const StyledNavButtonBox = styled(Box)(() => ({
     flexGrow: 1,
@@ -22,6 +24,7 @@ function Navbar() {
 
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
+    const [open, setOpen] = useState(false);
 
     return (
         <AppBar position="sticky" color={"default"} elevation={1}>
@@ -37,7 +40,8 @@ function Navbar() {
                 <StyledNavButtonBox>
                     <NavLinkButton text={"Projects"} link={"/project"}/>
                     <TextButton text={"Teams"}/>
-                    <ContainedButton text={"Create"}/>
+                    <ContainedButton text={"Create"} onClickHandler={() => setOpen(true)}/>
+                    {open && <CreateJira open={open} setOpen={setOpen}/>}
                 </StyledNavButtonBox>
 
                 {/* Empty container to take up remaining space */}
