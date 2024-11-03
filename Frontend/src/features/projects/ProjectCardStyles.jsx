@@ -28,7 +28,11 @@ export const StyledProjectCardContentBox = styled(Box)(() => ({
 }));
 
 export const StyledProjectTitle = styled(Typography)(() => ({
-    fontWeight: "bold"
+    fontWeight: "bold",
+
+    "&:hover": {
+        cursor: "pointer"
+    }
 }));
 
 export const StyledInfoText = styled(Typography)(({theme}) => ({

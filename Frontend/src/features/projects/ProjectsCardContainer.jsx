@@ -17,6 +17,7 @@ function ProjectsCardContainer() {
             {projects?.map(project => <ProjectCard
                 key={project.projectKey}
                 name={project.name}
+                projectKey={project.projectKey}
                 openIssues={project.openIssues}
                 doneIssues={project.doneIssues}
                 youWorkedOn={project.youWorkedOn}

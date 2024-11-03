@@ -11,9 +11,11 @@ import {
     StyledQuickInfoAndTimeLineBox,
 } from "./ProjectCardStyles.jsx";
 import {InfoItem, ProjectProgress} from "./ProjectCardComponents.jsx";
+import {useNavigate} from "react-router-dom";
 
 function ProjectCard({
                          name,
+                         projectKey,
                          openIssues,
                          doneIssues,
                          youWorkedOn,
@@ -26,14 +28,19 @@ function ProjectCard({
 
     const theme = useTheme();
     const match = useMediaQuery(theme.breakpoints.down('c500'));
+    const navigate = useNavigate();
+
+    // handler functions
+    function handleClickOnProjectName() {
+        navigate(`/project/${projectKey}`)
+    }
 
     return (
         <StyledCardPaper variant="outlined">
-
             <ProjectProgress completionPercentage={completionPercentage}/>
 
             <StyledProjectCardContentBox>
-                <StyledProjectTitle variant={"subtitle1"} gutterBottom noWrap>
+                <StyledProjectTitle variant={"subtitle1"} gutterBottom noWrap onClick={handleClickOnProjectName}>
                     {name}
                 </StyledProjectTitle>
 
