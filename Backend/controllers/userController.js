@@ -10,7 +10,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
         .setFirstName(firstName)
         .setLastName(lastName)
         .setEmail(email)
-        .setProfileImage(`https://avatar.iran.liara.run/username?username=${firstName}`)
+        .setProfileImage(`https://avatar.iran.liara.run/public/boy?username=${firstName}`)
         .setStatus(status)
         .setPassword(password)
         .build();

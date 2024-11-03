@@ -350,30 +350,34 @@ class Project {
     static async getAllProjects(userEmail) {
         const query = `
             SELECT P.name,
-                   P.project_key                                                              AS projectKey,
-                   P.start_date                                                               AS startDate,
-                   P.expected_end_date                                                        as expectedEndDate,
-                   DATEDIFF(P.expected_end_date, P.start_date)                                AS daysSpent,
-                   COUNT(CASE WHEN M.status != 3 THEN 1 END)                                  AS openIssues,
-                   COUNT(CASE WHEN M.status = 3 THEN 1 END)                                   AS doneIssues,
+                   P.project_key                                              AS projectKey,
+                   P.start_date                                               AS startDate,
+                   P.expected_end_date                                        AS expectedEndDate,
+                   DATEDIFF(P.expected_end_date, P.start_date)                AS daysSpent,
+                   MD.openIssues,
+                   MD.doneIssues,
                    IFNULL(GROUP_CONCAT(DISTINCT CONCAT(U.first_name, ' ', IFNULL(U.last_name, ''), '||', U.email, '||',
                                                        U.profile_image) SEPARATOR '|+|'), '') AS team,
-                   IFNULL(
-                           ROUND(
-                                   (COUNT(CASE WHEN M.status = 3 THEN 1 END) /
-                                    NULLIF((COUNT(CASE WHEN M.status != 3 THEN 1 END) +
-                                            COUNT(CASE WHEN M.status = 3 THEN 1 END)), 0)) * 100
-                               , 0), 0
-                   )                                                                          AS completionPercentage,
-                   COUNT(CASE
-                             WHEN (M.assigned_to = ? OR M.created_by = ?) THEN 1
-                       END)                                                                   AS youWorkedOn
+                   IFNULL(ROUND((MD.doneIssues / NULLIF((MD.openIssues + MD.doneIssues), 0)) * 100, 0),
+                          0)                                                  AS completionPercentage,
+                   COALESCE(YW.youWorkedOn, 0)                                AS youWorkedOn
             FROM Project AS P
-                     LEFT JOIN
-                 Metadata AS M ON P.project_key = M.project_key
-                     LEFT JOIN
-                 User AS U ON M.assigned_to = U.email OR M.created_by = U.email OR P.project_lead_by = U.email
-            GROUP BY p.name, p.project_key, p.start_date, p.expected_end_date`;
+                     LEFT JOIN (SELECT project_key,
+                                       COUNT(CASE WHEN status != 3 THEN 1 END) AS openIssues,
+                                       COUNT(CASE WHEN status = 3 THEN 1 END)  AS doneIssues
+                                FROM Metadata
+                                GROUP BY project_key) AS MD ON P.project_key = MD.project_key
+                     LEFT JOIN (SELECT project_key,
+                                       COUNT(*) AS youWorkedOn
+                                FROM Metadata
+                                WHERE assigned_to = ?
+                                   OR created_by = ?
+                                GROUP BY project_key) AS YW ON P.project_key = YW.project_key
+                     LEFT JOIN Metadata AS M ON P.project_key = M.project_key
+                     LEFT JOIN User AS U
+                               ON (M.assigned_to = U.email OR M.created_by = U.email OR P.project_lead_by = U.email)
+            GROUP BY P.project_key, P.name, P.start_date, P.expected_end_date, MD.openIssues, MD.doneIssues,
+                     YW.youWorkedOn`;
 
         try {
             const [results] = await dbPromise.execute(query, [userEmail, userEmail]);
