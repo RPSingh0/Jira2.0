@@ -40,6 +40,40 @@ exports.getAllProjectsAsOptions = catchAsync(async (req, res, next) => {
     Response.ok200(res, {projects: projects});
 });
 
+exports.getAllProjects = catchAsync(async (req, res, next) => {
+    const email = req.user.email
+    const projects = await Project.getAllProjects(email);
+
+    // processing team name, email and profileImage
+    const response = projects.map(project => {
+        const team = project.team;
+
+        if (!team) {
+            return {
+                ...project,
+                team: []
+            }
+        }
+
+        const users = team.split('|+|');
+        const finalUsers = users.map(user => {
+            const userData = user.split('||');
+            return {
+                name: userData[0],
+                email: userData[1],
+                profileImage: userData[2],
+            }
+        });
+
+        return {
+            ...project,
+            team: finalUsers
+        }
+    })
+
+    Response.ok200(res, {projects: response});
+});
+
 exports.getProjectByProjectKey = catchAsync(async (req, res, next) => {
     const {projectKey} = req.params;
     const project = await Project.getProjectByProjectKey(projectKey);

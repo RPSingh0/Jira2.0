@@ -341,6 +341,51 @@ class Project {
     }
 
     /**
+     * Fetches and returns all projects from database
+     *
+     * @returns {Promise<Object>} A promise that resolves with the result of database select operation
+     *
+     * @throws {ErrorInterceptor} Throws error if there is a database error
+     */
+    static async getAllProjects(userEmail) {
+        const query = `
+            SELECT P.name,
+                   P.project_key                                              AS projectKey,
+                   P.start_date                                               AS startDate,
+                   P.expected_end_date                                        as expectedEndDate,
+                   COUNT(CASE WHEN M.status != 3 THEN 1 END)                  AS openIssues,
+                   COUNT(CASE WHEN M.status = 3 THEN 1 END)                   AS doneIssues,
+                   IFNULL(GROUP_CONCAT(DISTINCT CONCAT(U.first_name, ' ', IFNULL(U.last_name, ''), '||', U.email, '||',
+                                                       U.profile_image) SEPARATOR '|+|'), '') AS team,
+                   IFNULL(
+                           ROUND(
+                                   (COUNT(CASE WHEN M.status = 3 THEN 1 END) /
+                                    NULLIF((COUNT(CASE WHEN M.status != 3 THEN 1 END) +
+                                            COUNT(CASE WHEN M.status = 3 THEN 1 END)), 0)) * 100
+                               , 0), 0
+                   )                                                          AS completionPercentage,
+                   COUNT(CASE
+                             WHEN (M.assigned_to = ? OR M.created_by = ?) THEN 1
+                       END)                                                   AS youWorkedOn
+            FROM Project AS P
+                     LEFT JOIN
+                 Metadata AS M ON P.project_key = M.project_key
+                     LEFT JOIN
+                 User AS U ON M.assigned_to = U.email OR M.created_by = U.email
+            GROUP BY p.name, p.project_key, p.start_date, p.expected_end_date`;
+
+        try {
+            const [results] = await dbPromise.execute(query, [userEmail, userEmail]);
+            return results;
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error fetching projects: ${err.message}`,
+            })
+        }
+    }
+
+    /**
      * Fetches and return a project using project key
      *
      * @param projectKey
