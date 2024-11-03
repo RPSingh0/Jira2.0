@@ -36,7 +36,7 @@ function Navbar() {
 
                 {/* Buttons on right side of Logo */}
                 <StyledNavButtonBox>
-                    <NavLinkButton text={"Projects"} link={"/projects"}/>
+                    <NavLinkButton text={"Projects"} link={"/project"}/>
                     <TextButton text={"Teams"}/>
                     <ContainedButton text={"Create"}/>
                 </StyledNavButtonBox>
