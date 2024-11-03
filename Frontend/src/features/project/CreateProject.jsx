@@ -8,7 +8,7 @@ import {getAllUsersService} from "../../services/user/userService.js";
 import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
 import {toast} from "react-toastify";
 import useDebounce from "../../hooks/useDebounce.js";
-import {useGetProjectKey} from "./hooks/useGetProjectKey.js";
+import {useGenerateProjectKey} from "./hooks/useGetProjectKey.js";
 import {useCreateProject} from "./hooks/useCreateProject.js";
 import {useNavigate} from "react-router-dom";
 import {
@@ -24,7 +24,7 @@ import {ProjectDatePicker, TextFieldInput} from "./CreateProjectComponents.jsx";
 function CreateProject() {
 
     // Initializing editor
-    const creatProjectEditor = useDefaultEditor('Description for project');
+    const {editingOn} = useDefaultEditor('Description for project');
 
     // Local states for form input management
     const [projectName, setProjectName] = useState('');
@@ -35,7 +35,7 @@ function CreateProject() {
     const debouncedProjectName = useDebounce(projectName, 500);
 
     // React query custom hooks
-    const {getProjectKey, isFetchingProjectKey} = useGetProjectKey()
+    const {generateProjectKey, isFetchingProjectKey} = useGenerateProjectKey()
     const {createProject, isCreating} = useCreateProject();
 
     // Other hooks
@@ -54,7 +54,7 @@ function CreateProject() {
             return;
         }
 
-        getProjectKey({name: debouncedProjectName}, {
+        generateProjectKey({name: debouncedProjectName}, {
             onSuccess: (data) => {
                 setProjectKey(data.data.projectKey);
             }
@@ -71,13 +71,12 @@ function CreateProject() {
             return;
         }
 
-        const editorData = creatProjectEditor.getHTML();
+        const editorData = editingOn.getHTML();
 
         createProject({
             name: projectName,
-            projectKey: projectKey,
             description: editorData,
-            projectLeadBy: projectLead.id,
+            projectLeadBy: projectLead.email,
             startDate: startDate,
             expectedEndDate: expectedEndDate
         }, {
@@ -114,15 +113,13 @@ function CreateProject() {
                             },
                         }}
                     />
-                    <TextEditor
-                        editor={creatProjectEditor}
-                    />
+                    <TextEditor editor={editingOn}/>
 
                     <AutocompleteSelector
                         variant={'user-avatar'}
                         name={"lead"}
                         label={"Project Lead"}
-                        options={(isLoadingUsers || usersForLeadError) ? [] : usersForLead.data.users}
+                        options={(isLoadingUsers || usersForLeadError) ? [] : usersForLead}
                         isLoading={isLoadingUsers}
                         value={projectLead}
                         setValue={setProjectLead}

@@ -1,12 +1,12 @@
 import {useMutation} from "@tanstack/react-query";
 import {toast} from "react-toastify";
-import {getProjectKeyService} from "../../../services/project/projectService.js";
+import {generateProjectKeyService} from "../../../services/project/projectService.js";
 
-export function useGetProjectKey() {
+export function useGenerateProjectKey() {
 
     // hit endpoint to get user details with email and password
-    const {mutate: getProjectKey, isPending: isFetchingProjectKey} = useMutation({
-        mutationFn: getProjectKeyService,
+    const {mutate: generateProjectKey, isPending: isFetchingProjectKey} = useMutation({
+        mutationFn: generateProjectKeyService,
         onSettled: (data, error) => {
             if (error) {
                 toast.error(error.message);
@@ -14,5 +14,5 @@ export function useGetProjectKey() {
         }
     });
 
-    return {getProjectKey, isFetchingProjectKey};
+    return {generateProjectKey, isFetchingProjectKey};
 }

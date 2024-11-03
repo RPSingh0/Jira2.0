@@ -49,9 +49,9 @@ export async function createProjectService({name, projectKey, description, proje
  *
  * @throws {Error} Error if api call is unsuccessful
  */
-export async function getProjectKeyService({name}) {
+export async function generateProjectKeyService({name}) {
 
-    let data = await fetch(`${URL}/getProjectKey`, {
+    let data = await fetch(`${URL}/generateProjectKey`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
