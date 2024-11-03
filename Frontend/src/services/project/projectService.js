@@ -94,7 +94,7 @@ export async function getAllProjectsService({token}) {
         throw new Error(data.message);
     }
 
-    return data;
+    return data.data.projects;
 }
 
 /**

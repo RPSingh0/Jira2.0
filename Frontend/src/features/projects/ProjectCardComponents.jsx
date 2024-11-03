@@ -30,16 +30,13 @@ export function InfoDot({color}) {
     );
 }
 
-export function ProjectProgress() {
-    const splitOn = Math.floor(Math.random() * 101);
-    const [open, close] = [splitOn, 100 - splitOn];
+export function ProjectProgress({completionPercentage}) {
+    const remaining = 100 - completionPercentage;
 
     return (
         <StyledProjectProgressBox>
-            <Box sx={{height: `${open}%`, backgroundColor: blue["700"]}}>
-            </Box>
-            <Box sx={{height: `${close}%`, backgroundColor: green["700"]}}>
-            </Box>
+            <Box sx={{height: `${completionPercentage}%`, backgroundColor: blue["700"]}}/>
+            <Box sx={{height: `${remaining}%`, backgroundColor: green["700"]}}/>
         </StyledProjectProgressBox>
     );
 }

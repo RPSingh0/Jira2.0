@@ -1,5 +1,4 @@
 import {ContainedNavLinkButton} from "../../components/button/Buttons.jsx";
-import ProjectCard from "./ProjectCard.jsx";
 import {
     StyledDivider,
     StyledProjectCardContainerBox,
@@ -8,6 +7,8 @@ import {
     StyledProjectsHeading
 } from "./ProjectsStyles.jsx";
 import Search from "../../components/search/Search.jsx";
+import {ProjectsContextProvider} from "./ProjectsContext.jsx";
+import ProjectsCardContainer from "./ProjectsCardContainer.jsx";
 
 function Projects() {
     return (
@@ -23,12 +24,9 @@ function Projects() {
             <StyledDivider/>
 
             <StyledProjectCardContainerBox>
-
-                <ProjectCard/>
-                <ProjectCard/>
-                <ProjectCard/>
-                <ProjectCard/>
-
+                <ProjectsContextProvider>
+                    <ProjectsCardContainer/>
+                </ProjectsContextProvider>
             </StyledProjectCardContainerBox>
 
         </StyledProjectsBox>
