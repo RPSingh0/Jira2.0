@@ -169,4 +169,41 @@ router.route('/validateToken')
 router.route('/getAllUsers')
     .get(userController.getAllUsers);
 
+/**
+ * @swagger
+ * /user/workedOn:
+ *   get:
+ *     security:
+ *       - Authorization: []
+ *     summary: Get jira current user worked on
+ *     tags: [User]
+ *     parameters:
+ *       - in: query
+ *         name: type
+ *         schema:
+ *           type: string
+ *           description: The type of jira
+ *     responses:
+ *       200:
+ *         description: Jira retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GetJiraUserWorkedOnSuccess'
+ *       400:
+ *         description: Bad Request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/BadRequest'
+ *       500:
+ *         description: Internal server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/InternalServerError'
+ */
+router.route('/workedOn')
+    .get(authenticationController.authenticate, userController.workedOn);
+
 module.exports = router;

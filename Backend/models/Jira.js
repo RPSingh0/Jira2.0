@@ -347,6 +347,50 @@ class Jira {
     }
 
     /**
+     * Takes in a user email and return all the jira user worked on or created
+     *
+     * @param email
+     * @param type
+     *
+     * @returns {Promise<*>}
+     *
+     * @throws {ErrorInterceptor} Error if there is a database error
+     */
+    static async getJiraByUserEmail(email, type) {
+
+        let query = `SELECT J.summary,
+                            J.jira_type                                            AS jiraType,
+                            J.jira_key                                             AS jiraKey,
+                            J.jira_link                                            AS jiraLink,
+                            CONCAT(UAT.first_name, ' ', IFNULL(UAT.last_name, '')) AS userAssignedToName,
+                            UAT.email                                              AS userAssignedToEmail,
+                            S.type                                                 AS statusType
+                     FROM Jira AS J
+                              INNER JOIN Metadata AS M ON J.jira_key = M.jira_key
+                              INNER JOIN User AS UAT ON M.assigned_to = UAT.email
+                              INNER JOIN Status AS S ON M.status = S.id
+                     WHERE (M.assigned_to = ?
+                         OR M.created_by = ?)`;
+
+        let params = [email, email];
+
+        if (type) {
+            query += ` AND J.jira_type = ?`;
+            params.push(type);
+        }
+
+        try {
+            const [results] = await dbPromise.execute(query, params);
+            return results;
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error executing query: ${err.message}`,
+            })
+        }
+    }
+
+    /**
      * Takes in a jiraKey and description as input and updates jira description
      *
      * @param jiraKey
