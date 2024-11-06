@@ -6,7 +6,8 @@ export const StyledWorkedOnSectionBox = styled(Box)(() => ({
 
 export const StyledTabButtonBox = styled(Box)(({theme}) => ({
     borderBottom: "1px solid",
-    borderColor: theme.palette.divider
+    borderColor: theme.palette.divider,
+    marginBottom: "2rem"
 }));
 
 export const StyledTabButton = styled(Tab)(() => ({
