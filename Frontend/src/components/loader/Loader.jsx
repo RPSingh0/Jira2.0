@@ -62,3 +62,24 @@ export function ProjectCardLoadingIndicator() {
         </>
     );
 }
+
+export function DashboardProjectCardLoadingIndicator() {
+    return (
+        <>
+            {Array.from({length: 4}, item =>
+                <Paper variant="outlined"
+                       key={item}
+                       sx={{
+                           display: "flex",
+                           flexDirection: "column",
+                           gap: "0.2rem",
+                           minWidth: "14rem",
+                           padding: "0.5rem"
+                       }}>
+                    <Skeleton variant="rounded" height={"2.5rem"} animation={"wave"}/>
+                    <Divider sx={{margin: "0.5rem 0"}}/>
+                    <Skeleton variant="rounded" height={"4.5rem"} animation={"wave"}/>
+                </Paper>)}
+        </>
+    );
+}

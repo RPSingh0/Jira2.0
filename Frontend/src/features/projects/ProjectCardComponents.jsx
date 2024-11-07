@@ -1,5 +1,5 @@
 import {Box, Chip, useTheme} from "@mui/material";
-import {blue, green} from "@mui/material/colors";
+import {green} from "@mui/material/colors";
 import {
     StyledProjectProgressBox,
     StyledQuickInfoDot,
@@ -31,12 +31,10 @@ export function InfoDot({color}) {
 }
 
 export function ProjectProgress({completionPercentage}) {
-    const remaining = 100 - completionPercentage;
 
     return (
         <StyledProjectProgressBox>
-            <Box sx={{height: `${completionPercentage}%`, backgroundColor: blue["700"]}}/>
-            <Box sx={{height: `${remaining}%`, backgroundColor: green["700"]}}/>
+            <Box sx={{height: `${completionPercentage}%`, backgroundColor: green["700"]}}/>
         </StyledProjectProgressBox>
     );
 }

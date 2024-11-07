@@ -6,8 +6,22 @@ import {
     StyledHeader,
     StyledHeaderHeading
 } from "./YourProjectsSectionStyles.jsx";
+import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
+import {getAllProjectsService} from "../../../services/project/projectService.js";
+import {DashboardProjectCardLoadingIndicator} from "../../../components/loader/Loader.jsx";
+import LoadOrFetchWrapper from "../../../components/loader/LoadOrFetchWrapper.jsx";
 
 function YourProjectsSection() {
+
+    const {
+        isLoading: loadingProjects,
+        isFetching: fetchingProjects,
+        data: projects
+    } = useGetQueryHook({
+        key: [`dashboard-projects`],
+        fn: getAllProjectsService,
+    });
+
     return (
         <StyledDashboardProjects>
             <StyledHeader>
@@ -19,16 +33,18 @@ function YourProjectsSection() {
                 </Typography>
             </StyledHeader>
             <StyledDashboardProjectsList>
-
-                <ProjectCard/>
-                <ProjectCard/>
-                <ProjectCard/>
-                <ProjectCard/>
-                <ProjectCard/>
-                <ProjectCard/>
-                <ProjectCard/>
-                <ProjectCard/>
-
+                <LoadOrFetchWrapper
+                    loading={loadingProjects}
+                    fetching={fetchingProjects}
+                    loader={<DashboardProjectCardLoadingIndicator/>}>
+                    {projects?.map(project => <ProjectCard
+                        key={project.id}
+                        name={project.name}
+                        openIssues={project.openIssues}
+                        doneIssues={project.doneIssues}
+                        completionPercentage={project.completionPercentage}
+                    />)}
+                </LoadOrFetchWrapper>
             </StyledDashboardProjectsList>
         </StyledDashboardProjects>
     );
