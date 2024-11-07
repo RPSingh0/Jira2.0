@@ -1,5 +1,4 @@
 import {Avatar, AvatarGroup, Divider, Typography, useMediaQuery, useTheme} from "@mui/material";
-import {blue, green, orange} from "@mui/material/colors";
 import {
     StyledCardPaper,
     StyledInfoContentBox,
@@ -57,22 +56,16 @@ function ProjectCard({
                             <InfoItem
                                 text={"Open Issues"}
                                 data={openIssues}
-                                dot={true}
-                                color={blue["700"]}
                                 chip={true}
                             />
                             <InfoItem
                                 text={"Done Issues"}
                                 data={doneIssues}
-                                dot={true}
-                                color={green["700"]}
                                 chip={true}
                             />
                             <InfoItem
                                 text={"Done By You"}
                                 data={youWorkedOn}
-                                dot={true}
-                                color={orange["700"]}
                                 chip={true}
                             />
                         </StyledInfoContentBox>
@@ -89,18 +82,16 @@ function ProjectCard({
                         <StyledInfoContentBox>
                             <InfoItem
                                 text={"Date Started"}
-                                dot={true} chip={true}
+                                chip={true}
                                 data={dateStarted}
                             />
                             <InfoItem
                                 text={"Expected"}
-                                dot={true}
                                 chip={true}
                                 data={expectedEndDate}
                             />
                             <InfoItem
                                 text={"Days on project"}
-                                dot={true}
                                 chip={true}
                                 data={daysSpent}
                             />
