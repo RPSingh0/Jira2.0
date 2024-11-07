@@ -350,17 +350,17 @@ class Project {
     static async getAllProjects(userEmail) {
         const query = `
             SELECT P.name,
-                   P.project_key                                              AS projectKey,
-                   P.start_date                                               AS startDate,
-                   P.expected_end_date                                        AS expectedEndDate,
-                   DATEDIFF(P.expected_end_date, P.start_date)                AS daysSpent,
-                   MD.openIssues,
-                   MD.doneIssues,
+                   P.project_key                                                              AS projectKey,
+                   P.start_date                                                               AS startDate,
+                   P.expected_end_date                                                        AS expectedEndDate,
+                   DATEDIFF(P.expected_end_date, P.start_date)                                AS daysSpent,
+                   IFNULL(MD.openIssues, 0)                                                   AS openIssues,
+                   IFNULL(MD.doneIssues, 0)                                                   AS doneIssues,
                    IFNULL(GROUP_CONCAT(DISTINCT CONCAT(U.first_name, ' ', IFNULL(U.last_name, ''), '||', U.email, '||',
                                                        U.profile_image) SEPARATOR '|+|'), '') AS team,
                    IFNULL(ROUND((MD.doneIssues / NULLIF((MD.openIssues + MD.doneIssues), 0)) * 100, 0),
-                          0)                                                  AS completionPercentage,
-                   COALESCE(YW.youWorkedOn, 0)                                AS youWorkedOn
+                          0)                                                                  AS completionPercentage,
+                   COALESCE(YW.youWorkedOn, 0)                                                AS youWorkedOn
             FROM Project AS P
                      LEFT JOIN (SELECT project_key,
                                        COUNT(CASE WHEN status != 3 THEN 1 END) AS openIssues,
