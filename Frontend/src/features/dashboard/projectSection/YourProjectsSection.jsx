@@ -38,8 +38,9 @@ function YourProjectsSection() {
                     fetching={fetchingProjects}
                     loader={<DashboardProjectCardLoadingIndicator/>}>
                     {projects?.map(project => <ProjectCard
-                        key={project.id}
+                        key={project.projectKey}
                         name={project.name}
+                        projectKey={project.projectKey}
                         openIssues={project.openIssues}
                         doneIssues={project.doneIssues}
                         completionPercentage={project.completionPercentage}

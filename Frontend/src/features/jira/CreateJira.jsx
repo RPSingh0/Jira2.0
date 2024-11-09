@@ -64,7 +64,7 @@ function CreateJira({open, setOpen}) {
     }, [isLoadingProjects]);
 
     useEffect(() => {
-        queryClient.invalidateQueries('featureOptions');
+        queryClient.invalidateQueries({queryKey: ['featureOptions']});
     }, [pOption]);
 
     // Updating feature selection once all features are loaded

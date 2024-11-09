@@ -8,13 +8,21 @@ import {
 } from "./YourProjectsSectionCardStyles.jsx";
 import {QuickInfoItem} from "./YourProjectsSectionCardComponents.jsx";
 import {ProjectProgress} from "../../projects/ProjectCardComponents.jsx";
+import {useNavigate} from "react-router-dom";
 
-function ProjectCard({name, openIssues, doneIssues, completionPercentage}) {
+function ProjectCard({name, projectKey, openIssues, doneIssues, completionPercentage}) {
+
+    const navigate = useNavigate();
+
+    function handleNameClick() {
+        navigate(`/project/${projectKey}`)
+    }
+
     return (
         <StyledCardPaper variant="outlined">
             <ProjectProgress completionPercentage={completionPercentage}/>
             <StyledProjectCardContentBox>
-                <StyledProjectTitle variant={"body2"} gutterBottom noWrap>
+                <StyledProjectTitle variant={"body2"} gutterBottom noWrap onClick={handleNameClick}>
                     {name}
                 </StyledProjectTitle>
                 <Divider flexItem sx={{marginBottom: "1rem"}}/>
