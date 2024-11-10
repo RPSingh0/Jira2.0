@@ -111,12 +111,15 @@
  *                   jiraLink:
  *                     type: string
  *                     description: The link to jira
- *                   userAssignedToName:
+ *                   assigneeName:
  *                     type: string
  *                     description: The user name of user this jira is assigned to
- *                   userAssignedToEmail:
+ *                   assigneeEmail:
  *                     type: string
  *                     description: The email of the user this jira is assigned to
+ *                   assigneeProfileImage:
+ *                     type: string
+ *                     description: The profile image of assignee
  *                   statusType:
  *                     type: string
  *                     description: The status of this jira

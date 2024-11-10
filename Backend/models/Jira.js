@@ -191,23 +191,23 @@ class Jira {
             });
         }
 
-        // check for assignedTo id existence
-        const assignedTo = await User.findByEmail(metadata.assignedTo);
+        // check for assignee id existence
+        const assignee = await User.findByEmail(metadata.assignee);
 
-        if (!assignedTo) {
+        if (!assignee) {
             throw new ErrorInterceptor({
                 type: ErrorType.VALIDATION,
-                message: 'No Such user available (assigned to)'
+                message: 'No Such user available (assignee)'
             });
         }
 
-        // check for createdBy id existence
-        const createdBy = await User.findByEmail(metadata.createdBy);
+        // check for reporter id existence
+        const reporter = await User.findByEmail(metadata.reporter);
 
-        if (!createdBy) {
+        if (!reporter) {
             throw new ErrorInterceptor({
                 type: ErrorType.VALIDATION,
-                message: 'No Such user available (created by)'
+                message: 'No Such user available (reporter)'
             });
         }
 
@@ -215,8 +215,10 @@ class Jira {
         await dbPromise.beginTransaction();
 
         // save the jira object first
+        const jiraQuery = `
+            INSERT INTO Jira (summary, jira_key, jira_type, description, jira_link)
+            VALUES (?, ?, ?, ?, ?)`;
 
-        const jiraQuery = 'INSERT INTO Jira (summary, jira_key, jira_type, description, jira_link) VALUES (?, ?, ?, ?, ?)';
         const jiraValues = [this.summary, this.jiraKey, this.jiraType, this.description, this.jiraLink];
         let jiraSavedId = null;
 
@@ -234,8 +236,10 @@ class Jira {
         }
 
         // save metadata object
-        const metadataQuery = 'INSERT INTO Metadata (jira_key, jira_point, project_key, feature_key, assigned_to, created_by, status) VALUES (?, ?, ?, ?, ?, ?, ?)';
-        const metadataValues = [metadata.jiraKey, metadata.jiraPoint, metadata.projectKey, metadata.featureKey, metadata.assignedTo, metadata.createdBy, metadata.status];
+        const metadataQuery = `
+            INSERT INTO Metadata (jira_key, jira_point, project_key, feature_key, assignee, reporter, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`;
+        const metadataValues = [metadata.jiraKey, metadata.jiraPoint, metadata.projectKey, metadata.featureKey, metadata.assignee, metadata.reporter, metadata.status];
         let metadataSavedId = null;
 
         try {
@@ -272,7 +276,10 @@ class Jira {
      * @throws {ErrorInterceptor} Error if there is a database error
      */
     static async generateJiraKeySequence(projectKey) {
-        const query = 'SELECT COUNT(*) as count FROM Jira WHERE jira_key LIKE ?';
+        const query = `
+            SELECT COUNT(*) as count
+            FROM Jira
+            WHERE jira_key LIKE ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [`${projectKey}%`]);
@@ -296,7 +303,14 @@ class Jira {
      */
     static async getJiraDetailsByJiraKey(jiraKey) {
 
-        const query = 'SELECT summary, jira_key AS jiraKey, jira_type as jiraType, description, jira_link AS jiraLink FROM Jira WHERE jira_key = ?';
+        const query = `
+            SELECT summary,
+                   jira_key  AS jiraKey,
+                   jira_type as jiraType,
+                   description,
+                   jira_link AS jiraLink
+            FROM Jira
+            WHERE jira_key = ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [jiraKey]);
@@ -321,19 +335,21 @@ class Jira {
      */
     static async getJiraByProjectKeyAndFeatureKey(projectKey, featureKey) {
 
-        const query = `SELECT J.summary,
-                              J.jira_type                                            AS jiraType,
-                              J.jira_key                                             AS jiraKey,
-                              J.jira_link                                            AS jiraLink,
-                              CONCAT(UAT.first_name, ' ', IFNULL(UAT.last_name, '')) AS userAssignedToName,
-                              UAT.email                                              AS userAssignedToEmail,
-                              S.type                                                 AS statusType
-                       FROM Jira AS J
-                                INNER JOIN Metadata AS M ON J.jira_key = M.jira_key
-                                INNER JOIN User AS UAT ON M.assigned_to = UAT.email
-                                INNER JOIN Status AS S ON M.status = S.id
-                       WHERE M.project_key = ?
-                         AND M.feature_key = ?`;
+        const query = `
+            SELECT J.summary,
+                   J.jira_type                                            AS jiraType,
+                   J.jira_key                                             AS jiraKey,
+                   J.jira_link                                            AS jiraLink,
+                   CONCAT(UAT.first_name, ' ', IFNULL(UAT.last_name, '')) AS assigneeName,
+                   UAT.email                                              AS assigneeEmail,
+                   UAT.profile_image                                      AS assigneeProfileImage,
+                   S.type                                                 AS statusType
+            FROM Jira AS J
+                     INNER JOIN Metadata AS M ON J.jira_key = M.jira_key
+                     INNER JOIN User AS UAT ON M.assignee = UAT.email
+                     INNER JOIN Status AS S ON M.status = S.id
+            WHERE M.project_key = ?
+              AND M.feature_key = ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [projectKey, featureKey]);
@@ -358,19 +374,21 @@ class Jira {
      */
     static async getJiraByUserEmail(email, type) {
 
-        let query = `SELECT J.summary,
-                            J.jira_type                                            AS jiraType,
-                            J.jira_key                                             AS jiraKey,
-                            J.jira_link                                            AS jiraLink,
-                            CONCAT(UAT.first_name, ' ', IFNULL(UAT.last_name, '')) AS userAssignedToName,
-                            UAT.email                                              AS userAssignedToEmail,
-                            S.type                                                 AS statusType
-                     FROM Jira AS J
-                              INNER JOIN Metadata AS M ON J.jira_key = M.jira_key
-                              INNER JOIN User AS UAT ON M.assigned_to = UAT.email
-                              INNER JOIN Status AS S ON M.status = S.id
-                     WHERE (M.assigned_to = ?
-                         OR M.created_by = ?)`;
+        let query = `
+            SELECT J.summary,
+                   J.jira_type                                            AS jiraType,
+                   J.jira_key                                             AS jiraKey,
+                   J.jira_link                                            AS jiraLink,
+                   CONCAT(UAT.first_name, ' ', IFNULL(UAT.last_name, '')) AS assigneeName,
+                   UAT.email                                              AS assigneeEmail,
+                   UAT.profile_image                                      AS assigneeProfileImage,
+                   S.type                                                 AS statusType
+            FROM Jira AS J
+                     INNER JOIN Metadata AS M ON J.jira_key = M.jira_key
+                     INNER JOIN User AS UAT ON M.assignee = UAT.email
+                     INNER JOIN Status AS S ON M.status = S.id
+            WHERE (M.assignee = ?
+                OR M.reporter = ?)`;
 
         let params = [email, email];
 
@@ -402,7 +420,10 @@ class Jira {
      */
     static async updateJiraDescriptionByJiraKey(jiraKey, description) {
 
-        const query = 'UPDATE Jira SET description = ? WHERE jira_key = ?';
+        const query = `
+            UPDATE Jira
+            SET description = ?
+            WHERE jira_key = ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [description, jiraKey]);
@@ -428,7 +449,10 @@ class Jira {
      */
     static async updateJiraSummaryByJiraKey(jiraKey, summary) {
 
-        const query = 'UPDATE Jira SET summary = ? WHERE jira_key = ?';
+        const query = `
+            UPDATE Jira
+            SET summary = ?
+            WHERE jira_key = ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [summary, jiraKey]);

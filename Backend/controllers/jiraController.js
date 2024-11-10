@@ -4,7 +4,7 @@ const Jira = require("../models/Jira");
 const Metadata = require("../models/Metadata");
 
 exports.createJira = catchAsync(async (req, res, next) => {
-    const {summary, jiraType, description, jiraPoint, projectKey, featureKey, assignedTo} = req.body;
+    const {summary, jiraType, description, jiraPoint, projectKey, featureKey, assignee} = req.body;
 
     // generate jira key
     const jiraKeySequence = await Jira.generateJiraKeySequence(projectKey);
@@ -25,8 +25,8 @@ exports.createJira = catchAsync(async (req, res, next) => {
         .setJiraPoint(jiraPoint)
         .setProjectKey(projectKey)
         .setFeatureKey(featureKey)
-        .setAssignedTo(assignedTo)
-        .setCreatedBy(req.user.email)
+        .setAssignee(assignee)
+        .setReporter(req.user.email)
         .setStatus(1)
         .build();
 
@@ -103,10 +103,10 @@ exports.updateDescription = catchAsync(async (req, res, next) => {
     Response.ok200(res);
 });
 
-exports.updateAssignedTo = catchAsync(async (req, res, next) => {
-    const {jiraKey, assignedTo} = req.body;
+exports.updateAssignee = catchAsync(async (req, res, next) => {
+    const {jiraKey, assignee} = req.body;
 
-    const affectedRows = await Metadata.updateAssignedTo(jiraKey, assignedTo);
+    const affectedRows = await Metadata.updateAssignee(jiraKey, assignee);
 
     if (affectedRows === 0) {
         return Response.notFound404(res, {

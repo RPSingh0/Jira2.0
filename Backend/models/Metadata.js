@@ -5,12 +5,12 @@ const User = require("./User");
 const Feature = require("./Feature");
 
 class Metadata {
-    constructor(jiraKey, projectKey, featureKey, assignedTo, createdBy, status, jiraPoint) {
+    constructor(jiraKey, projectKey, featureKey, assignee, reporter, status, jiraPoint) {
         this.jiraKey = jiraKey;
         this.projectKey = projectKey;
         this.featureKey = featureKey;
-        this.assignedTo = assignedTo;
-        this.createdBy = createdBy;
+        this.assignee = assignee;
+        this.reporter = reporter;
         this.status = status;
         this.jiraPoint = jiraPoint;
     }
@@ -88,44 +88,44 @@ class Metadata {
     }
 
     /**
-     * Metadata assignedTo setter, validates for null values
+     * Metadata assignee setter, validates for null values
      *
-     * @param {number} assignedTo
+     * @param {number} assignee
      *
      * @returns {Metadata}
      *
      * @throws {ErrorInterceptor} Error for field validations
      */
-    setAssignedTo(assignedTo) {
-        if (!assignedTo) {
+    setAssignee(assignee) {
+        if (!assignee) {
             throw new ErrorInterceptor({
                 type: ErrorType.VALIDATION,
                 message: 'Assigned to id is required.'
             })
         }
 
-        this.assignedTo = assignedTo;
+        this.assignee = assignee;
         return this;
     }
 
     /**
-     * Metadata createdBy setter, validates for null values
+     * Metadata reporter setter, validates for null values
      *
-     * @param {number} createdBy
+     * @param {number} reporter
      *
      * @returns {Metadata}
      *
      * @throws {ErrorInterceptor} Error for field validations
      */
-    setCreatedBy(createdBy) {
-        if (!createdBy) {
+    setReporter(reporter) {
+        if (!reporter) {
             throw new ErrorInterceptor({
                 type: ErrorType.VALIDATION,
                 message: 'Created by id is required.'
             })
         }
 
-        this.createdBy = createdBy;
+        this.reporter = reporter;
         return this;
     }
 
@@ -179,7 +179,7 @@ class Metadata {
      * @throws {ErrorInterceptor} Error for field validation if any required field is missing
      */
     build() {
-        const requiredFields = ['jiraKey', 'jiraPoint', 'projectKey', 'featureKey', 'assignedTo', 'createdBy', 'status'];
+        const requiredFields = ['jiraKey', 'jiraPoint', 'projectKey', 'featureKey', 'assignee', 'reporter', 'status'];
 
         const validatedAllFields = requiredFields.reduce((acc, field) => {
             if (!this[field]) {
@@ -213,12 +213,12 @@ class Metadata {
         const query = `
             SELECT M.jira_key                                             AS jiraKey,
                    M.jira_point                                           AS jiraPoint,
-                   CONCAT(UAT.first_name, ' ', IFNULL(UAT.last_name, '')) AS userAssignedToName,
-                   UAT.email                                              AS userAssignedToEmail,
-                   UAT.profile_image                                      AS userAssignedToProfileImage,
-                   CONCAT(UCB.first_name, ' ', IFNULL(UCB.last_name, '')) AS userCreatedByName,
-                   UCB.email                                              AS userCreatedByEmail,
-                   UCB.profile_image                                      AS userCreatedByProfileImage,
+                   CONCAT(UAT.first_name, ' ', IFNULL(UAT.last_name, '')) AS assigneeName,
+                   UAT.email                                              AS assigneeEmail,
+                   UAT.profile_image                                      AS assigneeProfileImage,
+                   CONCAT(UCB.first_name, ' ', IFNULL(UCB.last_name, '')) AS reporterName,
+                   UCB.email                                              AS reporterEmail,
+                   UCB.profile_image                                      AS reporterProfileImage,
                    P.project_key                                          AS projectKey,
                    P.name                                                 AS projectName,
                    F.feature_key                                          AS featureKey,
@@ -226,8 +226,8 @@ class Metadata {
                    S.type                                                 AS statusType,
                    M.created_on                                           AS createdOn
             FROM Metadata AS M
-                     INNER JOIN User AS UAT ON M.assigned_to = UAT.email
-                     INNER JOIN User AS UCB ON M.created_by = UCB.email
+                     INNER JOIN User AS UAT ON M.assignee = UAT.email
+                     INNER JOIN User AS UCB ON M.reporter = UCB.email
                      INNER JOIN Project AS P ON M.project_key = P.project_key
                      INNER JOIN Feature AS F ON M.feature_key = F.feature_key
                      INNER JOIN Status AS S ON M.status = S.id
@@ -248,16 +248,16 @@ class Metadata {
      * Takes in a jiraKey and assigned to email as input and updates jira metadata
      *
      * @param jiraKey
-     * @param assignedTo
+     * @param assignee
      *
      * @returns {Promise<number>}
      *
      * @throws {ErrorInterceptor} Error if there is a database error
      */
-    static async updateAssignedTo(jiraKey, assignedTo) {
+    static async updateAssignee(jiraKey, assignee) {
 
         // check for user existence
-        const user = await User.findByEmail(assignedTo);
+        const user = await User.findByEmail(assignee);
 
         if (!user) {
             throw new ErrorInterceptor({
@@ -266,10 +266,13 @@ class Metadata {
             });
         }
 
-        const query = 'UPDATE Metadata SET assigned_to = ? WHERE jira_key = ?';
+        const query = `
+            UPDATE Metadata
+            SET assignee = ?
+            WHERE jira_key = ?`;
 
         try {
-            const [results] = await dbPromise.execute(query, [assignedTo, jiraKey]);
+            const [results] = await dbPromise.execute(query, [assignee, jiraKey]);
             return results.affectedRows;
 
         } catch (err) {
@@ -292,7 +295,10 @@ class Metadata {
      */
     static async updatePoints(jiraKey, jiraPoint) {
 
-        const query = 'UPDATE Metadata SET jira_point = ? WHERE jira_key = ?';
+        const query = `
+            UPDATE Metadata
+            SET jira_point = ?
+            WHERE jira_key = ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [jiraPoint, jiraKey]);
@@ -332,7 +338,11 @@ class Metadata {
         await dbPromise.beginTransaction();
 
         // start by updating metadata
-        const queryUpdateMetadata = 'UPDATE Metadata SET feature_key = ? WHERE jira_key = ?';
+        const queryUpdateMetadata = `
+            UPDATE Metadata
+            SET feature_key = ?
+            WHERE jira_key = ?`;
+
         let metadataAffectedRows = 0;
 
         try {
@@ -356,7 +366,11 @@ class Metadata {
         }
 
         // update jira link
-        const queryUpdateJira = 'UPDATE Jira SET jira_link = ? WHERE jira_key = ?';
+        const queryUpdateJira = `
+            UPDATE Jira
+            SET jira_link = ?
+            WHERE jira_key = ?`;
+
         const jiraLink = `/project/${projectKey}/feature/${featureKey}/${jiraKey}`;
         let jiraAffectedRows = 0;
 

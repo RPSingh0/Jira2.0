@@ -5,13 +5,13 @@ const User = require("./User");
 const {validateDateFormat} = require("../utils/utils");
 
 class Project {
-    constructor(name, projectKey, description, project_lead_by, start_date, expected_end_date) {
+    constructor(name, projectKey, description, projectLeadBy, startDate, expectedEndDate) {
         this.name = name;
         this.projectKey = projectKey;
         this.description = description;
-        this.project_lead_by = project_lead_by;
-        this.start_date = start_date;
-        this.expected_end_date = expected_end_date;
+        this.projectLeadBy = projectLeadBy;
+        this.startDate = startDate;
+        this.expectedEndDate = expectedEndDate;
     }
 
     /**
@@ -104,7 +104,7 @@ class Project {
             })
         }
 
-        this.project_lead_by = lead;
+        this.projectLeadBy = lead;
         return this;
     }
 
@@ -136,7 +136,7 @@ class Project {
 
         const dateObj = new Date(`${year}-${month}-${day}`);
 
-        this.start_date = dateObj.toISOString().split('T')[0];
+        this.startDate = dateObj.toISOString().split('T')[0];
 
         return this;
     }
@@ -169,7 +169,7 @@ class Project {
 
         const dateObj = new Date(`${year}-${month}-${day}`);
 
-        this.expected_end_date = dateObj.toISOString().split('T')[0];
+        this.expectedEndDate = dateObj.toISOString().split('T')[0];
 
         return this;
     }
@@ -182,7 +182,7 @@ class Project {
      * @throws {ErrorInterceptor} Error for field validation if any required field is missing
      */
     build() {
-        const requiredFields = ['name', 'description', 'project_lead_by', 'start_date', 'expected_end_date'];
+        const requiredFields = ['name', 'description', 'projectLeadBy', 'startDate', 'expectedEndDate'];
 
         const validatedAllFields = requiredFields.reduce((acc, field) => {
             if (!this[field]) {
@@ -199,7 +199,7 @@ class Project {
             });
         }
 
-        if (new Date(this.start_date) > new Date(this.expected_end_date)) {
+        if (new Date(this.startDate) > new Date(this.expectedEndDate)) {
             throw new ErrorInterceptor({
                 type: ErrorType.VALIDATION,
                 message: 'End data cannot be less then start date'
@@ -220,7 +220,7 @@ class Project {
         this.build();
 
         // check for project lead
-        const projectLead = await User.findByEmail(this.project_lead_by);
+        const projectLead = await User.findByEmail(this.projectLeadBy);
 
         if (!projectLead) {
             throw new ErrorInterceptor({
@@ -236,8 +236,11 @@ class Project {
             });
         }
 
-        const query = 'INSERT INTO Project (name, project_key, description, project_lead_by, start_date, expected_end_date) VALUES (?, ?, ?, ?, ?, ?)';
-        const values = [this.name, this.projectKey, this.description, this.project_lead_by, this.start_date, this.expected_end_date];
+        const query = `
+            INSERT INTO Project (name, project_key, description, project_lead_by, start_date, expected_end_date)
+            VALUES (?, ?, ?, ?, ?, ?)`;
+
+        const values = [this.name, this.projectKey, this.description, this.projectLeadBy, this.startDate, this.expectedEndDate];
 
         try {
             const [{insertId: id}] = await dbPromise.execute(query, values);
@@ -260,7 +263,10 @@ class Project {
      * @throws {ErrorInterceptor} Error if there is a database error
      */
     static async generateProjectKeySequence(name) {
-        const query = 'SELECT COUNT(*) as count FROM Project WHERE project_key LIKE ?';
+        const query = `
+            SELECT COUNT(*) as count
+            FROM Project
+            WHERE project_key LIKE ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [`${name}%`]);
@@ -283,7 +289,10 @@ class Project {
      * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
      */
     static async findById(id) {
-        const query = 'SELECT id, name, project_key FROM project WHERE id = ?';
+        const query = `
+            SELECT id, name, project_key
+            FROM project
+            WHERE id = ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [id]);
@@ -306,7 +315,10 @@ class Project {
      * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
      */
     static async findByProjectKey(projectKey) {
-        const query = 'SELECT id, name, project_key FROM project WHERE project_key = ?';
+        const query = `
+            SELECT id, name, project_key
+            FROM project
+            WHERE project_key = ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [projectKey]);
@@ -327,7 +339,10 @@ class Project {
      * @throws {ErrorInterceptor} Throws error if there is a database error
      */
     static async getAllProjectsAsOptions() {
-        const query = 'SELECT project_key as projectKey, CONCAT(project_key, \' | \', name) AS optionText FROM project';
+        const query = `
+            SELECT project_key                      as projectKey,
+                   CONCAT(project_key, ' | ', name) AS optionText
+            FROM project`;
 
         try {
             const [results] = await dbPromise.execute(query);
@@ -370,12 +385,12 @@ class Project {
                      LEFT JOIN (SELECT project_key,
                                        COUNT(*) AS youWorkedOn
                                 FROM Metadata
-                                WHERE assigned_to = ?
-                                   OR created_by = ?
+                                WHERE assignee = ?
+                                   OR reporter = ?
                                 GROUP BY project_key) AS YW ON P.project_key = YW.project_key
                      LEFT JOIN Metadata AS M ON P.project_key = M.project_key
                      LEFT JOIN User AS U
-                               ON (M.assigned_to = U.email OR M.created_by = U.email OR P.project_lead_by = U.email)
+                               ON (M.assignee = U.email OR M.reporter = U.email OR P.project_lead_by = U.email)
             GROUP BY P.project_key, P.name, P.start_date, P.expected_end_date, MD.openIssues, MD.doneIssues,
                      YW.youWorkedOn`;
 
@@ -454,7 +469,10 @@ class Project {
      */
     static async updateProjectDescription(projectKey, description) {
 
-        const query = 'UPDATE Project SET description = ? WHERE project_key = ?';
+        const query = `
+            UPDATE Project
+            SET description = ?
+            WHERE project_key = ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [description, projectKey]);
@@ -490,7 +508,10 @@ class Project {
             });
         }
 
-        const query = 'UPDATE Project SET project_lead_by = ? WHERE project_key = ?';
+        const query = `
+            UPDATE Project
+            SET project_lead_by = ?
+            WHERE project_key = ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [leadBy, projectKey]);

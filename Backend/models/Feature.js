@@ -200,7 +200,11 @@ class Feature {
      * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
      */
     static async getFeaturesAsOptionsByProjectKey(projectKey) {
-        const query = 'SELECT feature_key AS featureKey, CONCAT(feature_key, \' | \', name) AS optionText FROM Feature AS F WHERE project_key = ?';
+        const query = `
+            SELECT feature_key                      AS featureKey,
+                   CONCAT(feature_key, ' | ', name) AS optionText
+            FROM Feature AS F
+            WHERE project_key = ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [projectKey]);
@@ -224,7 +228,14 @@ class Feature {
      * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
      */
     static async findFeatureByProjectKeyAndFeatureKey(projectKey, featureKey) {
-        const query = 'SELECT name, feature_key AS featureKey, project_key AS projectKey, description FROM Feature WHERE project_key = ? AND feature_key = ?';
+        const query = `
+            SELECT name,
+                   feature_key AS featureKey,
+                   project_key AS projectKey,
+                   description
+            FROM Feature
+            WHERE project_key = ?
+              AND feature_key = ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [projectKey, featureKey]);
@@ -247,7 +258,13 @@ class Feature {
      * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
      */
     static async findFeatureByProjectKey(projectKey) {
-        const query = 'SELECT name, feature_key AS featureKey, project_key AS projectKey, description FROM Feature WHERE project_key = ?';
+        const query = `
+            SELECT name,
+                   feature_key AS featureKey,
+                   project_key AS projectKey,
+                   description
+            FROM Feature
+            WHERE project_key = ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [projectKey]);
@@ -273,7 +290,12 @@ class Feature {
      */
     static async updateFeatureDescription(projectKey, featureKey, description) {
 
-        const query = 'UPDATE Feature SET description = ? WHERE project_key = ? AND feature_key = ?';
+        const query = `
+            UPDATE
+                Feature
+            SET description = ?
+            WHERE project_key = ?
+              AND feature_key = ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [description, projectKey, featureKey]);
@@ -300,7 +322,12 @@ class Feature {
      */
     static async updateFeatureName(projectKey, featureKey, name) {
 
-        const query = 'UPDATE Feature SET name = ? WHERE project_key = ? AND feature_key = ?';
+        const query = `
+            UPDATE
+                Feature
+            SET name = ?
+            WHERE project_key = ?
+              AND feature_key = ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [name, projectKey, featureKey]);

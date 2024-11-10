@@ -217,7 +217,10 @@ class User {
         this.build();
         await this.hashPassword();
 
-        const query = 'INSERT INTO user (first_name, last_name, email, profile_image, status, password) VALUES (?, ?, ?, ?, ?, ?)';
+        const query = `
+            INSERT INTO user (first_name, last_name, email, profile_image, status, password)
+            VALUES (?, ?, ?, ?, ?, ?)`;
+
         const values = [this.firstName, this.lastName, this.email, this.profileImage, this.status, this.password];
 
         try {
@@ -241,7 +244,10 @@ class User {
      * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
      */
     static async findById(id) {
-        const query = 'SELECT id, email, password, status, password_changed_at FROM user WHERE id = ?';
+        const query = `
+            SELECT id, email, password, status, password_changed_at
+            FROM user
+            WHERE id = ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [id]);
@@ -264,7 +270,10 @@ class User {
      * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
      */
     static async findByEmail(email) {
-        const query = 'SELECT id, email, password, status FROM user WHERE email = ?';
+        const query = `
+            SELECT id, email, password, status
+            FROM user
+            WHERE email = ?`;
 
         try {
             const [results] = await dbPromise.execute(query, [email]);
@@ -285,7 +294,12 @@ class User {
      * @throws {ErrorInterceptor} Throws error if there is a database error
      */
     static async getAllUsers() {
-        const query = 'SELECT CONCAT(first_name, \' \', IFNULL(last_name, \'\')) AS name, profile_image AS profileImage, email FROM user WHERE status = 1;';
+        const query = `
+            SELECT CONCAT(first_name, \' \', IFNULL(last_name, \'\')) AS name,
+                   profile_image                                      AS profileImage,
+                   email
+            FROM user
+            WHERE status = 1`;
 
         try {
             const [results] = await dbPromise.execute(query);

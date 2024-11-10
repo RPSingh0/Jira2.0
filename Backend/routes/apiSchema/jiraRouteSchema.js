@@ -10,8 +10,8 @@
  *         - jiraPoint
  *         - projectKey
  *         - featureKey
- *         - assignedTo
- *         - createdBy
+ *         - assignee
+ *         - reporter
  *       type: object
  *       properties:
  *         summary:
@@ -32,7 +32,7 @@
  *         featureKey:
  *           type: string
  *           description: The feature key this jira linked to
- *         assignedTo:
+ *         assignee:
  *           type: string
  *           description: The user this jira is assigned to
  *     JiraCreateSuccess:
@@ -92,22 +92,22 @@
  *                 jiraPoint:
  *                   type: number
  *                   description: The point assigned to jira
- *                 userAssignedToName:
+ *                 assigneeName:
  *                   type: string
  *                   description: The user name of user this jira is assigned to
- *                 userAssignedToEmail:
+ *                 assigneeEmail:
  *                   type: string
  *                   description: The user email of user this jira is assigned to
- *                 userAssignedToProfileImage:
+ *                 assigneeProfileImage:
  *                   type: string
  *                   description: The profile image of user this jira is assigned to
- *                 userCreatedByName:
+ *                 reporterName:
  *                   type: string
  *                   description: The user name of user created this jira
- *                 userCreatedByEmail:
+ *                 reporterEmail:
  *                   type: string
  *                   description: The user email of user created this jira
- *                 userCreatedByProfileImage:
+ *                 reporterProfileImage:
  *                   type: string
  *                   description: The profile image of user this jira is created by
  *                 projectKey:
@@ -154,10 +154,10 @@
  *                   jiraLink:
  *                     type: string
  *                     description: The link to jira
- *                   userAssignedToName:
+ *                   assigneeName:
  *                     type: string
  *                     description: The user name of user this jira is assigned to
- *                   userAssignedToEmail:
+ *                   assigneeEmail:
  *                     type: string
  *                     description: The email of the user this jira is assigned to
  *                   statusType:
@@ -199,19 +199,19 @@
  *         status:
  *           type: string
  *           description: The status for this request
- *     UpdateAssignedTo:
+ *     UpdateAssignee:
  *       required:
  *         - jiraKey
- *         - assignedTo
+ *         - assignee
  *       type: object
  *       properties:
  *         jiraKey:
  *           type: string
  *           description: The unique key to identify jira
- *         assignedTo:
+ *         assignee:
  *           type: string
  *           description: The updated user email
- *     UpdateAssignedToSuccess:
+ *     UpdateAssigneeSuccess:
  *       type: object
  *       properties:
  *         status:

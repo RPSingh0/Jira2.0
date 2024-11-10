@@ -233,7 +233,7 @@ router.route('/updateSummary')
 
 /**
  * @swagger
- * /jira/updateAssignedTo:
+ * /jira/updateAssignee:
  *   patch:
  *     summary: Update jira assigned to
  *     tags: [Jira]
@@ -242,14 +242,14 @@ router.route('/updateSummary')
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UpdateAssignedTo'
+ *             $ref: '#/components/schemas/UpdateAssignee'
  *     responses:
  *       200:
  *         description: Assigned to updated successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UpdateAssignedToSuccess'
+ *               $ref: '#/components/schemas/UpdateAssigneeSuccess'
  *       400:
  *         description: Bad Request
  *         content:
@@ -263,8 +263,8 @@ router.route('/updateSummary')
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.route('/updateAssignedTo')
-    .patch(jiraController.updateAssignedTo);
+router.route('/updateAssignee')
+    .patch(jiraController.updateAssignee);
 
 /**
  * @swagger
