@@ -74,10 +74,8 @@ function FeatureDetailItemCard({type, jiraKey, jiraLink, title, user, status, pr
 
             {/* Assign and Status */}
             <StyledFeatureDetailItemAssignAndStatusBox>
-                <StyledFeatureDetailItemStatusBox>
                     {IconMap[priority]}
                     {IconMap[status]}
-                </StyledFeatureDetailItemStatusBox>
                 <Avatar>
                     {user}
                 </Avatar>
