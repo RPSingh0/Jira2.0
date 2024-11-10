@@ -2,6 +2,8 @@ import {useNavigate} from "react-router-dom";
 import {IconMap} from "../../utils/IconMap.jsx";
 import {Avatar, Box, Paper, styled, Typography} from "@mui/material";
 import {grey} from "@mui/material/colors";
+import useMatchBreakpointUp from "../../hooks/useMatchBreakpointUp.js";
+import ColoredIcon from "../icon/ColoredIcon.jsx";
 
 const StyledJiraPaper = styled(Paper)(() => ({
     display: "flex",
@@ -47,19 +49,10 @@ const StyledJiraPaperOtherDetailBox = styled(Box)(() => ({
     gap: "1rem"
 }));
 
-function JiraListItem({
-                          type,
-                          jiraKey,
-                          jiraLink,
-                          title,
-                          assigneeName,
-                          assigneeEmail,
-                          assigneeProfileImage,
-                          status,
-                          priority
-                      }) {
+function JiraListItem({type, jiraKey, jiraLink, title, assigneeName, assigneeProfileImage, status, priority}) {
 
     const navigate = useNavigate();
+    const match = useMatchBreakpointUp('sm');
 
     function handleNavigateToJira() {
         navigate(jiraLink);
@@ -69,16 +62,18 @@ function JiraListItem({
         <StyledJiraPaper variant="outlined" onClick={handleNavigateToJira}>
 
             <StyledJiraPaperHeader>
-                {IconMap[type]}
+                <ColoredIcon iconFor={type}/>
                 <StyledJiraPaperTitle>
                     {title}
                 </StyledJiraPaperTitle>
             </StyledJiraPaperHeader>
 
             <StyledJiraPaperOtherDetailBox>
-                <Typography variant="overline" noWrap>
-                    {jiraKey}
-                </Typography>
+                {match &&
+                    <Typography variant="overline" noWrap>
+                        {jiraKey}
+                    </Typography>
+                }
                 {IconMap[priority]}
                 {IconMap[status]}
                 <Avatar title={assigneeName} src={assigneeProfileImage} alt={assigneeName}/>

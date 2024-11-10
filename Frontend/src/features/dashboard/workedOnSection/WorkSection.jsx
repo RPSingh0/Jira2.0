@@ -3,8 +3,8 @@ import {useState} from "react";
 import {IconMap} from "../../../utils/IconMap.jsx";
 import WorkedOnTab from "./workedOnTabSection/WorkedOnTab.jsx";
 import {StyledTabButton, StyledTabButtonBox, StyledWorkedOnSectionBox} from "./WorkSectionStyles.jsx";
-import {TabContentContainer} from "./WorkSectionComponents.jsx";
 import {WorkedOnSectionContextProvider} from "./WorkedOnSectionContext.jsx";
+import {ColorMap} from "../../../utils/ColorMap.jsx";
 
 function WorkSection() {
 
@@ -22,23 +22,24 @@ function WorkSection() {
                         icon={IconMap['work']}
                         iconPosition="start"
                         label={"Worked On"}
+                        color={ColorMap["workedOn"]}
                     />
                     <StyledTabButton
                         icon={IconMap['userStory']}
                         iconPosition="start"
                         label={"Stories"}
+                        color={ColorMap["userStory"]}
                     />
                     <StyledTabButton
                         icon={IconMap['bug']}
                         iconPosition="start"
                         label="Bugs"
+                        color={ColorMap["bug"]}
                     />
                 </Tabs>
             </StyledTabButtonBox>
             <WorkedOnSectionContextProvider activeTab={tab}>
-                <TabContentContainer>
-                    <WorkedOnTab/>
-                </TabContentContainer>
+                <WorkedOnTab/>
             </WorkedOnSectionContextProvider>
         </StyledWorkedOnSectionBox>
     );

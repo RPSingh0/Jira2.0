@@ -10,11 +10,12 @@ export const StyledTabButtonBox = styled(Box)(({theme}) => ({
     marginBottom: "2rem"
 }));
 
-export const StyledTabButton = styled(Tab)(() => ({
+export const StyledTabButton = styled(Tab)(({color}) => ({
     minHeight: "3rem",
     fontSize: "0.8rem",
 
     "& svg": {
-        height: "1.2rem"
+        height: "1.2rem",
+        color: color
     }
 }));

@@ -1,7 +1,11 @@
 import {Box, styled} from "@mui/material";
 
 export const StyledWorkedOnTabBox = styled(Box)(() => ({
-    display: "flex"
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem",
+    width: "100%",
+    marginTop: "2rem",
 }));
 
 export const StyledNoItemsContainer = styled('img')(() => ({

@@ -1,8 +1,8 @@
 import {useWorkedOnSectionContext} from "../WorkedOnSectionContext.jsx";
 import {FeatureJiraLoadingIndicator} from "../../../../components/loader/Loader.jsx";
-import {Box} from "@mui/material";
 import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper.jsx";
 import JiraListItem from "../../../../components/jira/JiraListItem.jsx";
+import {StyledWorkedOnTabBox} from "./WorkedOnTabStyles.jsx";
 
 function WorkedOnTab() {
 
@@ -13,7 +13,7 @@ function WorkedOnTab() {
             loading={loadingWorkedOn}
             fetching={fetchingWorkedOn}
             loader={<FeatureJiraLoadingIndicator/>}>
-            <Box sx={{marginTop: "2rem", display: "flex", flexDirection: "column", gap: "1rem", width: "100%"}}>
+            <StyledWorkedOnTabBox>
                 {workedOn?.map(item =>
                     <JiraListItem
                         key={item.jiraKey}
@@ -22,10 +22,11 @@ function WorkedOnTab() {
                         jiraLink={item.jiraLink}
                         title={item.summary}
                         user={item.assigneeName}
+                        assigneeProfileImage={item.assigneeProfileImage}
                         status={item.statusType.toLowerCase()}
                         priority={"high"}
                     />)}
-            </Box>
+            </StyledWorkedOnTabBox>
         </LoadOrFetchWrapper>
     );
 }

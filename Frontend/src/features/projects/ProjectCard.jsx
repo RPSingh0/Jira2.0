@@ -1,4 +1,4 @@
-import {Avatar, AvatarGroup, Divider, Typography, useMediaQuery, useTheme} from "@mui/material";
+import {Avatar, AvatarGroup, Divider, Typography} from "@mui/material";
 import {
     StyledCardPaper,
     StyledInfoContentBox,
@@ -12,22 +12,14 @@ import {
 import {InfoItem} from "./ProjectCardComponents.jsx";
 import {useNavigate} from "react-router-dom";
 import {ProjectProgress} from "../../components/progress/projectProgressBar.jsx";
+import useMatchBreakpointDown from "../../hooks/useMatchBreakpointDown.js";
 
 function ProjectCard({
-                         name,
-                         projectKey,
-                         openIssues,
-                         doneIssues,
-                         youWorkedOn,
-                         dateStarted,
-                         expectedEndDate,
-                         daysSpent,
-                         completionPercentage,
-                         team
+                         name, projectKey, openIssues, doneIssues, youWorkedOn, dateStarted, expectedEndDate, daysSpent,
+                         completionPercentage, team
                      }) {
 
-    const theme = useTheme();
-    const match = useMediaQuery(theme.breakpoints.down('c500'));
+    const match = useMatchBreakpointDown('c500')
     const navigate = useNavigate();
 
     // handler functions
