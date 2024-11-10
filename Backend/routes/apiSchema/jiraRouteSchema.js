@@ -16,43 +16,33 @@
  *       properties:
  *         summary:
  *           type: string
- *           description: The summary / title for jira
  *         jiraType:
  *           type: string
- *           description: The jira type, can be a bug or userStory
  *         description:
  *           type: string
- *           description: The description for the jira
  *         jiraPoint:
  *           type: number
- *           description: The point assigned for this jira
  *         projectKey:
  *           type: string
- *           description: The project key this jira linked to
  *         featureKey:
  *           type: string
- *           description: The feature key this jira linked to
  *         assignee:
  *           type: string
- *           description: The user this jira is assigned to
  *     JiraCreateSuccess:
  *       type: object
  *       properties:
  *         status:
  *           type: string
- *           description: The status for this request
  *         data:
  *           type: object
  *           properties:
  *             jiraKey:
  *               type: string
- *               description: The jira key of the jira created
  *     GetJiraDetailsByJiraKeySuccess:
  *       type: object
  *       properties:
  *         status:
  *           type: string
- *           description: The status for this request
  *         data:
  *           type: object
  *           properties:
@@ -61,25 +51,19 @@
  *               properties:
  *                 summary:
  *                   type: string
- *                   description: The summary / title for jira
  *                 jiraKey:
  *                   type: string
- *                   description: The unique key to identify jira
  *                 jiraType:
  *                   type: string
- *                   description: The jira type, can be a bug or userStory
  *                 description:
  *                   type: string
- *                   description: The description for the jira
  *                 jiraLink:
  *                   type: string
- *                   description: The link for the jira
  *     GetJiraMetadataByJiraKeySuccess:
  *       type: object
  *       properties:
  *         status:
  *           type: string
- *           description: The status for this request
  *         data:
  *           type: object
  *           properties:
@@ -88,52 +72,37 @@
  *               properties:
  *                 jiraKey:
  *                   type: string
- *                   description: The unique key to identify jira
  *                 jiraPoint:
  *                   type: number
- *                   description: The point assigned to jira
  *                 assigneeName:
  *                   type: string
- *                   description: The user name of user this jira is assigned to
  *                 assigneeEmail:
  *                   type: string
- *                   description: The user email of user this jira is assigned to
  *                 assigneeProfileImage:
  *                   type: string
- *                   description: The profile image of user this jira is assigned to
  *                 reporterName:
  *                   type: string
- *                   description: The user name of user created this jira
  *                 reporterEmail:
  *                   type: string
- *                   description: The user email of user created this jira
  *                 reporterProfileImage:
  *                   type: string
- *                   description: The profile image of user this jira is created by
  *                 projectKey:
  *                   type: string
- *                   description: The project key this jira is linked to
  *                 projectName:
  *                   type: string
- *                   description: The project name this jira is linked to
  *                 featureKey:
  *                   type: string
- *                   description: The feature key this jira is linked to
  *                 featureName:
  *                   type: string
- *                   description: The feature name this jira is linked to
  *                 statusType:
  *                   type: string
- *                   description: The status description type this jira is in
  *                 createdOn:
  *                   type: string
- *                   description: The data and time this jira is created on
  *     GetJiraUnderFeatureSuccess:
  *       type: object
  *       properties:
  *         status:
  *           type: string
- *           description: The status for this request
  *         data:
  *           type: object
  *           properties:
@@ -144,25 +113,18 @@
  *                 properties:
  *                   summary:
  *                     type: string
- *                     description: The summary of the jira
  *                   jiraType:
  *                     type: string
- *                     description: The type of jira
  *                   jiraKey:
  *                     type: string
- *                     description: The jira key of the jira
  *                   jiraLink:
  *                     type: string
- *                     description: The link to jira
  *                   assigneeName:
  *                     type: string
- *                     description: The user name of user this jira is assigned to
  *                   assigneeEmail:
  *                     type: string
- *                     description: The email of the user this jira is assigned to
  *                   statusType:
  *                     type: string
- *                     description: The status of this jira
  *     UpdateDescription:
  *       required:
  *         - jiraKey
@@ -171,16 +133,13 @@
  *       properties:
  *         jiraKey:
  *           type: string
- *           description: The unique key to identify jira
  *         description:
  *           type: string
- *           description: The description for the jira
  *     UpdateDescriptionSuccess:
  *       type: object
  *       properties:
  *         status:
  *           type: string
- *           description: The status for this request
  *     UpdateSummary:
  *       required:
  *         - jiraKey
@@ -189,16 +148,13 @@
  *       properties:
  *         jiraKey:
  *           type: string
- *           description: The unique key to identify jira
  *         summary:
  *           type: string
- *           description: The summary for the jira
  *     UpdateSummarySuccess:
  *       type: object
  *       properties:
  *         status:
  *           type: string
- *           description: The status for this request
  *     UpdateAssignee:
  *       required:
  *         - jiraKey
@@ -207,16 +163,13 @@
  *       properties:
  *         jiraKey:
  *           type: string
- *           description: The unique key to identify jira
  *         assignee:
  *           type: string
- *           description: The updated user email
  *     UpdateAssigneeSuccess:
  *       type: object
  *       properties:
  *         status:
  *           type: string
- *           description: The status for this request
  *     UpdatePoints:
  *       required:
  *         - jiraKey
@@ -225,16 +178,13 @@
  *       properties:
  *         jiraKey:
  *           type: string
- *           description: The unique key to identify jira
  *         jiraPoint:
  *           type: number
- *           description: The updated jira point
  *     UpdatePointsSuccess:
  *       type: object
  *       properties:
  *         status:
  *           type: string
- *           description: The status for this request
  *     UpdateFeature:
  *       required:
  *         - jiraKey
@@ -244,17 +194,13 @@
  *       properties:
  *         jiraKey:
  *           type: string
- *           description: The unique key to identify jira
  *         projectKey:
  *           type: string
- *           description: The project key this jira is linked to
  *         featureKey:
  *           type: string
- *           description: The updated feature key this jira is linked to
  *     UpdateFeatureSuccess:
  *       type: object
  *       properties:
  *         status:
  *           type: string
- *           description: The status for this request
  */
