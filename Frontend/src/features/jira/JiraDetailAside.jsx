@@ -1,6 +1,6 @@
 import {Paper, styled} from "@mui/material";
-import JiraDetailAssignedTo from "./JiraDetailAssignedTo.jsx";
-import JiraDetailCreatedBy from "./JiraDetailCreatedBy.jsx";
+import JiraDetailAssignee from "./JiraDetailAssignee.jsx";
+import JiraDetailReporter from "./JiraDetailReporter.jsx";
 import JiraDetailPoints from "./JiraDetailPoints.jsx";
 import JiraDetailProject from "./JiraDetailProject.jsx";
 import JiraDetailFeature from "./JiraDetailFeature.jsx";
@@ -39,8 +39,8 @@ function JiraDetailAside() {
 
     return (
         <StyledProjectDetailAsideBox variant="outlined">
-            <JiraDetailAssignedTo/>
-            <JiraDetailCreatedBy/>
+            <JiraDetailAssignee/>
+            <JiraDetailReporter/>
             <JiraDetailPoints/>
             <JiraDetailProject/>
             <JiraDetailFeature/>

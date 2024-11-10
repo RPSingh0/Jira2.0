@@ -5,7 +5,7 @@ import {StyledItemValueStaticBox} from "./JiraDetailAsideStyles.jsx";
 import {Rounded2Half} from "../../components/loader/Loader.jsx";
 import LoadOrFetchWrapper from "../../components/loader/LoadOrFetchWrapper.jsx";
 
-function JiraDetailCreatedBy() {
+function JiraDetailReporter() {
 
     // context states
     const {loadingJiraMetadata, fetchingJiraMetadata, jiraMetadata} = useJiraMetadataContext();
@@ -22,9 +22,9 @@ function JiraDetailCreatedBy() {
                 loader={<Rounded2Half/>}>
                 <StyledItemValueStaticBox>
                     <StaticAvatarAndText
-                        src={jiraMetadata?.userCreatedByProfileImage}
-                        alt={"createdBy"}
-                        text={jiraMetadata?.userCreatedByName}
+                        src={jiraMetadata?.reporterProfileImage}
+                        alt={"reporter"}
+                        text={jiraMetadata?.reporterName}
                     />
                 </StyledItemValueStaticBox>
             </LoadOrFetchWrapper>
@@ -32,4 +32,4 @@ function JiraDetailCreatedBy() {
     );
 }
 
-export default JiraDetailCreatedBy;
+export default JiraDetailReporter;

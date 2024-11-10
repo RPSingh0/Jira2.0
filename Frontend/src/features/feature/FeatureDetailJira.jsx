@@ -30,7 +30,7 @@ function FeatureDetailJira() {
                             jiraKey={item.jiraKey}
                             jiraLink={item.jiraLink}
                             title={item.summary}
-                            user={item.userAssignedToName}
+                            user={item.assigneeName}
                             status={item.statusType.toLowerCase()}
                             priority={"high"}
                         />)}

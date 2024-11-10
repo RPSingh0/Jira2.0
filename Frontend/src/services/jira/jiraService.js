@@ -10,13 +10,13 @@ const URL = `${import.meta.env.VITE_BACKEND_URL}/api/v1/jira`;
  * @param {string} description
  * @param {number} projectKey
  * @param {number} featureKey
- * @param {number} assignedTo
+ * @param {number} assignee
  *
  * @returns {Promise<*>}
  *
  * @throws {Error} Error if api call is unsuccessful
  */
-export async function createJiraService({token, summary, jiraType, jiraPoint, description, projectKey, featureKey, assignedTo}) {
+export async function createJiraService({token, summary, jiraType, jiraPoint, description, projectKey, featureKey, assignee}) {
 
     let data = await fetch(`${URL}/create`, {
         method: 'POST',
@@ -31,7 +31,7 @@ export async function createJiraService({token, summary, jiraType, jiraPoint, de
             jiraPoint: jiraPoint,
             projectKey: projectKey,
             featureKey: featureKey,
-            assignedTo: assignedTo,
+            assignee: assignee,
         })
     });
 
@@ -201,15 +201,15 @@ export async function updateJiraSummaryService({token, jiraKey, summary}) {
  *
  * @param {string} token
  * @param {string} jiraKey
- * @param {number} assignedTo
+ * @param {number} assignee
  *
  * @returns {Promise<*>}
  *
  * @throws {Error} Error if api call is unsuccessful
  */
-export async function updateJiraAssignedService({token, jiraKey, assignedTo}) {
+export async function updateJiraAssigneeService({token, jiraKey, assignee}) {
 
-    let data = await fetch(`${URL}/updateAssignedTo`, {
+    let data = await fetch(`${URL}/updateAssignee`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -217,7 +217,7 @@ export async function updateJiraAssignedService({token, jiraKey, assignedTo}) {
         },
         body: JSON.stringify({
             jiraKey: jiraKey,
-            assignedTo: assignedTo
+            assignee: assignee
         })
     });
 

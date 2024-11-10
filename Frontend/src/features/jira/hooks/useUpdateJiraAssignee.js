@@ -1,11 +1,11 @@
 import {useMutation} from "@tanstack/react-query";
 import {toast} from "react-toastify";
-import {updateJiraAssignedService} from "../../../services/jira/jiraService.js";
+import {updateJiraAssigneeService} from "../../../services/jira/jiraService.js";
 
-export function useUpdateJiraAssignedTo() {
+export function useUpdateJiraAssignee() {
 
-    const {mutate: updateJiraAssignedTo, isPending: isUpdating} = useMutation({
-        mutationFn: updateJiraAssignedService,
+    const {mutate: updateJiraAssignee, isPending: isUpdating} = useMutation({
+        mutationFn: updateJiraAssigneeService,
         onSettled: (data, error) => {
             if (error) {
                 toast.error(error.message);
@@ -15,5 +15,5 @@ export function useUpdateJiraAssignedTo() {
         }
     });
 
-    return {updateJiraAssignedTo, isUpdating};
+    return {updateJiraAssignee, isUpdating};
 }

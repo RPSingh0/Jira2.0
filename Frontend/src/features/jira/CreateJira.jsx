@@ -122,7 +122,7 @@ function CreateJira({open, setOpen}) {
             description: editingOn.getHTML(),
             projectKey: pOption.projectKey,
             featureKey: fOption.featureKey,
-            assignedTo: uOption.email
+            assignee: uOption.email
         }, {
             onSuccess: () => setOpen(false)
         });
@@ -192,8 +192,8 @@ function CreateJira({open, setOpen}) {
                     />
                     <AutocompleteSelector
                         variant={"user-avatar"}
-                        name={"assignedTo"}
-                        label={"Assigned To"}
+                        name={"assignee"}
+                        label={"Assignee"}
                         options={isLoadingUsers ? [] : userOptions}
                         isLoading={isLoadingUsers}
                         disabled={isLoadingUsers}

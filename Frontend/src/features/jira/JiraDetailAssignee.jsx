@@ -3,7 +3,7 @@ import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
 import {getAllUsersService} from "../../services/user/userService.js";
 import {useEffect, useState} from "react";
 import {Box, Typography} from "@mui/material";
-import {useUpdateJiraAssignedTo} from "./hooks/useUpdateJiraAssignedTo.js";
+import {useUpdateJiraAssignee} from "./hooks/useUpdateJiraAssignee.js";
 import {toast} from "react-toastify";
 import {useQueryClient} from "@tanstack/react-query";
 import {useJiraMetadataContext} from "./JiraMetadataContext.jsx";
@@ -16,17 +16,17 @@ import {
     StyledOkCancelPaperButtonBox
 } from "./JiraDetailAsideStyles.jsx";
 
-function JiraDetailAssignedTo() {
+function JiraDetailAssignee() {
 
     // context states
     const {jiraKey, loadingJiraMetadata, fetchingJiraMetadata, jiraMetadata} = useJiraMetadataContext();
 
     // react query hooks
     const queryClient = useQueryClient();
-    const {updateJiraAssignedTo, isUpdating} = useUpdateJiraAssignedTo();
+    const {updateJiraAssignee, isUpdating} = useUpdateJiraAssignee();
 
     // local states
-    const [assignedTo, setAssignedTo] = useState(null);
+    const [assignee, setAssignee] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
 
     // load all the users
@@ -40,30 +40,30 @@ function JiraDetailAssignedTo() {
         // if jira details are loaded
         if (!loadingJiraMetadata && !fetchingJiraMetadata) {
             // set the user
-            setAssignedTo({
-                name: jiraMetadata.userAssignedToName,
-                email: jiraMetadata.userAssignedToEmail,
-                profileImage: jiraMetadata.userAssignedToProfileImage,
-                imageAltText: jiraMetadata.userAssignedToName
+            setAssignee({
+                name: jiraMetadata.assigneeName,
+                email: jiraMetadata.assigneeEmail,
+                profileImage: jiraMetadata.assigneeProfileImage,
+                imageAltText: jiraMetadata.assigneeName
             });
         }
     }, [loadingJiraMetadata, fetchingJiraMetadata, isLoadingUsers]);
 
     // handler functions
-    function handleUpdateAssignedTo() {
+    function handleUpdateAssignee() {
 
-        if (!assignedTo) {
+        if (!assignee) {
             toast.error('Please select a user');
             return;
         }
 
-        if (assignedTo.email === jiraMetadata.userAssignedToEmail) {
+        if (assignee.email === jiraMetadata.assigneeEmail) {
             return;
         }
 
-        updateJiraAssignedTo({
+        updateJiraAssignee({
             jiraKey: jiraKey,
-            assignedTo: assignedTo.email
+            assignee: assignee.email
         }, {
             onSuccess: () => {
                 setIsEditing(false);
@@ -85,23 +85,23 @@ function JiraDetailAssignedTo() {
                     <StyledAutoCompleteWithButtonBox>
                         <AutocompleteSelector
                             variant={'user-avatar'}
-                            name={"assignedTo"}
+                            name={"assignee"}
                             options={(isLoadingUsers || usersError) ? [] : users}
                             isLoading={isLoadingUsers}
-                            value={assignedTo}
-                            setValue={setAssignedTo}
+                            value={assignee}
+                            setValue={setAssignee}
                         />
                         <StyledOkCancelPaperButtonBox>
-                            <PaperOkButton onClickHandler={handleUpdateAssignedTo} disabled={isUpdating}/>
+                            <PaperOkButton onClickHandler={handleUpdateAssignee} disabled={isUpdating}/>
                             <PaperCancelButton onClickHandler={() => setIsEditing(false)} disabled={isUpdating}/>
                         </StyledOkCancelPaperButtonBox>
                     </StyledAutoCompleteWithButtonBox>
                     :
                     <StyledItemValueStaticBox onDoubleClick={() => setIsEditing(true)}>
                         <StaticAvatarAndText
-                            src={jiraMetadata?.userAssignedToProfileImage}
-                            alt={"assignedTo"}
-                            text={jiraMetadata?.userAssignedToName}
+                            src={jiraMetadata?.assigneeProfileImage}
+                            alt={"assignee"}
+                            text={jiraMetadata?.assigneeName}
                         />
                     </StyledItemValueStaticBox>
                 }
@@ -110,4 +110,4 @@ function JiraDetailAssignedTo() {
     );
 }
 
-export default JiraDetailAssignedTo;
+export default JiraDetailAssignee;

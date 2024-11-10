@@ -87,7 +87,7 @@ function JiraDetailFeature() {
                     <StyledAutoCompleteWithButtonBox>
                         <AutocompleteSelector
                             variant={'default'}
-                            name={"assignedTo"}
+                            name={"assignee"}
                             options={isLoadingFeatures ? [] : featureOptions}
                             isLoading={isLoadingFeatures}
                             value={feature}
