@@ -66,9 +66,9 @@ export function ProjectCardLoadingIndicator() {
 export function DashboardProjectCardLoadingIndicator() {
     return (
         <>
-            {Array.from({length: 4}, item =>
+            {Array.from({length: 4}, (item, index) =>
                 <Paper variant="outlined"
-                       key={item}
+                       key={index}
                        sx={{
                            display: "flex",
                            flexDirection: "column",

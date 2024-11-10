@@ -1,5 +1,4 @@
 import {Box, Paper, styled, Typography} from "@mui/material";
-import {grey} from "@mui/material/colors";
 
 export const StyledCardPaper = styled(Paper)(({theme}) => ({
     padding: "1rem",
@@ -11,17 +10,6 @@ export const StyledCardPaper = styled(Paper)(({theme}) => ({
     "&:hover": {
         boxShadow: theme.shadows[5],
     }
-}));
-
-export const StyledProjectProgressBox = styled(Box)(() => ({
-    display: "flex",
-    flexDirection: "column",
-    minWidth: "0.5rem",
-    backgroundColor: grey["400"],
-    borderRadius: "1rem",
-    overflow: "hidden",
-    opacity: "80%",
-    justifyContent: "flex-end"
 }));
 
 export const StyledProjectCardContentBox = styled(Box)(() => ({

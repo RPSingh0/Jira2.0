@@ -9,8 +9,9 @@ import {
     StyledProjectTitle,
     StyledQuickInfoAndTimeLineBox,
 } from "./ProjectCardStyles.jsx";
-import {InfoItem, ProjectProgress} from "./ProjectCardComponents.jsx";
+import {InfoItem} from "./ProjectCardComponents.jsx";
 import {useNavigate} from "react-router-dom";
+import {ProjectProgress} from "../../components/progress/projectProgressBar.jsx";
 
 function ProjectCard({
                          name,

@@ -98,8 +98,6 @@ export async function getJiraCurrentUserWorkedOnService({token, type}) {
         url.searchParams.append('type', type);
     }
 
-    console.log(type);
-
     let data = await fetch(url, {
         method: 'GET',
         headers: {

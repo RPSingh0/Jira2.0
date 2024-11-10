@@ -12,13 +12,6 @@ export const StyledCardPaper = styled(Paper)(({theme}) => ({
     }
 }));
 
-export const StyledProjectProgressBox = styled(Box)(() => ({
-    minWidth: "0.5rem",
-    backgroundColor: "#ff5b31",
-    borderRadius: "1rem",
-    opacity: "80%"
-}));
-
 export const StyledProjectCardContentBox = styled(Box)(() => ({
     overflow: "hidden",
     flexGrow: 1

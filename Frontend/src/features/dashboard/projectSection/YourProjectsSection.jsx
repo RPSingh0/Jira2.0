@@ -1,4 +1,3 @@
-import {Typography} from "@mui/material";
 import ProjectCard from "./YourProjectsSectionCard.jsx";
 import {
     StyledDashboardProjects,
@@ -10,14 +9,11 @@ import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
 import {getAllProjectsService} from "../../../services/project/projectService.js";
 import {DashboardProjectCardLoadingIndicator} from "../../../components/loader/Loader.jsx";
 import LoadOrFetchWrapper from "../../../components/loader/LoadOrFetchWrapper.jsx";
+import ViewAllNavigate from "../../../components/viewAll/ViewAllNavigate.jsx";
 
 function YourProjectsSection() {
 
-    const {
-        isLoading: loadingProjects,
-        isFetching: fetchingProjects,
-        data: projects
-    } = useGetQueryHook({
+    const {isLoading: loadingProjects, isFetching: fetchingProjects, data: projects} = useGetQueryHook({
         key: [`dashboard-projects`],
         fn: getAllProjectsService,
     });
@@ -28,9 +24,7 @@ function YourProjectsSection() {
                 <StyledHeaderHeading variant={'body2'}>
                     Your projects
                 </StyledHeaderHeading>
-                <Typography variant={"caption"}>
-                    View all
-                </Typography>
+                <ViewAllNavigate text={"View All"} link={"/project"}/>
             </StyledHeader>
             <StyledDashboardProjectsList>
                 <LoadOrFetchWrapper

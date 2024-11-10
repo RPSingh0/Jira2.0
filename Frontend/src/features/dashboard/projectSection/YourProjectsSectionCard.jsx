@@ -7,8 +7,8 @@ import {
     StyledQuickInfoText
 } from "./YourProjectsSectionCardStyles.jsx";
 import {QuickInfoItem} from "./YourProjectsSectionCardComponents.jsx";
-import {ProjectProgress} from "../../projects/ProjectCardComponents.jsx";
 import {useNavigate} from "react-router-dom";
+import {ProjectProgress} from "../../../components/progress/projectProgressBar.jsx";
 
 function ProjectCard({name, projectKey, openIssues, doneIssues, completionPercentage}) {
 

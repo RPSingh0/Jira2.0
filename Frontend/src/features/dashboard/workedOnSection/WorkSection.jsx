@@ -19,10 +19,22 @@ function WorkSection() {
     return (
         <StyledWorkedOnSectionBox>
             <StyledTabButtonBox>
-                <Tabs value={tab} onChange={handleTabSwitch}>
-                    <StyledTabButton icon={IconMap['work']} iconPosition="start" label="Worked On"/>
-                    <StyledTabButton icon={IconMap['userStory']} iconPosition="start" label="Stories"/>
-                    <StyledTabButton icon={IconMap['bug']} iconPosition="start" label="Bugs"/>
+                <Tabs value={tab} onChange={handleTabSwitch} variant={"scrollable"}>
+                    <StyledTabButton
+                        icon={IconMap['work']}
+                        iconPosition="start"
+                        label={"Worked On"}
+                    />
+                    <StyledTabButton
+                        icon={IconMap['userStory']}
+                        iconPosition="start"
+                        label={"Stories"}
+                    />
+                    <StyledTabButton
+                        icon={IconMap['bug']}
+                        iconPosition="start"
+                        label="Bugs"
+                    />
                 </Tabs>
             </StyledTabButtonBox>
             <WorkedOnSectionContextProvider activeTab={tab}>
