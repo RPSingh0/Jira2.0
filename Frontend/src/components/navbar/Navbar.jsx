@@ -1,8 +1,9 @@
-import {AppBar, Avatar, Box, IconButton, styled, Toolbar, Tooltip, useMediaQuery, useTheme} from "@mui/material";
+import {Avatar, Box, IconButton, styled, Toolbar, Tooltip, useMediaQuery, useTheme} from "@mui/material";
 import Logo from "../logo/Logo.jsx";
 import {ContainedButton, NavLinkButton, TextButton} from "../button/Buttons.jsx";
 import {useState} from "react";
 import CreateJira from "../../features/jira/CreateJira.jsx";
+import {StyledAppBar} from "./NavBarStyles.jsx";
 
 const StyledNavButtonBox = styled(Box)(() => ({
     flexGrow: 1,
@@ -27,36 +28,25 @@ function Navbar() {
     const [open, setOpen] = useState(false);
 
     return (
-        <AppBar position="sticky" color={"default"} elevation={1}>
+        <StyledAppBar>
             <Toolbar>
-                {/* Logo (based on screen size) */}
-                <Logo
-                    imageName={matches ? "logo" : "main"}
-                    containerPadding={"0"}
-                    imageHeight={"1.5rem"}
-                />
-
-                {/* Buttons on right side of Logo */}
+                <Logo imageName={matches ? "logo" : "main"} containerPadding={"0"} imageHeight={"1.5rem"}/>
                 <StyledNavButtonBox>
                     <NavLinkButton text={"Projects"} link={"/project"}/>
                     <TextButton text={"Teams"}/>
                     <ContainedButton text={"Create"} onClickHandler={() => setOpen(true)}/>
                     {open && <CreateJira open={open} setOpen={setOpen}/>}
                 </StyledNavButtonBox>
-
-                {/* Empty container to take up remaining space */}
                 <StyledEmptyContainer/>
-
-                {/* User profile container and image */}
                 <StyledUserProfileBox>
                     <Tooltip title="Account - To be done">
                         <IconButton onClick={() => console.log('To be done')} sx={{p: 0}}>
-                            <Avatar alt="user-avatar" src=""/>
+                            <Avatar alt="user-avatar" src="https://avatar.iran.liara.run/public?username=Xenovia"/>
                         </IconButton>
                     </Tooltip>
                 </StyledUserProfileBox>
             </Toolbar>
-        </AppBar>
+        </StyledAppBar>
     );
 }
 
