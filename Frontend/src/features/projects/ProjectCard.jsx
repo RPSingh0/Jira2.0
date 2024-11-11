@@ -5,9 +5,9 @@ import {
     StyledInfoText,
     StyledMeetYourTeamBox,
     StyledProjectCardContentBox,
-    StyledProjectCardInfoContainer,
+    StyledProjectCardOverviewContainer,
+    StyledProjectCardOverviewSection,
     StyledProjectTitle,
-    StyledQuickInfoAndTimeLineBox,
 } from "./ProjectCardStyles.jsx";
 import {InfoItem} from "./ProjectCardComponents.jsx";
 import {useNavigate} from "react-router-dom";
@@ -30,18 +30,13 @@ function ProjectCard({
     return (
         <StyledCardPaper variant="outlined">
             <ProjectProgress completionPercentage={completionPercentage}/>
-
             <StyledProjectCardContentBox>
-                <StyledProjectTitle variant={"subtitle1"} gutterBottom noWrap onClick={handleClickOnProjectName}>
+                <StyledProjectTitle onClick={handleClickOnProjectName}>
                     {name}
                 </StyledProjectTitle>
-
                 <Divider flexItem sx={{marginBottom: "1rem"}}/>
-
-                {/* Quick Info and Timeline */}
-                <StyledQuickInfoAndTimeLineBox>
-                    {/* Quick info */}
-                    <StyledProjectCardInfoContainer>
+                <StyledProjectCardOverviewContainer>
+                    <StyledProjectCardOverviewSection>
                         <StyledInfoText variant={"overline"}>
                             Quick Info
                         </StyledInfoText>
@@ -49,25 +44,22 @@ function ProjectCard({
                             <InfoItem
                                 text={"Open Issues"}
                                 data={openIssues}
-                                chip={true}
                             />
                             <InfoItem
                                 text={"Done Issues"}
                                 data={doneIssues}
-                                chip={true}
                             />
                             <InfoItem
                                 text={"Done By You"}
                                 data={youWorkedOn}
-                                chip={true}
                             />
                         </StyledInfoContentBox>
-                    </StyledProjectCardInfoContainer>
+                    </StyledProjectCardOverviewSection>
 
                     <Divider orientation={match ? "horizontal" : "vertical"} flexItem={true}/>
 
                     {/* Timeline */}
-                    <StyledProjectCardInfoContainer>
+                    <StyledProjectCardOverviewSection>
                         <StyledInfoText variant={"overline"}>
                             Timeline
                         </StyledInfoText>
@@ -75,22 +67,19 @@ function ProjectCard({
                         <StyledInfoContentBox>
                             <InfoItem
                                 text={"Date Started"}
-                                chip={true}
                                 data={dateStarted}
                             />
                             <InfoItem
                                 text={"Expected"}
-                                chip={true}
                                 data={expectedEndDate}
                             />
                             <InfoItem
                                 text={"Days on project"}
-                                chip={true}
                                 data={daysSpent}
                             />
                         </StyledInfoContentBox>
-                    </StyledProjectCardInfoContainer>
-                </StyledQuickInfoAndTimeLineBox>
+                    </StyledProjectCardOverviewSection>
+                </StyledProjectCardOverviewContainer>
 
                 <Divider flexItem sx={{marginBottom: "1rem", marginTop: "1rem"}}/>
                 {team?.length > 0 &&

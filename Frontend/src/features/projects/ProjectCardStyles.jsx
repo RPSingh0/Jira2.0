@@ -25,6 +25,12 @@ export const StyledProjectTitle = styled(Typography)(() => ({
     }
 }));
 
+StyledProjectTitle.defaultProps = {
+    variant: "subtitle1",
+    gutterBottom: true,
+    noWrap: true
+}
+
 export const StyledInfoText = styled(Typography)(({theme}) => ({
     color: theme.palette.defaultBlack.light,
     fontWeight: "bold",
@@ -51,13 +57,7 @@ export const StyledQuickInfoItemText = styled(Typography)(() => ({
     fontSize: "0.7rem",
 }));
 
-export const StyledQuickInfoDot = styled('span')(({color}) => ({
-    lineHeight: "0",
-    fontSize: "2rem",
-    color: color
-}));
-
-export const StyledQuickInfoAndTimeLineBox = styled(Box)(({theme}) => ({
+export const StyledProjectCardOverviewContainer = styled(Box)(({theme}) => ({
     display: "flex",
     gap: "1rem",
 
@@ -72,6 +72,6 @@ export const StyledMeetYourTeamBox = styled(Box)(() => ({
     alignItems: "start"
 }));
 
-export const StyledProjectCardInfoContainer = styled(Box)(() => ({
+export const StyledProjectCardOverviewSection = styled(Box)(() => ({
     flexGrow: 1
 }));

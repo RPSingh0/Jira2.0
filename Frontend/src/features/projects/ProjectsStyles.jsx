@@ -1,7 +1,6 @@
 import {Box, Divider, styled, Typography} from "@mui/material";
 
 export const StyledProjectsBox = styled(Box)(({theme}) => ({
-
     padding: "1rem",
 
     [theme.breakpoints.up('sm')]: {
@@ -21,6 +20,10 @@ export const StyledProjectsHeading = styled(Typography)(({theme}) => ({
     color: theme.palette.defaultBlack.dark,
     fontWeight: "bold"
 }));
+
+StyledProjectsHeading.defaultProps = {
+    variant: "h5"
+}
 
 export const StyledDivider = styled(Divider)(() => ({
     marginTop: "2rem",

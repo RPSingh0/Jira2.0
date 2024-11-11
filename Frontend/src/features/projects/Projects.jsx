@@ -14,7 +14,7 @@ function Projects() {
     return (
         <StyledProjectsBox>
             <StyledProjectsHeaderBox>
-                <StyledProjectsHeading variant="h5">
+                <StyledProjectsHeading>
                     Projects
                 </StyledProjectsHeading>
                 <ContainedNavLinkButton text={"Create Project"} link={"create"}/>
