@@ -1,4 +1,4 @@
-import {Box, styled, Typography} from "@mui/material";
+import {Box, styled} from "@mui/material";
 
 export const StyledDashboardBox = styled(Box)(({theme}) => ({
 
@@ -9,8 +9,4 @@ export const StyledDashboardBox = styled(Box)(({theme}) => ({
     [theme.breakpoints.down('sm')]: {
         padding: "1rem"
     }
-}));
-
-export const StyledDashboardHeading = styled(Typography)(({theme}) => ({
-    color: theme.palette.defaultBlack.dark
 }));
