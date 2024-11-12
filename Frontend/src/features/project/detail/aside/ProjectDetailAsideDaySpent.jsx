@@ -1,8 +1,8 @@
-import {useProjectDetailContext} from "./ProjectDetailContext.jsx";
+import {useProjectDetailContext} from "../../context/ProjectDetailContext.jsx";
 import {Box, Typography} from "@mui/material";
-import LoadOrFetchWrapper from "../../components/loader/LoadOrFetchWrapper.jsx";
-import {Rounded2Half} from "../../components/loader/Loader.jsx";
-import {StyledItemValueStaticBox} from "../jira/JiraDetailAsideStyles.jsx";
+import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper.jsx";
+import {Rounded2Half} from "../../../../components/loader/Loader.jsx";
+import {StyledItemValueStaticBox} from "../../../jira/JiraDetailAsideStyles.jsx";
 
 function ProjectDetailAsideDaySpent() {
 

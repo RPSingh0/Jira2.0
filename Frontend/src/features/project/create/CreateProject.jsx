@@ -1,15 +1,15 @@
 import {Button} from "@mui/material";
-import TextEditor from "../../components/editor/Editor.jsx";
-import {getFormData} from "../../utils/FormUtils.js";
-import useDefaultEditor from "../../components/editor/useDefaultEditor.js";
-import AutocompleteSelector from "../../components/autocomplete/AutocompleteSelector.jsx";
+import TextEditor from "../../../components/editor/Editor.jsx";
+import {getFormData} from "../../../utils/FormUtils.js";
+import useDefaultEditor from "../../../components/editor/useDefaultEditor.js";
+import AutocompleteSelector from "../../../components/autocomplete/AutocompleteSelector.jsx";
 import {useEffect, useState} from "react";
-import {getAllUsersService} from "../../services/user/userService.js";
-import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
+import {getAllUsersService} from "../../../services/user/userService.js";
+import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
 import {toast} from "react-toastify";
-import useDebounce from "../../hooks/useDebounce.js";
-import {useGenerateProjectKey} from "./hooks/useGetProjectKey.js";
-import {useCreateProject} from "./hooks/useCreateProject.js";
+import useDebounce from "../../../hooks/useDebounce.js";
+import {useGenerateProjectKey} from "../hooks/useGetProjectKey.js";
+import {useCreateProject} from "../hooks/useCreateProject.js";
 import {useNavigate} from "react-router-dom";
 import {
     StyledCreateProjectAsideImageBox,

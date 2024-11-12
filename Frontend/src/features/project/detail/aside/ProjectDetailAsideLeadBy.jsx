@@ -1,16 +1,16 @@
-import AutocompleteSelector from "../../components/autocomplete/AutocompleteSelector.jsx";
-import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
-import {getAllUsersService} from "../../services/user/userService.js";
+import AutocompleteSelector from "../../../../components/autocomplete/AutocompleteSelector.jsx";
+import useGetQueryHook from "../../../../queryHooks/useGetQueryHook.js";
+import {getAllUsersService} from "../../../../services/user/userService.js";
 import {useEffect, useState} from "react";
 import {Box, styled, Typography} from "@mui/material";
 import {toast} from "react-toastify";
 import {useQueryClient} from "@tanstack/react-query";
-import LoadOrFetchWrapper from "../../components/loader/LoadOrFetchWrapper.jsx";
-import {Rounded2Half} from "../../components/loader/Loader.jsx";
-import {useProjectDetailContext} from "./ProjectDetailContext.jsx";
-import {useUpdateProjectLeadBy} from "./hooks/useUpdateProjectLeadBy.js";
+import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper.jsx";
+import {Rounded2Half} from "../../../../components/loader/Loader.jsx";
+import {useProjectDetailContext} from "../../context/ProjectDetailContext.jsx";
+import {useUpdateProjectLeadBy} from "../../hooks/useUpdateProjectLeadBy.js";
 import {grey} from "@mui/material/colors";
-import {PaperCancelButton, PaperOkButton, StaticAvatarAndText} from "../jira/JiraDetailAsideComponents.jsx";
+import {PaperCancelButton, PaperOkButton, StaticAvatarAndText} from "../../../jira/JiraDetailAsideComponents.jsx";
 
 const StyledOkCancelPaperButtonBox = styled(Box)(() => ({
     display: "flex",
@@ -44,7 +44,7 @@ const StyledAutoCompleteWithButtonBox = styled(Box)(() => ({
     position: "relative"
 }));
 
-function ProjectDetailLeadBy() {
+function ProjectDetailAsideLeadBy() {
 
     // context states
     const {loadingProjectDetail, fetchingProjectDetail, projectDetail} = useProjectDetailContext();
@@ -138,4 +138,4 @@ function ProjectDetailLeadBy() {
     );
 }
 
-export default ProjectDetailLeadBy;
+export default ProjectDetailAsideLeadBy;

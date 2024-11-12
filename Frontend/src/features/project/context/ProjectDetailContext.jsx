@@ -1,7 +1,7 @@
 import {createContext, useContext} from "react";
 import {useParams} from "react-router-dom";
-import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
-import {getProjectDetailService} from "../../services/project/projectService.js";
+import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
+import {getProjectDetailService} from "../../../services/project/projectService.js";
 
 const ProjectDetailContext = createContext();
 

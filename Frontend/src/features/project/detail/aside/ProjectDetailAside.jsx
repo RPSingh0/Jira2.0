@@ -1,5 +1,5 @@
 import {Paper, styled} from "@mui/material";
-import ProjectDetailLeadBy from "./ProjectDetailLeadBy.jsx";
+import ProjectDetailAsideLeadBy from "./ProjectDetailAsideLeadBy.jsx";
 import ProjectDetailAsideOpenIssue from "./ProjectDetailAsideOpenIssue.jsx";
 import ProjectDetailAsideDoneIssue from "./ProjectDetailAsideDoneIssue.jsx";
 import ProjectDetailAsideStarted from "./ProjectDetailAsideStarted.jsx";
@@ -39,7 +39,7 @@ function ProjectDetailAside() {
 
     return (
         <StyledProjectDetailAsideBox variant="outlined">
-            <ProjectDetailLeadBy/>
+            <ProjectDetailAsideLeadBy/>
             <ProjectDetailAsideOpenIssue/>
             <ProjectDetailAsideDoneIssue/>
             <ProjectDetailAsideStarted/>

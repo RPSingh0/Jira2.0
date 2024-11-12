@@ -1,17 +1,18 @@
+import {useProjectDetailContext} from "../../context/ProjectDetailContext.jsx";
 import {Box, Typography} from "@mui/material";
-import LoadOrFetchWrapper from "../../components/loader/LoadOrFetchWrapper.jsx";
-import {Rounded2Half} from "../../components/loader/Loader.jsx";
-import {StyledItemValueStaticBox} from "../jira/JiraDetailAsideStyles.jsx";
-import {useProjectDetailContext} from "./ProjectDetailContext.jsx";
+import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper.jsx";
+import {Rounded2Half} from "../../../../components/loader/Loader.jsx";
+import {StyledItemValueStaticBox} from "../../../jira/JiraDetailAsideStyles.jsx";
+import {formatDateToLocale} from "../../../../utils/utils.js";
 
-function ProjectDetailAsideOpenIssue() {
+function ProjectDetailAsideStarted() {
 
     const {loadingProjectDetail, fetchingProjectDetail, projectDetail} = useProjectDetailContext();
 
     return (
         <Box>
             <Typography variant="overline" gutterBottom sx={{paddingLeft: "0.5rem"}}>
-                Open Issues
+                Date Started
             </Typography>
             <LoadOrFetchWrapper
                 loading={loadingProjectDetail}
@@ -19,7 +20,7 @@ function ProjectDetailAsideOpenIssue() {
                 loader={<Rounded2Half/>}>
                 <StyledItemValueStaticBox>
                     <Typography variant="body1">
-                        {projectDetail?.openIssues}
+                        {formatDateToLocale(projectDetail?.startDate)}
                     </Typography>
                 </StyledItemValueStaticBox>
             </LoadOrFetchWrapper>
@@ -27,4 +28,4 @@ function ProjectDetailAsideOpenIssue() {
     );
 }
 
-export default ProjectDetailAsideOpenIssue;
+export default ProjectDetailAsideStarted;

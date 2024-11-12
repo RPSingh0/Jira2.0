@@ -7,8 +7,8 @@ import ProtectedRoute from "./features/auth/ProtectedRoute.jsx";
 import AppLayout from "./components/appLayout/AppLayout.jsx";
 import Dashboard from "./features/dashboard/Dashboard.jsx";
 import Projects from "./features/projects/Projects.jsx";
-import CreateProject from "./features/project/CreateProject.jsx";
-import ProjectDetail from "./features/project/ProjectDetail.jsx";
+import CreateProject from "./features/project/create/CreateProject.jsx";
+import ProjectDetail from "./features/project/detail/ProjectDetail.jsx";
 import FeatureDetail from "./features/feature/FeatureDetail.jsx";
 import JiraDetail from "./features/jira/JiraDetail.jsx";
 
