@@ -1,4 +1,4 @@
-import {Button, styled, useMediaQuery, useTheme} from "@mui/material";
+import {Button, IconButton, Paper, styled, useMediaQuery, useTheme} from "@mui/material";
 import {grey} from "@mui/material/colors";
 import {NavLink} from "react-router-dom";
 import {IconMap} from "../../utils/IconMap.jsx";
@@ -92,15 +92,37 @@ export function ContainedNavLinkButton({text, link}) {
     );
 }
 
-export function OutlinedIconNavLinkButton({text, link, startIcon}) {
-    const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.down('sm'));
 
+export function PaperOkButton({onClickHandler, disabled}) {
     return (
-        <NavLink to={link}>
-            <StyledContainedNavLinkButton variant="outlined" size={matches ? "small" : "medium"} startIcon={IconMap[startIcon]}>
-                {text}
-            </StyledContainedNavLinkButton>
-        </NavLink>
+        <Paper sx={{overflow: "hidden"}}>
+            <IconButton
+                size={"small"}
+                disableFocusRipple
+                disableTouchRipple
+                sx={{borderRadius: "0"}}
+                onClick={onClickHandler}
+                disabled={disabled}
+            >
+                {IconMap['save']}
+            </IconButton>
+        </Paper>
+    );
+}
+
+export function PaperCancelButton({onClickHandler, disabled}) {
+    return (
+        <Paper sx={{overflow: "hidden"}}>
+            <IconButton
+                size={"small"}
+                disableFocusRipple
+                disableTouchRipple
+                sx={{borderRadius: "0"}}
+                onClick={onClickHandler}
+                disabled={disabled}
+            >
+                {IconMap['close']}
+            </IconButton>
+        </Paper>
     );
 }

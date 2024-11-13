@@ -10,7 +10,7 @@ export function useUpdateProjectLeadBy() {
             if (error) {
                 toast.error(error.message);
             } else {
-                toast.success(`Jira assigned to updated`);
+                toast.success(`Jira assignee updated`);
             }
         }
     });

@@ -5,12 +5,15 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 import ProtectedRoute from "./features/auth/ProtectedRoute.jsx";
 import AppLayout from "./components/appLayout/AppLayout.jsx";
-import Dashboard from "./features/dashboard/Dashboard.jsx";
-import Projects from "./features/projects/Projects.jsx";
-import CreateProject from "./features/project/create/CreateProject.jsx";
-import ProjectDetail from "./features/project/detail/ProjectDetail.jsx";
-import FeatureDetail from "./features/feature/FeatureDetail.jsx";
-import JiraDetail from "./features/jira/JiraDetail.jsx";
+import {lazy, Suspense} from "react";
+
+const Dashboard = lazy(() => import('./features/dashboard/Dashboard.jsx'));
+const Projects = lazy(() => import('./features/projects/Projects.jsx'));
+const CreateProject = lazy(() => import('./features/project/create/CreateProject.jsx'));
+const ProjectDetail = lazy(() => import('./features/project/detail/ProjectDetail.jsx'));
+const FeatureDetail = lazy(() => import('./features/feature/FeatureDetail.jsx'));
+const JiraDetail = lazy(() => import('./features/jira/JiraDetail.jsx'));
+
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -25,21 +28,23 @@ function App() {
         <QueryClientProvider client={queryClient}>
             <ReactQueryDevtools initialIsOpen={false}/>
             <BrowserRouter>
-                <Routes>
-                    <Route index path={"welcome"} element={<WelcomeHome/>}/>
-                    <Route path={"login"} element={<Login/>}/>
-                    <Route path={"/"} element={<ProtectedRoute><AppLayout/></ProtectedRoute>}>
-                        <Route index element={<Navigate replace to={"dashboard"}/>}/>
-                        <Route path={"dashboard"} element={<Dashboard/>}/>
-                        <Route path={"project"}>
-                            <Route index element={<Projects/>}/>
-                            <Route path={"create"} element={<CreateProject/>}/>
-                            <Route path={":projectKey"} element={<ProjectDetail/>}/>
-                            <Route path={":projectKey/feature/:featureKey"} element={<FeatureDetail/>}/>
-                            <Route path={":projectKey/feature/:featureKey/:jiraKey"} element={<JiraDetail/>}/>
+                <Suspense>
+                    <Routes>
+                        <Route index path={"welcome"} element={<WelcomeHome/>}/>
+                        <Route path={"login"} element={<Login/>}/>
+                        <Route path={"/"} element={<ProtectedRoute><AppLayout/></ProtectedRoute>}>
+                            <Route index element={<Navigate replace to={"dashboard"}/>}/>
+                            <Route path={"dashboard"} element={<Dashboard/>}/>
+                            <Route path={"project"}>
+                                <Route index element={<Projects/>}/>
+                                <Route path={"create"} element={<CreateProject/>}/>
+                                <Route path={":projectKey"} element={<ProjectDetail/>}/>
+                                <Route path={":projectKey/feature/:featureKey"} element={<FeatureDetail/>}/>
+                                <Route path={":projectKey/feature/:featureKey/:jiraKey"} element={<JiraDetail/>}/>
+                            </Route>
                         </Route>
-                    </Route>
-                </Routes>
+                    </Routes>
+                </Suspense>
             </BrowserRouter>
         </QueryClientProvider>
     );

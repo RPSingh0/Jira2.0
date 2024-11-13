@@ -1,48 +1,16 @@
-import AutocompleteSelector from "../../../../components/autocomplete/AutocompleteSelector.jsx";
 import useGetQueryHook from "../../../../queryHooks/useGetQueryHook.js";
 import {getAllUsersService} from "../../../../services/user/userService.js";
 import {useEffect, useState} from "react";
-import {Box, styled, Typography} from "@mui/material";
+import {Box} from "@mui/material";
 import {toast} from "react-toastify";
 import {useQueryClient} from "@tanstack/react-query";
 import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper.jsx";
 import {Rounded2Half} from "../../../../components/loader/Loader.jsx";
 import {useProjectDetailContext} from "../../context/ProjectDetailContext.jsx";
 import {useUpdateProjectLeadBy} from "../../hooks/useUpdateProjectLeadBy.js";
-import {grey} from "@mui/material/colors";
-import {PaperCancelButton, PaperOkButton, StaticAvatarAndText} from "../../../jira/JiraDetailAsideComponents.jsx";
-
-const StyledOkCancelPaperButtonBox = styled(Box)(() => ({
-    display: "flex",
-    flexDirection: "row",
-    gap: "0.5rem",
-    position: "absolute",
-    bottom: "-2rem",
-    right: 0,
-    zIndex: 1000
-}));
-
-const StyledItemValueStaticBox = styled(Box)(() => ({
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: "1rem",
-    padding: "0.5rem",
-    borderRadius: "9px",
-    transition: "background-color 0.2s ease",
-
-    "&:hover": {
-        backgroundColor: grey["200"]
-    }
-}));
-
-const StyledAutoCompleteWithButtonBox = styled(Box)(() => ({
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "end",
-    gap: "0.5rem",
-    position: "relative"
-}));
+import AutocompleteAssign from "../../../../components/autocompleteAssign/AutocompleteAssign.jsx";
+import AsideElementHeading from "../../../../components/heading/AsideElementHeading.jsx";
+import {StaticAvatarAndText} from "../../../../components/avatar/StaticAvatarAndText.jsx";
 
 function ProjectDetailAsideLeadBy() {
 
@@ -102,37 +70,29 @@ function ProjectDetailAsideLeadBy() {
 
     return (
         <Box>
-            <Typography variant="overline" gutterBottom sx={{paddingLeft: "0.5rem"}}>
-                Lead By
-            </Typography>
+            <AsideElementHeading text={"Lead By"}/>
             <LoadOrFetchWrapper
                 loading={loadingProjectDetail}
                 fetching={fetchingProjectDetail}
                 loader={<Rounded2Half/>}>
-                {isEditing ?
-                    <StyledAutoCompleteWithButtonBox>
-                        <AutocompleteSelector
-                            variant={'user-avatar'}
-                            name={"leadBy"}
-                            options={(isLoadingUsers || usersError) ? [] : users}
-                            isLoading={isLoadingUsers}
-                            value={leadBy}
-                            setValue={setLeadBy}
-                        />
-                        <StyledOkCancelPaperButtonBox>
-                            <PaperOkButton onClickHandler={handleUpdateLeadBy} disabled={isUpdating}/>
-                            <PaperCancelButton onClickHandler={() => setIsEditing(false)} disabled={isUpdating}/>
-                        </StyledOkCancelPaperButtonBox>
-                    </StyledAutoCompleteWithButtonBox>
-                    :
-                    <StyledItemValueStaticBox onDoubleClick={() => setIsEditing(true)}>
-                        <StaticAvatarAndText
-                            src={projectDetail?.leadProfileImage}
-                            alt={"lead by"}
-                            text={projectDetail?.leadName}
-                        />
-                    </StyledItemValueStaticBox>
-                }
+                <AutocompleteAssign
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
+                    isLoading={isLoadingUsers}
+                    isUpdating={isUpdating}
+                    name={"leadBy"}
+                    variant={"user-avatar"}
+                    options={(isLoadingUsers || usersError) ? [] : users}
+                    value={leadBy}
+                    setValue={setLeadBy}
+                    okClickHandler={handleUpdateLeadBy}
+                >
+                    <StaticAvatarAndText
+                        src={projectDetail?.leadProfileImage}
+                        alt={"lead by"}
+                        text={projectDetail?.leadName}
+                    />
+                </AutocompleteAssign>
             </LoadOrFetchWrapper>
         </Box>
     );

@@ -1,9 +1,10 @@
 import {useProjectDetailContext} from "../../context/ProjectDetailContext.jsx";
-import {Box, Typography} from "@mui/material";
+import {Box} from "@mui/material";
 import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper.jsx";
 import {Rounded2Half} from "../../../../components/loader/Loader.jsx";
-import {StyledItemValueStaticBox} from "../../../jira/JiraDetailAsideStyles.jsx";
 import {formatDateToLocale} from "../../../../utils/utils.js";
+import AsideElementHeading from "../../../../components/heading/AsideElementHeading.jsx";
+import StaticText from "../../../../components/text/StaticText.jsx";
 
 function ProjectDetailAsideEnd() {
 
@@ -11,18 +12,12 @@ function ProjectDetailAsideEnd() {
 
     return (
         <Box>
-            <Typography variant="overline" gutterBottom sx={{paddingLeft: "0.5rem"}}>
-                End Date (Expected)
-            </Typography>
+            <AsideElementHeading text={"End Date (Expected)"}/>
             <LoadOrFetchWrapper
                 loading={loadingProjectDetail}
                 fetching={fetchingProjectDetail}
                 loader={<Rounded2Half/>}>
-                <StyledItemValueStaticBox>
-                    <Typography variant="body1">
-                        {formatDateToLocale(projectDetail?.expectedEndDate)}
-                    </Typography>
-                </StyledItemValueStaticBox>
+                <StaticText text={formatDateToLocale(projectDetail?.expectedEndDate)}/>
             </LoadOrFetchWrapper>
         </Box>
     );
