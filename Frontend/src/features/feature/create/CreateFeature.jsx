@@ -1,11 +1,13 @@
-import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
-import {TextFieldInput} from "./CreateFeatureComponents.jsx";
+import {Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import {useState} from "react";
-import useDefaultEditor from "../../components/editor/useDefaultEditor.js";
-import Editor from "../../components/editor/Editor.jsx";
+import useDefaultEditor from "../../../components/editor/useDefaultEditor.js";
+import Editor from "../../../components/editor/Editor.jsx";
 import {toast} from "react-toastify";
-import {useCreateFeature} from "./hooks/useCreateFeature.js";
+import {useCreateFeature} from "../hooks/useCreateFeature.js";
 import {useParams} from "react-router-dom";
+import {FormSubmitButton, OutlinedButton} from "../../../components/button/Buttons.jsx";
+import {TextFieldInput} from "../../../components/input/InputTextField.jsx";
+import {StyledCreateFeatureForm} from "./CreateFeatureStyles.jsx";
 
 function CreateFeature({open, setOpen}) {
 
@@ -46,12 +48,7 @@ function CreateFeature({open, setOpen}) {
                 Create Feature
             </DialogTitle>
             <DialogContent>
-                <Box id={"create-feature-form"} component={'form'} sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "1rem",
-                    padding: "1rem"
-                }}>
+                <StyledCreateFeatureForm id={"create-feature-form"}>
                     <TextFieldInput
                         name={"name"}
                         label={"Feature Name"}
@@ -59,24 +56,16 @@ function CreateFeature({open, setOpen}) {
                         onChange={(event) => setFeatureName(event.target.value.trimStart())}
                     />
                     <Editor editor={editingOn} height={"12rem"}/>
-                </Box>
+                </StyledCreateFeatureForm>
             </DialogContent>
             <DialogActions>
-                <Button
-                    variant={"outlined"}
-                    type={"submit"}
-                    form={"create-feature-form"}
-                    onClick={handleSubmit}
+                <FormSubmitButton
+                    buttonText={"Create"}
+                    formId={"create-feature-form"}
+                    onClickHandler={handleSubmit}
                     disabled={isCreating}
-                >
-                    Create
-                </Button>
-                <Button
-                    variant={"outlined"}
-                    onClick={() => setOpen(false)}
-                >
-                    Cancel
-                </Button>
+                />
+                <OutlinedButton text={"Cancel"} onClickHandler={() => setOpen(false)}/>
             </DialogActions>
         </Dialog>
     );

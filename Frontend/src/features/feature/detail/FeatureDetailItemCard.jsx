@@ -1,5 +1,5 @@
 import {Avatar, Box, Paper, styled, Typography} from "@mui/material";
-import {IconMap} from "../../utils/IconMap.jsx";
+import {IconMap} from "../../../utils/IconMap.jsx";
 import {grey} from "@mui/material/colors";
 import {useNavigate} from "react-router-dom";
 
@@ -41,13 +41,6 @@ const StyledFeatureDetailItemAssignAndStatusBox = styled(Box)(() => ({
     alignItems: "center",
     justifyContent: "space-between",
     gap: "1rem"
-}));
-
-const StyledFeatureDetailItemStatusBox = styled(Box)(() => ({
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: "0.5rem"
 }));
 
 function FeatureDetailItemCard({type, jiraKey, jiraLink, title, user, status, priority}) {

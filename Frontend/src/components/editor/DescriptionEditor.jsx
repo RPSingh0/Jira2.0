@@ -12,7 +12,7 @@ function DescriptionEditor({isEditing, setIsEditing, editingOff, editingOn, hand
     }
 
     return (
-        <Box onDoubleClick={handleDoubleClickOnDescriptionBox} marginBottom={"1rem"}>
+        <Box onDoubleClick={handleDoubleClickOnDescriptionBox}>
             {isEditing ?
                 <TextEditor editor={editingOn} height={"min-content"}/>
                 :

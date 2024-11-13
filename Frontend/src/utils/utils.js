@@ -41,3 +41,21 @@ export function formatDateToLocale(dateString) {
     const date = new Date(dateString);
     return date.toLocaleDateString();
 }
+
+export function getSlotPropsForInput(multiline) {
+    return multiline ? {
+        input: {
+            style: {
+                padding: "0 0.5rem",
+                fontSize: "1.5rem"
+            }
+        }
+    } : {
+        htmlInput: {
+            style: {
+                padding: "0 0.5rem",
+                fontSize: "1.5rem"
+            }
+        }
+    }
+}

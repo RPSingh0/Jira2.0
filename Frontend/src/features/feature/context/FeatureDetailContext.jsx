@@ -1,7 +1,7 @@
 import {createContext, useContext} from "react";
 import {useParams} from "react-router-dom";
-import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
-import {getFeatureDetailService} from "../../services/feature/featureService.js";
+import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
+import {getFeatureDetailService} from "../../../services/feature/featureService.js";
 
 const FeatureDetailContext = createContext();
 

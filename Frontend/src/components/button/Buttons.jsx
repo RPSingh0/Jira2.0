@@ -92,6 +92,19 @@ export function ContainedNavLinkButton({text, link}) {
     );
 }
 
+export function FormSubmitButton({variant, buttonText, formId, onClickHandler, disabled}) {
+    return (
+        <Button
+            variant={variant || "outlined"}
+            type={"submit"}
+            form={formId}
+            onClick={onClickHandler}
+            disabled={disabled}
+        >
+            {buttonText}
+        </Button>
+    );
+}
 
 export function PaperOkButton({onClickHandler, disabled}) {
     return (

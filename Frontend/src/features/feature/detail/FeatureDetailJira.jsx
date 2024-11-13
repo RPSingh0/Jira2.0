@@ -1,9 +1,10 @@
 import {Box, styled, Typography} from "@mui/material";
-import FeatureDetailItemCard from "./FeatureDetailItemCard.jsx";
-import Search from "../../components/search/Search.jsx";
+import Search from "../../../components/search/Search.jsx";
 import {useFeatureJiraContext} from "./FeatureDetailJiraContext.jsx";
-import {FeatureJiraLoadingIndicator} from "../../components/loader/Loader.jsx";
-import LoadOrFetchWrapper from "../../components/loader/LoadOrFetchWrapper.jsx";
+import {FeatureJiraLoadingIndicator} from "../../../components/loader/Loader.jsx";
+import LoadOrFetchWrapper from "../../../components/loader/LoadOrFetchWrapper.jsx";
+import {StyledListContainer} from "../../../styles/StyledListContainer.jsx";
+import JiraListItem from "../../../components/jira/JiraListItem.jsx";
 
 const StyledFeatureDetailJiraBox = styled(Box)(() => ({}));
 
@@ -20,21 +21,22 @@ function FeatureDetailJira() {
                 loading={loadingFeatureJira}
                 fetching={fetchingFeatureJira}
                 loader={<FeatureJiraLoadingIndicator/>}>
-
                 <Search placeholder={"Search"}/>
-                <Box sx={{marginTop: "2rem", display: "flex", flexDirection: "column", gap: "1rem"}}>
+                <StyledListContainer>
                     {featureJira?.map(item =>
-                        <FeatureDetailItemCard
+                        <JiraListItem
                             key={item.jiraKey}
                             type={item.jiraType}
                             jiraKey={item.jiraKey}
                             jiraLink={item.jiraLink}
                             title={item.summary}
                             user={item.assigneeName}
+                            assigneeProfileImage={item.assigneeProfileImage}
                             status={item.statusType.toLowerCase()}
                             priority={"high"}
-                        />)}
-                </Box>
+                        />
+                    )}
+                </StyledListContainer>
             </LoadOrFetchWrapper>
         </StyledFeatureDetailJiraBox>
     );

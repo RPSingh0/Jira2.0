@@ -1,4 +1,3 @@
-import {Button} from "@mui/material";
 import TextEditor from "../../../components/editor/Editor.jsx";
 import {getFormData} from "../../../utils/FormUtils.js";
 import useDefaultEditor from "../../../components/editor/useDefaultEditor.js";
@@ -19,7 +18,9 @@ import {
     StyledCreateProjectHeading,
     StyledCreateProjectImage
 } from "./CreateProjectStyles.jsx";
-import {ProjectDatePicker, TextFieldInput} from "./CreateProjectComponents.jsx";
+import {TextFieldInput} from "../../../components/input/InputTextField.jsx";
+import InputDatePicker from "../../../components/input/InputDatePicker.jsx";
+import {FormSubmitButton} from "../../../components/button/Buttons.jsx";
 
 function CreateProject() {
 
@@ -85,15 +86,11 @@ function CreateProject() {
     }
 
     return (
-        // main container
         <StyledCreateProjectContainer>
-            {/* Form Section */}
             <StyledCreateProjectContentBox>
                 <StyledCreateProjectHeading variant="h6">
                     Create New Project
                 </StyledCreateProjectHeading>
-
-                {/* Actual Form */}
                 <StyledCreateProjectForm onSubmit={handleSubmit}>
                     <TextFieldInput
                         name={"name"}
@@ -114,7 +111,6 @@ function CreateProject() {
                         }}
                     />
                     <TextEditor editor={editingOn}/>
-
                     <AutocompleteSelector
                         variant={'user-avatar'}
                         name={"lead"}
@@ -124,21 +120,23 @@ function CreateProject() {
                         value={projectLead}
                         setValue={setProjectLead}
                     />
-
-                    <ProjectDatePicker
+                    <InputDatePicker
                         name={"startDate"}
-                        label={"Start Date"}/>
-                    <ProjectDatePicker
+                        label={"Start Date"}
+                        disabled={isCreating}
+                    />
+                    <InputDatePicker
                         name={"expectedEndDate"}
                         label={"Expected End Date"}
+                        disabled={isCreating}
                     />
-                    <Button type={"submit"} variant={"contained"}>
-                        Create
-                    </Button>
+                    <FormSubmitButton
+                        variant={"contained"}
+                        buttonText={"Create"}
+                        disabled={isCreating}
+                    />
                 </StyledCreateProjectForm>
             </StyledCreateProjectContentBox>
-
-            {/* Image Section */}
             <StyledCreateProjectAsideImageBox>
                 <StyledCreateProjectImage src={"/new/create_new_project.png"} alt={"new project image"}/>
             </StyledCreateProjectAsideImageBox>
