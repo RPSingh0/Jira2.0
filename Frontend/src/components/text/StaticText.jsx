@@ -1,19 +1,5 @@
-import {Box, styled, Typography} from "@mui/material";
-import {grey} from "@mui/material/colors";
-
-const StyledItemValueStaticBox = styled(Box)(() => ({
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    gap: "1rem",
-    padding: "0.5rem",
-    borderRadius: "9px",
-    transition: "background-color 0.2s ease",
-
-    "&:hover": {
-        backgroundColor: grey["200"]
-    }
-}));
+import {Typography} from "@mui/material";
+import {StyledItemValueStaticBox} from "../../styles/StyledItemValueStaticBox.jsx";
 
 function StaticText({text}) {
     return (

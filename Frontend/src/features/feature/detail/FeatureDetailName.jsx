@@ -1,4 +1,3 @@
-import {Box} from "@mui/material";
 import {useFeatureDetailContext} from "../context/FeatureDetailContext.jsx";
 import {Rounded2Half} from "../../../components/loader/Loader.jsx";
 import LoadOrFetchWrapper from "../../../components/loader/LoadOrFetchWrapper.jsx";
@@ -28,14 +27,6 @@ function FeatureDetailName() {
         }
     }, [loadingFeatureDetail, fetchingFeatureDetail]);
 
-    // handler functions
-    function handleDoubleClickOnNameBox() {
-        if (isEditing) {
-            return;
-        }
-        setIsEditing(true);
-    }
-
     function handleSaveName() {
         updateFeatureName({
             projectKey: featureDetail.projectKey,
@@ -50,23 +41,21 @@ function FeatureDetailName() {
     }
 
     return (
-        <Box onDoubleClick={handleDoubleClickOnNameBox}>
-            <LoadOrFetchWrapper
-                loading={loadingFeatureDetail}
-                fetching={fetchingFeatureDetail}
-                loader={<Rounded2Half/>}>
-                <NameSummaryEditor
-                    isEditing={isEditing}
-                    setIsEditing={setIsEditing}
-                    isUpdating={isUpdating}
-                    value={name}
-                    setValue={setName}
-                    multiline={false}
-                    okClickHandler={handleSaveName}
-                    text={featureDetail?.name}
-                />
-            </LoadOrFetchWrapper>
-        </Box>
+        <LoadOrFetchWrapper
+            loading={loadingFeatureDetail}
+            fetching={fetchingFeatureDetail}
+            loader={<Rounded2Half/>}>
+            <NameSummaryEditor
+                isEditing={isEditing}
+                setIsEditing={setIsEditing}
+                isUpdating={isUpdating}
+                value={name}
+                setValue={setName}
+                multiline={false}
+                okClickHandler={handleSaveName}
+                text={featureDetail?.name}
+            />
+        </LoadOrFetchWrapper>
     );
 }
 

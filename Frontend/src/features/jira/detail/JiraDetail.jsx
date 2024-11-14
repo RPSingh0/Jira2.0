@@ -1,13 +1,12 @@
-import {JiraDetailContextProvider} from "./JiraDetailContext.jsx";
-import {StyledJiraDetailBox, StyledProjectDetailContentBox} from "./JiraDetailStyles.jsx";
-import JiraDetailAside from "./JiraDetailAside.jsx";
-import {JiraMetadataContextProvider} from "./JiraMetadataContext.jsx";
+import {JiraDetailContextProvider} from "../context/JiraDetailContext.jsx";
+import {StyledProjectDetailContentBox} from "./JiraDetailStyles.jsx";
+import JiraDetailAside from "./aside/JiraDetailAside.jsx";
+import {JiraMetadataContextProvider} from "../context/JiraMetadataContext.jsx";
 import JiraDetailMain from "./JiraDetailMain.jsx";
 
 
 function JiraDetail() {
     return (
-        <StyledJiraDetailBox>
             <StyledProjectDetailContentBox>
                 <JiraDetailContextProvider>
                     <JiraDetailMain/>
@@ -16,7 +15,6 @@ function JiraDetail() {
                     <JiraDetailAside/>
                 </JiraMetadataContextProvider>
             </StyledProjectDetailContentBox>
-        </StyledJiraDetailBox>
     );
 }
 

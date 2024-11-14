@@ -1,21 +1,21 @@
 import {Box, Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
-import {TextFieldInput} from "../../components/input/InputTextField.jsx";
-import InputSelectField from "../../components/input/InputSelectField.jsx";
+import {TextFieldInput} from "../../../components/input/InputTextField.jsx";
+import InputSelectField from "../../../components/input/InputSelectField.jsx";
 import {useEffect, useState} from "react";
-import useDefaultEditor from "../../components/editor/useDefaultEditor.js";
-import TextEditor from "../../components/editor/Editor.jsx";
-import AutocompleteSelector from "../../components/autocomplete/AutocompleteSelector.jsx";
-import {getFormData} from "../../utils/FormUtils.js";
+import useDefaultEditor from "../../../components/editor/useDefaultEditor.js";
+import TextEditor from "../../../components/editor/Editor.jsx";
+import AutocompleteSelector from "../../../components/autocomplete/AutocompleteSelector.jsx";
+import {getFormData} from "../../../utils/FormUtils.js";
 import {useParams} from "react-router-dom";
-import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
-import {getAllProjectsAsOptionsService} from "../../services/project/projectService.js";
-import {getFeatureIfLoaded, getProjectIfLoaded} from "../../utils/utils.js";
-import {getFeaturesAsOptionsByProjectKey} from "../../services/feature/featureService.js";
+import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
+import {getAllProjectsAsOptionsService} from "../../../services/project/projectService.js";
+import {getFeatureIfLoaded, getProjectIfLoaded} from "../../../utils/utils.js";
+import {getFeaturesAsOptionsByProjectKey} from "../../../services/feature/featureService.js";
 import {useQueryClient} from "@tanstack/react-query";
-import {getAllUsersService} from "../../services/user/userService.js";
+import {getAllUsersService} from "../../../services/user/userService.js";
 import {toast} from "react-toastify";
-import {useCreateJira} from "./hooks/useCreateJira.js";
-import {getAuthToken} from "../../services/user/authenticationSlice.js";
+import {useCreateJira} from "../hooks/useCreateJira.js";
+import {getAuthToken} from "../../../services/user/authenticationSlice.js";
 import {useSelector} from "react-redux";
 
 function CreateJira({open, setOpen}) {

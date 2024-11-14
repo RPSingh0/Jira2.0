@@ -14,12 +14,19 @@ function NameSummaryEditor({
 
     const slotProps = getSlotPropsForInput(multiline);
 
+    function handleDoubleClickOnNameBox() {
+        if (isEditing) {
+            return;
+        }
+        setIsEditing(true);
+    }
+
     function handleChangeName(event) {
         setValue(event.target.value);
     }
 
     return (
-        <>
+        <Box onDoubleClick={handleDoubleClickOnNameBox}>
             {isEditing ?
                 <StyledNameBox>
                     <TextField
@@ -30,17 +37,16 @@ function NameSummaryEditor({
                         onChange={handleChangeName}
                         slotProps={slotProps}
                     />
-                    {isEditing && <PaperOkAndCancelGroup
+                    <PaperOkAndCancelGroup
                         setIsEditing={setIsEditing}
                         isUpdating={isUpdating}
                         okClickHandler={okClickHandler}
                     />
-                    }
                 </StyledNameBox>
                 :
                 <StaticNameSummary text={text}/>
             }
-        </>
+        </Box>
     );
 }
 

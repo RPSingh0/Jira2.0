@@ -69,7 +69,7 @@ export async function getJiraDetailsByJiraKeyService({token, jiraKey}) {
         throw new Error(data.message);
     }
 
-    return data;
+    return data.data.jiraDetails;
 }
 
 /**

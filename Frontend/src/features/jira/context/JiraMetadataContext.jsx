@@ -1,7 +1,7 @@
 import {createContext, useContext} from "react";
 import {useParams} from "react-router-dom";
-import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
-import {getJiraMetadataByJiraKeyService} from "../../services/jira/jiraService.js";
+import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
+import {getJiraMetadataByJiraKeyService} from "../../../services/jira/jiraService.js";
 
 const JiraMetadataContext = createContext();
 

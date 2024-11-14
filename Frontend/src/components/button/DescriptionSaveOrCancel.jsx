@@ -1,4 +1,4 @@
-import {StyledEditingSaveAndCancelBox} from "../../features/jira/JiraDetailStyles.jsx";
+import {StyledEditingSaveAndCancelBox} from "../../features/jira/detail/JiraDetailStyles.jsx";
 import {ContainedButton, OutlinedButton} from "./Buttons.jsx";
 import {Box, styled} from "@mui/material";
 

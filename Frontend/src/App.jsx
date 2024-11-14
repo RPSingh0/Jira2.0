@@ -12,7 +12,7 @@ const Projects = lazy(() => import('./features/projects/Projects.jsx'));
 const CreateProject = lazy(() => import('./features/project/create/CreateProject.jsx'));
 const ProjectDetail = lazy(() => import('./features/project/detail/ProjectDetail.jsx'));
 const FeatureDetail = lazy(() => import('./features/feature/detail/FeatureDetail.jsx'));
-const JiraDetail = lazy(() => import('./features/jira/JiraDetail.jsx'));
+const JiraDetail = lazy(() => import('./features/jira/detail/JiraDetail.jsx'));
 
 
 const queryClient = new QueryClient({

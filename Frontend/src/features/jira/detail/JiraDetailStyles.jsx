@@ -1,15 +1,9 @@
 import {Box, styled} from "@mui/material";
 
-export const StyledJiraDetailBox = styled(Box)(() => ({
-    display: "flex",
-    flexDirection: "column",
-    gap: "1rem",
-    padding: "2rem"
-}));
-
 export const StyledProjectDetailContentBox = styled(Box)(({theme}) => ({
     display: "flex",
     flexDirection: "row",
+    padding: "2rem",
     justifyContent: "space-between",
 
     [theme.breakpoints.down('c1000')]: {
@@ -19,6 +13,10 @@ export const StyledProjectDetailContentBox = styled(Box)(({theme}) => ({
 }));
 
 export const StyledProjectDetailMainSectionBox = styled(Box)(({theme}) => ({
+    display: "flex",
+    flexDirection: "column",
+    gap: "1rem",
+
     width: "78%",
 
     [theme.breakpoints.down('c1360')]: {
@@ -32,10 +30,6 @@ export const StyledProjectDetailMainSectionBox = styled(Box)(({theme}) => ({
     [theme.breakpoints.down('c1000')]: {
         width: "100%",
     }
-}));
-
-export const StyledProjectDetailDescriptionBox = styled(Box)(() => ({
-    marginBottom: "1rem",
 }));
 
 export const StyledEditingSaveAndCancelBox = styled(Box)(() => ({

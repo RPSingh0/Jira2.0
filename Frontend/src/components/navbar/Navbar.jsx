@@ -2,7 +2,7 @@ import {Avatar, Box, IconButton, styled, Toolbar, Tooltip, useMediaQuery, useThe
 import Logo from "../logo/Logo.jsx";
 import {ContainedButton, NavLinkButton, TextButton} from "../button/Buttons.jsx";
 import {useState} from "react";
-import CreateJira from "../../features/jira/CreateJira.jsx";
+import CreateJira from "../../features/jira/create/CreateJira.jsx";
 import {StyledAppBar} from "./NavBarStyles.jsx";
 
 const StyledNavButtonBox = styled(Box)(() => ({

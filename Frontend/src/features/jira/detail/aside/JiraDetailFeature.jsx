@@ -1,20 +1,16 @@
-import AutocompleteSelector from "../../components/autocomplete/AutocompleteSelector.jsx";
-import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
+import useGetQueryHook from "../../../../queryHooks/useGetQueryHook.js";
 import {useEffect, useState} from "react";
-import {Box, Typography} from "@mui/material";
+import {Box} from "@mui/material";
 import {toast} from "react-toastify";
 import {useQueryClient} from "@tanstack/react-query";
-import {useJiraMetadataContext} from "./JiraMetadataContext.jsx";
-import {getFeaturesAsOptionsByProjectKey} from "../../services/feature/featureService.js";
-import {useUpdateJiraFeature} from "./hooks/useUpdateJiraFeature.js";
-import {Rounded2Half} from "../../components/loader/Loader.jsx";
-import LoadOrFetchWrapper from "../../components/loader/LoadOrFetchWrapper.jsx";
-import {
-    StyledAutoCompleteWithButtonBox,
-    StyledItemValueStaticBox,
-    StyledOkCancelPaperButtonBox
-} from "./JiraDetailAsideStyles.jsx";
-import {PaperCancelButton, PaperOkButton} from "./JiraDetailAsideComponents.jsx";
+import {useJiraMetadataContext} from "../../context/JiraMetadataContext.jsx";
+import {getFeaturesAsOptionsByProjectKey} from "../../../../services/feature/featureService.js";
+import {useUpdateJiraFeature} from "../../hooks/useUpdateJiraFeature.js";
+import {Rounded2Half} from "../../../../components/loader/Loader.jsx";
+import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper.jsx";
+import AutocompleteAssign from "../../../../components/autocompleteAssign/AutocompleteAssign.jsx";
+import StaticText from "../../../../components/text/StaticText.jsx";
+import AsideElementHeading from "../../../../components/heading/AsideElementHeading.jsx";
 
 function JiraDetailFeature() {
 
@@ -74,37 +70,26 @@ function JiraDetailFeature() {
     }
 
     return (
-
         <Box>
-            <Typography variant="overline" gutterBottom sx={{paddingLeft: "0.5rem"}}>
-                Feature
-            </Typography>
+            <AsideElementHeading text={"Feature"}/>
             <LoadOrFetchWrapper
                 loading={loadingJiraMetadata}
                 fetching={fetchingJiraMetadata}
                 loader={<Rounded2Half/>}>
-                {isEditing ?
-                    <StyledAutoCompleteWithButtonBox>
-                        <AutocompleteSelector
-                            variant={'default'}
-                            name={"assignee"}
-                            options={isLoadingFeatures ? [] : featureOptions}
-                            isLoading={isLoadingFeatures}
-                            value={feature}
-                            setValue={setFeature}
-                        />
-                        <StyledOkCancelPaperButtonBox>
-                            <PaperOkButton onClickHandler={handleUpdateFeature} disabled={isUpdating}/>
-                            <PaperCancelButton onClickHandler={() => setIsEditing(false)} disabled={isUpdating}/>
-                        </StyledOkCancelPaperButtonBox>
-                    </StyledAutoCompleteWithButtonBox>
-                    :
-                    <StyledItemValueStaticBox onDoubleClick={() => setIsEditing(true)}>
-                        <Typography variant="body1">
-                            {`${jiraMetadata?.featureKey} | ${jiraMetadata?.featureName}`}
-                        </Typography>
-                    </StyledItemValueStaticBox>
-                }
+                <AutocompleteAssign
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
+                    isLoading={isLoadingFeatures}
+                    isUpdating={isUpdating}
+                    name={"feature"}
+                    variant={"default"}
+                    options={isLoadingFeatures ? [] : featureOptions}
+                    value={feature}
+                    setValue={setFeature}
+                    okClickHandler={handleUpdateFeature}
+                >
+                    <StaticText text={`${jiraMetadata?.featureKey} | ${jiraMetadata?.featureName}`}/>
+                </AutocompleteAssign>
             </LoadOrFetchWrapper>
         </Box>
     );

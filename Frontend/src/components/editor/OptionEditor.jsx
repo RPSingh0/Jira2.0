@@ -1,12 +1,9 @@
-import AutocompleteSelector from "../autocomplete/AutocompleteSelector.jsx";
-import {StyledAutoCompleteWithButtonBox} from "./AutocompleteAssignStyles.jsx";
-import {Box} from "@mui/material";
+import {StyledAutoCompleteWithButtonBox} from "../autocompleteAssign/AutocompleteAssignStyles.jsx";
+import InputSelectField from "../input/InputSelectField.jsx";
 import PaperOkAndCancelGroup from "../button/PaperOkAndCancelGroup.jsx";
+import {Box} from "@mui/material";
 
-function AutocompleteAssign({
-                                isEditing, setIsEditing, isLoading, isUpdating, name, variant, options, value, setValue,
-                                okClickHandler, children
-                            }) {
+function OptionEditor({isEditing, setIsEditing, isUpdating, name, options, value, setValue, okClickHandler, children}) {
 
     function handleDoubleClick() {
         setIsEditing(true);
@@ -16,13 +13,11 @@ function AutocompleteAssign({
         <>
             {isEditing ?
                 <StyledAutoCompleteWithButtonBox>
-                    <AutocompleteSelector
-                        variant={variant}
+                    <InputSelectField
                         name={name}
-                        options={options}
-                        isLoading={isLoading}
                         value={value}
-                        setValue={setValue}
+                        onChange={(event) => setValue(event.target.value)}
+                        options={options}
                     />
                     <PaperOkAndCancelGroup
                         setIsEditing={setIsEditing}
@@ -39,4 +34,4 @@ function AutocompleteAssign({
     );
 }
 
-export default AutocompleteAssign;
+export default OptionEditor;

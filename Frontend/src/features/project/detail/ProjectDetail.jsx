@@ -14,31 +14,22 @@ function ProjectDetail() {
 
     return (
         <StyledProjectDetailBox>
-
             <ProjectDetailContextProvider>
                 <ProjectDetailName/>
             </ProjectDetailContextProvider>
-
             <StyledProjectDetailContentBox>
-
                 <StyledProjectDetailMainSectionBox>
-
                     <ProjectDetailContextProvider>
                         <ProjectDetailDescription/>
                     </ProjectDetailContextProvider>
-
                     <ProjectDetailFeatureContextProvider>
                         <ProjectDetailFeature/>
                     </ProjectDetailFeatureContextProvider>
-
                 </StyledProjectDetailMainSectionBox>
-
                 <ProjectDetailContextProvider>
                     <ProjectDetailAside/>
                 </ProjectDetailContextProvider>
-
             </StyledProjectDetailContentBox>
-
         </StyledProjectDetailBox>
     );
 }

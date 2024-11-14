@@ -1,6 +1,6 @@
 import {StyledProjectDetailMainSectionBox} from "./JiraDetailStyles.jsx";
-import JiraDetailSummary from "./JiraDetailSummary.jsx";
 import JiraDetailDescription from "./JiraDetailDescription.jsx";
+import JiraDetailSummary from "./JiraDetailSummary.jsx";
 
 
 function JiraDetailMain() {
