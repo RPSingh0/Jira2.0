@@ -43,9 +43,9 @@ export function FeatureJiraLoadingIndicator() {
 export function ProjectCardLoadingIndicator() {
     return (
         <>
-            {Array.from({length: 4}, item =>
+            {Array.from({length: 4}, (item, index) =>
                 <Paper variant="outlined"
-                       key={item}
+                       key={index}
                        sx={{
                            display: "flex",
                            flexDirection: "column",

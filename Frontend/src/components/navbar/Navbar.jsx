@@ -2,8 +2,8 @@ import {Avatar, Box, IconButton, styled, Toolbar, Tooltip, useMediaQuery, useThe
 import Logo from "../logo/Logo.jsx";
 import {ContainedButton, NavLinkButton, TextButton} from "../button/Buttons.jsx";
 import {useState} from "react";
-import CreateJira from "../../features/jira/create/CreateJira.jsx";
 import {StyledAppBar} from "./NavBarStyles.jsx";
+import CreateModal from "../../features/create/CreateModal.jsx";
 
 const StyledNavButtonBox = styled(Box)(() => ({
     flexGrow: 1,
@@ -35,7 +35,7 @@ function Navbar() {
                     <NavLinkButton text={"Projects"} link={"/project"}/>
                     <TextButton text={"Teams"}/>
                     <ContainedButton text={"Create"} onClickHandler={() => setOpen(true)}/>
-                    {open && <CreateJira open={open} setOpen={setOpen}/>}
+                    {open && <CreateModal open={open} setOpen={setOpen}/>}
                 </StyledNavButtonBox>
                 <StyledEmptyContainer/>
                 <StyledUserProfileBox>

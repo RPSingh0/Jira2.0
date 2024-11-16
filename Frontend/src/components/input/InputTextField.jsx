@@ -1,18 +1,46 @@
-import {TextField} from "@mui/material";
+import {FormControl, TextField} from "@mui/material";
+import {Controller} from "react-hook-form";
+import Label from "../label/Label.jsx";
 
-export function TextFieldInput({name, label, ...extras}) {
+export function TextFieldInput({
+                                   name,
+                                   control,
+                                   labelText,
+                                   defaultValue,
+                                   placeholder,
+                                   required,
+                                   requiredMessage,
+                                   id,
+                                   disabled,
+                                   error,
+                                   helperText
+                               }) {
     return (
-        <TextField
+        <Controller
             name={name}
-            label={label}
-            variant="outlined"
-            size="small"
-            required={true}
-            fullWidth={true}
-            sx={(theme) => ({
-                'input': {color: theme.palette.defaultBlack.main}
-            })}
-            {...extras}
+            control={control}
+            defaultValue={defaultValue}
+            rules={{
+                required: required ? requiredMessage : false
+            }}
+            render={({field}) => (
+                <FormControl fullWidth>
+                    <Label id={id} labelText={labelText}/>
+                    <TextField
+                        {...field}
+                        id={id}
+                        name={name}
+                        placeholder={placeholder}
+                        size="small"
+                        disabled={disabled}
+                        error={error}
+                        helperText={helperText}
+                        sx={(theme) => ({
+                            'input': {color: theme.palette.defaultBlack.main}
+                        })}
+                    />
+                </FormControl>
+            )}
         />
     );
 }
