@@ -13,6 +13,7 @@ function AutocompleteSelector({
                                   noOptionsText,
                                   variant,
                                   loading,
+                                  disabled,
                                   error,
                                   helperText
                               }) {
@@ -42,6 +43,7 @@ function AutocompleteSelector({
                     options={options || []}
                     getOptionLabel={(option) => option?.[optionLabel]}
                     noOptionsText={noOptionsText}
+                    disabled={disabled}
                     disableClearable={true}
                     size="small"
                     onChange={(_, data) => field.onChange(data)}

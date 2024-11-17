@@ -1,15 +1,24 @@
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle, Tab, Tabs} from "@mui/material";
+import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
 import {useState} from "react";
 import CreateFeature from "./feature/CreateFeature.jsx";
 import CreateJira from "./jira/CreateJira.jsx";
+import InputSelectButton from "../../components/input/InputSelectButton.jsx";
+import {LoadingButton} from "@mui/lab";
+
+const formIds = {
+    0: 'create-jira-form',
+    1: 'create-feature-form'
+}
+
+const options = [
+    "Issue",
+    "Feature"
+];
 
 function CreateModal({open, setOpen}) {
 
-    const [tab, setTab] = useState(0);
-
-    function handleTabSwitch(_, tabIndexToSwitchTo) {
-        setTab(tabIndexToSwitchTo);
-    }
+    const [createType, setCreateType] = useState(0);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     function handleClose() {
         setOpen(false);
@@ -23,24 +32,41 @@ function CreateModal({open, setOpen}) {
             maxWidth={"md"}
             onClose={handleClose}
         >
-            <DialogTitle>
-                <Tabs
-                    value={tab}
-                    onChange={handleTabSwitch}
-                    variant="fullWidth"
-                >
-                    <Tab label="New Issue"/>
-                    <Tab label="New Feature"/>
-                </Tabs>
+            <DialogTitle sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between"
+            }}>
+                Create
+                <InputSelectButton
+                    createType={createType}
+                    setCreateType={setCreateType}
+                    options={options}
+                />
             </DialogTitle>
-            <DialogContent>
-                {(tab === 0) && <CreateJira/>}
-                {(tab === 1) && <CreateFeature/>}
+            <DialogContent dividers={true}>
+                {(createType === 0) && <CreateJira
+                    formId={formIds[createType]}
+                    setSubmitClicked={setIsSubmitting}
+                />}
+                {(createType === 1) && <CreateFeature
+                    formId={formIds[createType]}
+                    setSubmitClicked={setIsSubmitting}
+                />}
             </DialogContent>
             <DialogActions>
                 <Button onClick={() => setOpen(false)}>
                     Cancel
                 </Button>
+                <LoadingButton
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    form={formIds[createType]}
+                    loading={isSubmitting}
+                >
+                    Create
+                </LoadingButton>
             </DialogActions>
         </Dialog>
     );

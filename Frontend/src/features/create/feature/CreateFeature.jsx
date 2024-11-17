@@ -10,7 +10,7 @@ import AutocompleteSelector from "../../../components/autocomplete/AutocompleteS
 import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
 import {getAllProjectsAsOptionsService} from "../../../services/project/projectService.js";
 
-function CreateFeature() {
+function CreateFeature({formId}) {
 
     // Initializing editor
     const {editingOn} = useDefaultEditor("");
@@ -43,7 +43,7 @@ function CreateFeature() {
 
 
     return (
-        <StyledCreateFeatureForm id={"create-feature-form"} onSubmit={handleSubmit(onSubmit)}>
+        <StyledCreateFeatureForm id={formId} onSubmit={handleSubmit(onSubmit)}>
             <AutocompleteSelector
                 name={"project"}
                 id={"project"}

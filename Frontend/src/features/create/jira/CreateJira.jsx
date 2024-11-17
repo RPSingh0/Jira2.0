@@ -1,4 +1,4 @@
-import {Box, Button} from "@mui/material";
+import {Box, Divider} from "@mui/material";
 import {TextFieldInput} from "../../../components/input/InputTextField.jsx";
 import InputSelectField from "../../../components/input/InputSelectField.jsx";
 import useDefaultEditor from "../../../components/editor/useDefaultEditor.js";
@@ -11,102 +11,111 @@ import {getAllUsersService} from "../../../services/user/userService.js";
 import {useCreateJira} from "../../jira/hooks/useCreateJira.js";
 import {getAuthToken} from "../../../services/user/authenticationSlice.js";
 import {useSelector} from "react-redux";
-import {useForm} from "react-hook-form";
+import {useForm, useWatch} from "react-hook-form";
 import Label from "../../../components/label/Label.jsx";
 import {StyledCreateJiraForm} from "./CreateJiraStyles.jsx";
+import {useEffect} from "react";
+import {useQueryClient} from "@tanstack/react-query";
+import {getFeatureIfLoaded, getProjectIfLoaded} from "../../../utils/utils.js";
+import {useParams} from "react-router-dom";
 
-function CreateJira() {
+function CreateJira({formId, setSubmitClicked}) {
 
-    // Initializing editor
-    const {editingOn} = useDefaultEditor('Description for the jira goes here...');
+    const {editingOn} = useDefaultEditor('');
+    const queryClient = useQueryClient();
+    const {createJira, isCreating} = useCreateJira();
+    const {control, handleSubmit, formState: {errors}, setValue} = useForm();
+    const {projectKey, featureKey} = useParams();
 
-    // global state selectors
     const token = useSelector(getAuthToken);
 
-    // React query hooks
-    const {createJira, isCreating} = useCreateJira();
-
-    // React hook form state
-    const {control, handleSubmit, formState: {errors}} = useForm();
-
-    // Fetch all the projects
     const {isLoading: isLoadingProjects, data: projectOptions} = useGetQueryHook({
         key: ['projectOptions'],
         fn: getAllProjectsAsOptionsService
     });
 
-    // Fetch all features related to projects
+    const selectedProject = useWatch({control: control, name: "project"});
+
     const {isLoading: isLoadingFeatures, isFetching: isFetchingFeatures, data: featureOptions} = useGetQueryHook({
         key: ['featureOptions'],
         fn: getFeaturesAsOptionsByProjectKey,
-        projectKey: 'dr1',
-        // enabledDependency: [!pOption.loading]
+        projectKey: selectedProject?.projectKey,
+        enabledDependency: [Boolean(selectedProject?.projectKey)]
     });
 
-    // Fetch all users
     const {isLoading: isLoadingUsers, data: userOptions} = useGetQueryHook({
         key: ['userOptions'],
         fn: getAllUsersService
     });
 
+    // Updating project selection once all projects are loaded
+    useEffect(() => {
+        setValue('project', (getProjectIfLoaded(isLoadingProjects, projectOptions, projectKey)));
+    }, [isLoadingProjects]);
+
+    // Updating project selection once all projects are loaded
+    useEffect(() => {
+        setValue('feature', (getFeatureIfLoaded(isFetchingFeatures, featureOptions, featureKey)));
+    }, [isFetchingFeatures]);
+
+    useEffect(() => {
+        queryClient.invalidateQueries({queryKey: ['featureOptions']});
+    }, [selectedProject]);
+
     function onSubmit(data) {
-        console.log(data);
+
+        setSubmitClicked(true);
+
+        const {project, feature, issueType, summary, issuePoints, assignee} = data;
+
+        // create jira
+        createJira({
+            token: token,
+            summary: summary,
+            jiraType: issueType,
+            jiraPoint: issuePoints,
+            description: editingOn.getHTML(),
+            projectKey: project.projectKey,
+            featureKey: feature.featureKey,
+            assignee: assignee.email
+        }, {
+            onSettled: () => setSubmitClicked(false)
+        });
     }
 
-    // function onSubmit(event) {
-    //     event.preventDefault();
-    //
-    //     // summary will come from form object
-    //     const {summary} = getFormData(event.target.form);
-    //
-    //     // verify all necessary fields are provided
-    //     if (!jiraType) {
-    //         toast.error('Jira type is required');
-    //         return;
-    //     }
-    //
-    //     if (!summary) {
-    //         toast.error('Summary is required');
-    //         return;
-    //     }
-    //
-    //     if (!jiraPoint) {
-    //         toast.error('Jira point is required');
-    //         return;
-    //     }
-    //
-    //     if (!pOption.projectKey) {
-    //         toast.error('Please select a project');
-    //         return;
-    //     }
-    //
-    //     if (!fOption.featureKey) {
-    //         toast.error('Please select a feature');
-    //         return;
-    //     }
-    //
-    //     if (!uOption?.email) {
-    //         toast.error('Please assign it to a user');
-    //         return;
-    //     }
-    //
-    //     // create jira
-    //     createJira({
-    //         token: token,
-    //         summary: summary,
-    //         jiraType: jiraType,
-    //         jiraPoint: jiraPoint,
-    //         description: editingOn.getHTML(),
-    //         projectKey: pOption.projectKey,
-    //         featureKey: fOption.featureKey,
-    //         assignee: uOption.email
-    //     }, {
-    //         onSuccess: () => setOpen(false)
-    //     });
-    // }
-
     return (
-        <StyledCreateJiraForm id={"create-jira-form"} onSubmit={handleSubmit(onSubmit)}>
+        <StyledCreateJiraForm id={formId} onSubmit={handleSubmit(onSubmit)}>
+            <AutocompleteSelector
+                name={"project"}
+                id={"project"}
+                labelText={"Project"}
+                control={control}
+                options={projectOptions}
+                optionKey={"projectKey"}
+                optionLabel={"optionText"}
+                noOptionsText={"No projects available"}
+                variant={"default"}
+                loading={isLoadingProjects}
+                disabled={isLoadingProjects || isCreating}
+                error={!!errors.project}
+                helperText={errors.project?.message}
+            />
+            <AutocompleteSelector
+                name={"feature"}
+                id={"feature"}
+                labelText={"Feature"}
+                control={control}
+                options={featureOptions}
+                optionKey={"featureKey"}
+                optionLabel={"optionText"}
+                noOptionsText={"No features available"}
+                variant={"default"}
+                loading={isFetchingFeatures}
+                disabled={isLoadingFeatures || isFetchingFeatures || isCreating}
+                error={!!errors.feature}
+                helperText={errors.feature?.message}
+            />
+            <Divider sx={{margin: "2rem 0"}}/>
             <InputSelectField
                 name={"issueType"}
                 control={control}
@@ -160,34 +169,6 @@ function CreateJira() {
                 helperText={errors.issuePoints?.message}
             />
             <AutocompleteSelector
-                name={"project"}
-                id={"project"}
-                labelText={"Project"}
-                control={control}
-                options={projectOptions}
-                optionKey={"projectKey"}
-                optionLabel={"optionText"}
-                noOptionsText={"No projects available"}
-                variant={"default"}
-                loading={isLoadingProjects}
-                error={!!errors.project}
-                helperText={errors.project?.message}
-            />
-            <AutocompleteSelector
-                name={"feature"}
-                id={"feature"}
-                labelText={"Feature"}
-                control={control}
-                options={featureOptions}
-                optionKey={"featureKey"}
-                optionLabel={"optionText"}
-                noOptionsText={"No features available"}
-                variant={"default"}
-                loading={isLoadingFeatures}
-                error={!!errors.feature}
-                helperText={errors.feature?.message}
-            />
-            <AutocompleteSelector
                 name={"assignee"}
                 id={"assignee"}
                 labelText={"Assignee"}
@@ -198,10 +179,10 @@ function CreateJira() {
                 noOptionsText={"No users available"}
                 variant={"user-avatar"}
                 loading={isLoadingUsers}
+                disabled={isLoadingUsers || isCreating}
                 error={!!errors.assignee}
                 helperText={errors.assignee?.message}
             />
-            <Button type="submit">Submit</Button>
         </StyledCreateJiraForm>
     );
 }
