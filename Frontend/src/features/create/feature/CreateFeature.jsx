@@ -9,14 +9,16 @@ import Label from "../../../components/label/Label.jsx";
 import AutocompleteSelector from "../../../components/autocomplete/AutocompleteSelector.jsx";
 import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
 import {getAllProjectsAsOptionsService} from "../../../services/project/projectService.js";
+import {useEffect} from "react";
+import {getProjectIfLoaded} from "../../../utils/utils.js";
+import {useParams} from "react-router-dom";
 
 function CreateFeature({formId}) {
 
-    // Initializing editor
     const {editingOn} = useDefaultEditor("");
-
-    // React query custom hooks
     const {createFeature, isCreating} = useCreateFeature();
+    const {control, handleSubmit, formState: {errors}, setValue} = useForm();
+    const {projectKey} = useParams();
 
     // Fetch all the projects
     const {isLoading: isLoadingProjects, data: projectOptions} = useGetQueryHook({
@@ -24,8 +26,10 @@ function CreateFeature({formId}) {
         fn: getAllProjectsAsOptionsService
     });
 
-    // React hook form state
-    const {control, handleSubmit, formState: {errors}} = useForm();
+    // Updating project selection once all projects are loaded
+    useEffect(() => {
+        setValue('project', (getProjectIfLoaded(isLoadingProjects, projectOptions, projectKey)));
+    }, [isLoadingProjects]);
 
     function onSubmit(data) {
 
@@ -40,7 +44,6 @@ function CreateFeature({formId}) {
             projectKey: project.projectKey
         });
     }
-
 
     return (
         <StyledCreateFeatureForm id={formId} onSubmit={handleSubmit(onSubmit)}>
