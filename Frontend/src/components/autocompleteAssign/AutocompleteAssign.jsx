@@ -4,8 +4,24 @@ import {Box} from "@mui/material";
 import PaperOkAndCancelGroup from "../button/PaperOkAndCancelGroup.jsx";
 
 function AutocompleteAssign({
-                                isEditing, setIsEditing, isLoading, isUpdating, name, variant, options, value, setValue,
-                                okClickHandler, children
+                                name,
+                                id,
+                                labelText,
+                                control,
+                                options,
+                                optionKey,
+                                optionLabel,
+                                noOptionsText,
+                                variant,
+                                loading,
+                                disabled,
+                                isEditing,
+                                setIsEditing,
+                                isUpdating,
+                                okClickHandler,
+                                error,
+                                helperText,
+                                children
                             }) {
 
     function handleDoubleClick() {
@@ -17,12 +33,19 @@ function AutocompleteAssign({
             {isEditing ?
                 <StyledAutoCompleteWithButtonBox>
                     <AutocompleteSelector
-                        variant={variant}
                         name={name}
+                        id={id}
+                        labelText={labelText}
+                        control={control}
                         options={options}
-                        isLoading={isLoading}
-                        value={value}
-                        setValue={setValue}
+                        optionKey={optionKey}
+                        optionLabel={optionLabel}
+                        noOptionsText={noOptionsText}
+                        variant={variant}
+                        loading={loading}
+                        disabled={disabled}
+                        error={error}
+                        helperText={helperText}
                     />
                     <PaperOkAndCancelGroup
                         setIsEditing={setIsEditing}

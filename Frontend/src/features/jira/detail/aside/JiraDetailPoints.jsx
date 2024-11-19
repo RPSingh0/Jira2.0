@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
 import {Box} from "@mui/material";
-import {toast} from "react-toastify";
 import {useQueryClient} from "@tanstack/react-query";
 import {useJiraMetadataContext} from "../../context/JiraMetadataContext.jsx";
 import {useUpdateJiraPoints} from "../../hooks/useUpdateJiraPoints.js";
@@ -9,50 +8,58 @@ import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper
 import AsideElementHeading from "../../../../components/heading/AsideElementHeading.jsx";
 import OptionEditor from "../../../../components/editor/OptionEditor.jsx";
 import StaticText from "../../../../components/text/StaticText.jsx";
+import {useWatch} from "react-hook-form";
 
 function JiraDetailPoints() {
 
     // context states
-    const {jiraKey, loadingJiraMetadata, fetchingJiraMetadata, jiraMetadata} = useJiraMetadataContext();
+    const {
+        jiraKey,
+        loadingJiraMetadata,
+        fetchingJiraMetadata,
+        jiraMetadata,
+        control,
+        errors,
+        handleSubmit,
+        setValue
+    } = useJiraMetadataContext();
 
     // react query hooks
     const queryClient = useQueryClient();
     const {updateJiraPoints, isUpdating} = useUpdateJiraPoints();
 
     // local states
-    const [jiraPoint, setJiraPoint] = useState(0);
     const [isEditing, setIsEditing] = useState(false);
+    const selectedJiraPoints = useWatch({control: control, name: "jiraPoints"});
 
     // once the jira metadata is loaded, set the jira point
     useEffect(() => {
         // if jira metadata is loaded
         if (!loadingJiraMetadata && !fetchingJiraMetadata) {
             // set the jira point
-            setJiraPoint(jiraMetadata.jiraPoint);
+            setValue("jiraPoints", jiraMetadata.jiraPoint);
         }
     }, [loadingJiraMetadata, fetchingJiraMetadata]);
 
-    // handler functions
-    function handleUpdateJiraPoint() {
-
-        if (!jiraPoint) {
-            toast.error('Please select a point');
-            return;
-        }
-
-        if (jiraPoint === jiraMetadata.jiraPoint) {
+    function onSubmit() {
+        if (selectedJiraPoints === jiraMetadata.jiraPoint) {
             return;
         }
 
         updateJiraPoints({
             jiraKey: jiraKey,
-            jiraPoint: jiraPoint
+            jiraPoint: selectedJiraPoints
         }, {
             onSuccess: () => {
                 setIsEditing(false);
                 queryClient.invalidateQueries({queryKey: [`${jiraKey}-metadata`]});
             }
         });
+    }
+
+    // handler functions
+    function handleUpdateJiraPoint() {
+        handleSubmit(onSubmit)();
     }
 
     return (
@@ -64,12 +71,12 @@ function JiraDetailPoints() {
                 fetching={fetchingJiraMetadata}
                 loader={<Rounded2Half/>}>
                 <OptionEditor
-                    isEditing={isEditing}
-                    setIsEditing={setIsEditing}
-                    isUpdating={isUpdating}
-                    name={"jiraPoint"}
-                    value={jiraPoint}
-                    setValue={setJiraPoint}
+                    name={"jiraPoints"}
+                    control={control}
+                    placeholder={"Select points"}
+                    required={true}
+                    requiredMessage={"Please select points"}
+                    id={"jiraPoints"}
                     options={[
                         {text: "1", value: 1},
                         {text: "2", value: 2},
@@ -77,7 +84,13 @@ function JiraDetailPoints() {
                         {text: "5", value: 5},
                         {text: "8", value: 8},
                     ]}
+                    isEditing={isEditing}
+                    setIsEditing={setIsEditing}
+                    isUpdating={isUpdating}
                     okClickHandler={handleUpdateJiraPoint}
+                    disabled={isUpdating}
+                    error={!!errors.jiraPoints}
+                    helperText={errors.jiraPoints?.message}
                 >
                     <StaticText text={jiraMetadata?.jiraPoint}/>
                 </OptionEditor>

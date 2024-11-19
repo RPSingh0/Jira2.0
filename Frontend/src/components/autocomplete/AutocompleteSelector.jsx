@@ -40,6 +40,7 @@ function AutocompleteSelector({
             render={({field}) => (
                 <Autocomplete
                     {...field}
+                    fullWidth
                     options={options || []}
                     getOptionLabel={(option) => option?.[optionLabel]}
                     noOptionsText={noOptionsText}

@@ -1,7 +1,6 @@
 import useGetQueryHook from "../../../../queryHooks/useGetQueryHook.js";
 import {useEffect, useState} from "react";
 import {Box} from "@mui/material";
-import {toast} from "react-toastify";
 import {useQueryClient} from "@tanstack/react-query";
 import {useJiraMetadataContext} from "../../context/JiraMetadataContext.jsx";
 import {getFeaturesAsOptionsByProjectKey} from "../../../../services/feature/featureService.js";
@@ -11,18 +10,27 @@ import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper
 import AutocompleteAssign from "../../../../components/autocompleteAssign/AutocompleteAssign.jsx";
 import StaticText from "../../../../components/text/StaticText.jsx";
 import AsideElementHeading from "../../../../components/heading/AsideElementHeading.jsx";
+import {useWatch} from "react-hook-form";
 
 function JiraDetailFeature() {
 
     // context states
-    const {jiraKey, loadingJiraMetadata, fetchingJiraMetadata, jiraMetadata} = useJiraMetadataContext();
+    const {
+        jiraKey,
+        loadingJiraMetadata,
+        fetchingJiraMetadata,
+        jiraMetadata,
+        control,
+        errors,
+        handleSubmit,
+        setValue
+    } = useJiraMetadataContext();
 
     // react query hooks
     const queryClient = useQueryClient();
     const {updateJiraFeature, isUpdating} = useUpdateJiraFeature();
 
     // local states
-    const [feature, setFeature] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
 
     // Fetch all features related to project
@@ -33,40 +41,40 @@ function JiraDetailFeature() {
         enabledDependency: [!loadingJiraMetadata, !fetchingJiraMetadata]
     });
 
+    const selectedFeature = useWatch({control: control, name: "feature"});
+
     // once the jira details are loaded, set the user assigned to from jira
     useEffect(() => {
         // if jira details are loaded
         if (!loadingJiraMetadata && !fetchingJiraMetadata) {
             // set the feature
-            setFeature({
+            setValue("feature", {
                 featureKey: jiraMetadata.featureKey,
                 optionText: `${jiraMetadata.featureKey} | ${jiraMetadata.featureName}`
             });
         }
     }, [loadingJiraMetadata, fetchingJiraMetadata]);
 
-    // handler functions
-    function handleUpdateFeature() {
-
-        if (!feature) {
-            toast.error('Please select a feature');
-            return;
-        }
-
-        if (feature.featureKey === jiraMetadata.featureKey) {
+    function onSubmit() {
+        if (selectedFeature.featureKey === jiraMetadata.featureKey) {
             return;
         }
 
         updateJiraFeature({
             jiraKey: jiraKey,
             projectKey: jiraMetadata.projectKey,
-            featureKey: feature.featureKey
+            featureKey: selectedFeature.featureKey
         }, {
             onSuccess: () => {
                 setIsEditing(false);
                 queryClient.invalidateQueries({queryKey: [`${jiraKey}-metadata`]});
             }
         });
+    }
+
+    // handler functions
+    function handleUpdateFeature() {
+        handleSubmit(onSubmit)();
     }
 
     return (
@@ -77,15 +85,20 @@ function JiraDetailFeature() {
                 fetching={fetchingJiraMetadata}
                 loader={<Rounded2Half/>}>
                 <AutocompleteAssign
+                    name={"feature"}
+                    id={"feature"}
+                    control={control}
+                    options={featureOptions}
+                    optionKey={"featureKey"}
+                    optionLabel={"optionText"}
+                    variant={"default"}
+                    loading={isLoadingFeatures}
+                    disabled={isLoadingFeatures || isUpdating}
+                    error={!!errors.feature}
+                    helperText={errors.feature?.message}
                     isEditing={isEditing}
                     setIsEditing={setIsEditing}
-                    isLoading={isLoadingFeatures}
                     isUpdating={isUpdating}
-                    name={"feature"}
-                    variant={"default"}
-                    options={isLoadingFeatures ? [] : featureOptions}
-                    value={feature}
-                    setValue={setFeature}
                     okClickHandler={handleUpdateFeature}
                 >
                     <StaticText text={`${jiraMetadata?.featureKey} | ${jiraMetadata?.featureName}`}/>

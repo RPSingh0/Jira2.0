@@ -3,7 +3,22 @@ import InputSelectField from "../input/InputSelectField.jsx";
 import PaperOkAndCancelGroup from "../button/PaperOkAndCancelGroup.jsx";
 import {Box} from "@mui/material";
 
-function OptionEditor({isEditing, setIsEditing, isUpdating, name, options, value, setValue, okClickHandler, children}) {
+function OptionEditor({
+                          name,
+                          control,
+                          placeholder,
+                          required,
+                          requiredMessage,
+                          id,
+                          options,
+                          isEditing,
+                          setIsEditing,
+                          isUpdating,
+                          okClickHandler,
+                          error,
+                          helperText,
+                          children
+                      }) {
 
     function handleDoubleClick() {
         setIsEditing(true);
@@ -15,9 +30,15 @@ function OptionEditor({isEditing, setIsEditing, isUpdating, name, options, value
                 <StyledAutoCompleteWithButtonBox>
                     <InputSelectField
                         name={name}
-                        value={value}
-                        onChange={(event) => setValue(event.target.value)}
+                        control={control}
+                        placeholder={placeholder}
+                        required={required}
+                        requiredMessage={requiredMessage}
+                        id={id}
                         options={options}
+                        disabled={isUpdating}
+                        error={error}
+                        helperText={helperText}
                     />
                     <PaperOkAndCancelGroup
                         setIsEditing={setIsEditing}

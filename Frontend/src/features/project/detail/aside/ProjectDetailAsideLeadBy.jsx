@@ -2,7 +2,6 @@ import useGetQueryHook from "../../../../queryHooks/useGetQueryHook.js";
 import {getAllUsersService} from "../../../../services/user/userService.js";
 import {useEffect, useState} from "react";
 import {Box} from "@mui/material";
-import {toast} from "react-toastify";
 import {useQueryClient} from "@tanstack/react-query";
 import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper.jsx";
 import {Rounded2Half} from "../../../../components/loader/Loader.jsx";
@@ -11,6 +10,7 @@ import {useUpdateProjectLeadBy} from "../../hooks/useUpdateProjectLeadBy.js";
 import AutocompleteAssign from "../../../../components/autocompleteAssign/AutocompleteAssign.jsx";
 import AsideElementHeading from "../../../../components/heading/AsideElementHeading.jsx";
 import {StaticAvatarAndText} from "../../../../components/avatar/StaticAvatarAndText.jsx";
+import {useForm, useWatch} from "react-hook-form";
 
 function ProjectDetailAsideLeadBy() {
 
@@ -21,12 +21,13 @@ function ProjectDetailAsideLeadBy() {
     const queryClient = useQueryClient();
     const {updateProjectLeadBy, isUpdating} = useUpdateProjectLeadBy();
 
-    // local states
-    const [leadBy, setLeadBy] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
+    const {control, handleSubmit, formState: {errors}, setValue} = useForm();
+
+    const selectedLeadBy = useWatch({control: control, name: "leadBy"});
 
     // load all the users
-    const {isLoading: isLoadingUsers, data: users, error: usersError} = useGetQueryHook({
+    const {isLoading: isLoadingUsers, data: users} = useGetQueryHook({
         key: ['users-lead-by'],
         fn: getAllUsersService
     });
@@ -36,7 +37,7 @@ function ProjectDetailAsideLeadBy() {
         // if jira details are loaded
         if (!loadingProjectDetail && !fetchingProjectDetail) {
             // set the user
-            setLeadBy({
+            setValue("leadBy", {
                 name: projectDetail.leadName,
                 email: projectDetail.leadEmail,
                 profileImage: projectDetail.leadProfileImage,
@@ -45,27 +46,26 @@ function ProjectDetailAsideLeadBy() {
         }
     }, [loadingProjectDetail, fetchingProjectDetail, isLoadingUsers]);
 
-    // handler functions
-    function handleUpdateLeadBy() {
+    function onSubmit() {
 
-        if (!leadBy) {
-            toast.error('Please select a user');
-            return;
-        }
-
-        if (leadBy.email === projectDetail.leadEmail) {
+        if (selectedLeadBy.email === projectDetail.leadEmail) {
             return;
         }
 
         updateProjectLeadBy({
             projectKey: projectDetail.projectKey,
-            leadBy: leadBy.email
+            leadBy: selectedLeadBy.email
         }, {
             onSuccess: () => {
                 setIsEditing(false);
                 queryClient.invalidateQueries({queryKey: [`${projectDetail.projectKey}-detail`]});
             }
         });
+    }
+
+    // handler functions
+    function handleUpdateLeadBy() {
+        handleSubmit(onSubmit)();
     }
 
     return (
@@ -76,15 +76,21 @@ function ProjectDetailAsideLeadBy() {
                 fetching={fetchingProjectDetail}
                 loader={<Rounded2Half/>}>
                 <AutocompleteAssign
+                    name={"leadBy"}
+                    id={"leadBy"}
+                    control={control}
+                    options={users}
+                    optionKey={"email"}
+                    optionLabel={"name"}
+                    noOptionsText={"No users available"}
+                    variant={"user-avatar"}
+                    loading={isLoadingUsers}
+                    disabled={isLoadingUsers || isUpdating}
+                    error={!!errors.leadBy}
+                    helperText={errors.leadBy?.message}
                     isEditing={isEditing}
                     setIsEditing={setIsEditing}
-                    isLoading={isLoadingUsers}
                     isUpdating={isUpdating}
-                    name={"leadBy"}
-                    variant={"user-avatar"}
-                    options={(isLoadingUsers || usersError) ? [] : users}
-                    value={leadBy}
-                    setValue={setLeadBy}
                     okClickHandler={handleUpdateLeadBy}
                 >
                     <StaticAvatarAndText

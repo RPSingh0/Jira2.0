@@ -25,7 +25,7 @@ function InputSelectField({
                 required: required ? requiredMessage : false
             }}
             render={({field}) => (
-                <FormControl size="small" error={error}>
+                <FormControl size="small" error={error} fullWidth>
                     <SelectLabel id={id} labelText={labelText}/>
                     <Select
                         {...field}
