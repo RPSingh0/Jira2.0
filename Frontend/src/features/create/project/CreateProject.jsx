@@ -1,14 +1,12 @@
 import TextEditor from "../../../components/editor/Editor.jsx";
-import {getFormData} from "../../../utils/FormUtils.js";
 import useDefaultEditor from "../../../components/editor/useDefaultEditor.js";
 import AutocompleteSelector from "../../../components/autocomplete/AutocompleteSelector.jsx";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {getAllUsersService} from "../../../services/user/userService.js";
 import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
-import {toast} from "react-toastify";
 import useDebounce from "../../../hooks/useDebounce.js";
-import {useGenerateProjectKey} from "../hooks/useGetProjectKey.js";
-import {useCreateProject} from "../hooks/useCreateProject.js";
+import {useGenerateProjectKey} from "../../project/hooks/useGetProjectKey.js";
+import {useCreateProject} from "../../project/hooks/useCreateProject.js";
 import {useNavigate} from "react-router-dom";
 import {
     StyledCreateProjectAsideImageBox,
@@ -21,29 +19,30 @@ import {
 import {TextFieldInput} from "../../../components/input/InputTextField.jsx";
 import InputDatePicker from "../../../components/input/InputDatePicker.jsx";
 import {FormSubmitButton} from "../../../components/button/Buttons.jsx";
+import {useForm, useWatch} from "react-hook-form";
+import {Box} from "@mui/material";
+import Label from "../../../components/label/Label.jsx";
 
 function CreateProject() {
 
     // Initializing editor
     const {editingOn} = useDefaultEditor('Description for project');
+    const {control, handleSubmit, formState: {errors}, setValue} = useForm();
 
-    // Local states for form input management
-    const [projectName, setProjectName] = useState('');
-    const [projectKey, setProjectKey] = useState('');
-    const [projectLead, setProjectLead] = useState(null);
-
+    const filledProjectName = useWatch({control: control, name: "projectName", defaultValue: ""});
+    console.log(filledProjectName);
     // Custom debounce project name for delayed project key fetching
-    const debouncedProjectName = useDebounce(projectName, 500);
+    const debouncedProjectName = useDebounce(filledProjectName, 500);
 
     // React query custom hooks
-    const {generateProjectKey, isFetchingProjectKey} = useGenerateProjectKey()
+    const {generateProjectKey} = useGenerateProjectKey()
     const {createProject, isCreating} = useCreateProject();
 
     // Other hooks
     const navigate = useNavigate();
 
     // Getting all users in system for lead selection
-    const {isLoading: isLoadingUsers, data: usersForLead, error: usersForLeadError} = useGetQueryHook({
+    const {isLoading: isLoadingUsers, data: usersForLead} = useGetQueryHook({
         key: ['usersForLead'],
         fn: getAllUsersService
     });
@@ -51,33 +50,27 @@ function CreateProject() {
     // Based on debounced value, fetching project key from database
     useEffect(() => {
         if (debouncedProjectName.length === 0) {
-            setProjectKey('');
+            setValue("projectKey", '');
             return;
         }
 
         generateProjectKey({name: debouncedProjectName}, {
             onSuccess: (data) => {
-                setProjectKey(data.data.projectKey);
+                setValue("projectKey", data.projectKey);
             }
         });
     }, [debouncedProjectName]);
 
-    function handleSubmit(event) {
-        event.preventDefault();
+    function onSubmit(data) {
 
-        const {startDate, expectedEndDate} = getFormData(event.target);
-
-        if (projectLead === null) {
-            toast.error('Please select a lead');
-            return;
-        }
+        const {projectName, leadBy, startDate, expectedEndDate} = data;
 
         const editorData = editingOn.getHTML();
 
         createProject({
             name: projectName,
             description: editorData,
-            projectLeadBy: projectLead.email,
+            projectLeadBy: leadBy.email,
             startDate: startDate,
             expectedEndDate: expectedEndDate
         }, {
@@ -91,34 +84,47 @@ function CreateProject() {
                 <StyledCreateProjectHeading variant="h6">
                     Create New Project
                 </StyledCreateProjectHeading>
-                <StyledCreateProjectForm onSubmit={handleSubmit}>
+                <StyledCreateProjectForm onSubmit={handleSubmit(onSubmit)}>
                     <TextFieldInput
-                        name={"name"}
-                        label={"Project Name"}
-                        value={projectName}
-                        onChange={(event) => setProjectName(event.target.value.trimStart())}
+                        name={"projectName"}
+                        control={control}
+                        labelText={"Project Name"}
+                        defaultValue={""}
+                        placeholder={"Project Name"}
+                        required={true}
+                        requiredMessage={"Please provide a project name"}
+                        id={"projectName"}
                         disabled={isCreating}
+                        error={!!errors.projectName}
+                        helperText={errors.projectName?.message}
                     />
                     <TextFieldInput
                         name={"projectKey"}
-                        label={"Project Key"}
-                        value={projectKey}
-                        disabled={isFetchingProjectKey || isCreating}
-                        slotProps={{
-                            input: {
-                                readOnly: true,
-                            },
-                        }}
+                        control={control}
+                        labelText={"Project Key"}
+                        defaultValue={""}
+                        placeholder={"Project Key"}
+                        id={"projectKey"}
+                        disabled={true}
                     />
-                    <TextEditor editor={editingOn}/>
+                    <Box>
+                        <Label id={"description"} labelText={"Description"}/>
+                        <TextEditor editor={editingOn}/>
+                    </Box>
                     <AutocompleteSelector
-                        variant={'user-avatar'}
-                        name={"lead"}
-                        label={"Project Lead"}
-                        options={(isLoadingUsers || usersForLeadError) ? [] : usersForLead}
-                        isLoading={isLoadingUsers}
-                        value={projectLead}
-                        setValue={setProjectLead}
+                        name={"leadBy"}
+                        id={"leadBy"}
+                        labelText={"Project Lead"}
+                        control={control}
+                        options={usersForLead}
+                        optionKey={"email"}
+                        optionLabel={"name"}
+                        noOptionsText={"No users available"}
+                        variant={"user-avatar"}
+                        loading={isLoadingUsers}
+                        disabled={isLoadingUsers || isCreating}
+                        error={!!errors.leadBy}
+                        helperText={errors.leadBy?.message}
                     />
                     <InputDatePicker
                         name={"startDate"}

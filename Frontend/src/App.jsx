@@ -9,7 +9,7 @@ import {lazy, Suspense} from "react";
 
 const Dashboard = lazy(() => import('./features/dashboard/Dashboard.jsx'));
 const Projects = lazy(() => import('./features/projects/Projects.jsx'));
-const CreateProject = lazy(() => import('./features/project/create/CreateProject.jsx'));
+const CreateProject = lazy(() => import('./features/create/project/CreateProject.jsx'));
 const ProjectDetail = lazy(() => import('./features/project/detail/ProjectDetail.jsx'));
 const FeatureDetail = lazy(() => import('./features/feature/detail/FeatureDetail.jsx'));
 const JiraDetail = lazy(() => import('./features/jira/detail/JiraDetail.jsx'));

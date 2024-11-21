@@ -67,7 +67,7 @@ export async function generateProjectKeyService({name}) {
         throw new Error(data.message);
     }
 
-    return data;
+    return data.data;
 }
 
 /**
