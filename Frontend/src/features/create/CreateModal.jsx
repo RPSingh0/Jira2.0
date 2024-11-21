@@ -1,19 +1,12 @@
-import {Button, Dialog, DialogActions, DialogContent, DialogTitle} from "@mui/material";
+import {Button, DialogActions, DialogContent} from "@mui/material";
 import {useState} from "react";
 import CreateFeature from "./feature/CreateFeature.jsx";
 import CreateJira from "./jira/CreateJira.jsx";
 import InputSelectButton from "../../components/input/InputSelectButton.jsx";
 import {LoadingButton} from "@mui/lab";
+import {FormIds, Options} from "../../utils/CreateModalData.js";
+import {StyledDialog, StyledDialogTitle} from "./CreateModalStyles.jsx";
 
-const formIds = {
-    0: 'create-jira-form',
-    1: 'create-feature-form'
-}
-
-const options = [
-    "Issue",
-    "Feature"
-];
 
 function CreateModal({open, setOpen}) {
 
@@ -25,33 +18,25 @@ function CreateModal({open, setOpen}) {
     }
 
     return (
-        <Dialog
-            open={open}
-            scroll={"paper"}
-            fullWidth={true}
-            maxWidth={"md"}
-            onClose={handleClose}
-        >
-            <DialogTitle sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between"
-            }}>
+        <StyledDialog open={open} onClose={handleClose}>
+            <StyledDialogTitle>
                 Create
                 <InputSelectButton
                     createType={createType}
                     setCreateType={setCreateType}
-                    options={options}
+                    options={Options}
                 />
-            </DialogTitle>
+            </StyledDialogTitle>
             <DialogContent dividers={true}>
                 {(createType === 0) && <CreateJira
-                    formId={formIds[createType]}
+                    formId={FormIds[createType]}
                     setSubmitClicked={setIsSubmitting}
+                    toggle={handleClose}
                 />}
                 {(createType === 1) && <CreateFeature
-                    formId={formIds[createType]}
+                    formId={FormIds[createType]}
                     setSubmitClicked={setIsSubmitting}
+                    toggle={handleClose}
                 />}
             </DialogContent>
             <DialogActions>
@@ -62,13 +47,13 @@ function CreateModal({open, setOpen}) {
                     type="submit"
                     variant="contained"
                     color="primary"
-                    form={formIds[createType]}
+                    form={FormIds[createType]}
                     loading={isSubmitting}
                 >
                     Create
                 </LoadingButton>
             </DialogActions>
-        </Dialog>
+        </StyledDialog>
     );
 }
 

@@ -19,7 +19,7 @@ import {useQueryClient} from "@tanstack/react-query";
 import {getFeatureIfLoaded, getProjectIfLoaded} from "../../../utils/utils.js";
 import {useParams} from "react-router-dom";
 
-function CreateJira({formId, setSubmitClicked}) {
+function CreateJira({formId, setSubmitClicked, toggle}) {
 
     const {editingOn} = useDefaultEditor('');
     const queryClient = useQueryClient();
@@ -79,7 +79,10 @@ function CreateJira({formId, setSubmitClicked}) {
             featureKey: feature.featureKey,
             assignee: assignee.email
         }, {
-            onSettled: () => setSubmitClicked(false)
+            onSettled: () => {
+                setSubmitClicked(false);
+                toggle();
+            }
         });
     }
 

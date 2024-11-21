@@ -1,6 +1,6 @@
 import {createContext, useContext} from "react";
 import {getJiraCurrentUserWorkedOnService} from "../../../services/user/userService.js";
-import {DashboardTabMap} from "../../../utils/DashboardTabMap.jsx";
+import {DashboardTabMap} from "../../../utils/DashboardTabMap.js";
 import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
 
 const WorkedOnSectionContext = createContext();

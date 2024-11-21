@@ -4,7 +4,7 @@ import {IconMap} from "../../../utils/IconMap.jsx";
 import WorkedOnTab from "./workedOnTabSection/WorkedOnTab.jsx";
 import {StyledTabButton, StyledTabButtonBox, StyledWorkedOnSectionBox} from "./WorkSectionStyles.jsx";
 import {WorkedOnSectionContextProvider} from "./WorkedOnSectionContext.jsx";
-import {ColorMap} from "../../../utils/ColorMap.jsx";
+import {ColorMap} from "../../../utils/ColorMap.js";
 
 function WorkSection() {
 

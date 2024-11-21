@@ -1,6 +1,6 @@
 import {IconMap} from "../../utils/IconMap.jsx";
 import {Box, styled} from "@mui/material";
-import {ColorMap} from "../../utils/ColorMap.jsx";
+import {ColorMap} from "../../utils/ColorMap.js";
 
 const StyledColoredIconBox = styled(Box)(({color}) => ({
     display: "flex",

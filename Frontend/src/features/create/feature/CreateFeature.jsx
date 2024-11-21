@@ -13,7 +13,7 @@ import {useEffect} from "react";
 import {getProjectIfLoaded} from "../../../utils/utils.js";
 import {useParams} from "react-router-dom";
 
-function CreateFeature({formId}) {
+function CreateFeature({formId, setSubmitClicked, toggle}) {
 
     const {editingOn} = useDefaultEditor("");
     const {createFeature, isCreating} = useCreateFeature();
@@ -33,6 +33,8 @@ function CreateFeature({formId}) {
 
     function onSubmit(data) {
 
+        setSubmitClicked(true);
+
         const {featureName, project} = data;
 
         // Description editor data
@@ -42,6 +44,11 @@ function CreateFeature({formId}) {
             name: featureName,
             description: editorData,
             projectKey: project.projectKey
+        }, {
+            onSettled: () => {
+                setSubmitClicked(false);
+                toggle();
+            }
         });
     }
 
