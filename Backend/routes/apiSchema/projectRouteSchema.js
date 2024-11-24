@@ -19,10 +19,10 @@
  *           type: string
  *         startDate:
  *           type: string
- *           example: "dd/mm/yyyy"
+ *           format: date-time
  *         expectedEndDate:
  *           type: string
- *           example: "dd/mm/yyyy"
+ *           format: date-time
  *     GenerateProjectKey:
  *       type: object
  *       required:

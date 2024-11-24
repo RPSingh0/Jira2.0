@@ -2,7 +2,7 @@ const {dbPromise} = require('../db');
 const ErrorInterceptor = require('../utils/errorInterceptor');
 const ErrorType = require('../utils/errorTypes');
 const User = require("./User");
-const {validateDateFormat} = require("../utils/utils");
+const {validateDateFormat, formatISODate} = require("../utils/utils");
 
 class Project {
     constructor(name, projectKey, description, projectLeadBy, startDate, expectedEndDate) {
@@ -128,15 +128,11 @@ class Project {
         if (!validateDateFormat(startDate)) {
             throw new ErrorInterceptor({
                 type: ErrorType.VALIDATION,
-                message: 'Please enter date in format: dd/mm/yyyy'
+                message: 'Please enter a valid ISO date'
             });
         }
 
-        const [day, month, year] = startDate.split('/');
-
-        const dateObj = new Date(`${year}-${month}-${day}`);
-
-        this.startDate = dateObj.toISOString().split('T')[0];
+        this.startDate = formatISODate(startDate);
 
         return this;
     }
@@ -161,15 +157,11 @@ class Project {
         if (!validateDateFormat(expectedEndDate)) {
             throw new ErrorInterceptor({
                 type: ErrorType.VALIDATION,
-                message: 'Please enter date in format: dd/mm/yyyy'
+                message: 'Please enter a valid ISO date'
             });
         }
 
-        const [day, month, year] = expectedEndDate.split('/');
-
-        const dateObj = new Date(`${year}-${month}-${day}`);
-
-        this.expectedEndDate = dateObj.toISOString().split('T')[0];
+        this.expectedEndDate = formatISODate(expectedEndDate);
 
         return this;
     }
