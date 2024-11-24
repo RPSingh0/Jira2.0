@@ -12,6 +12,7 @@ export function TextFieldInput({
                                    requiredMessage,
                                    id,
                                    disabled,
+                                   readOnly = false,
                                    error,
                                    helperText
                                }) {
@@ -38,6 +39,11 @@ export function TextFieldInput({
                         sx={(theme) => ({
                             'input': {color: theme.palette.defaultBlack.main}
                         })}
+                        slotProps={{
+                            input: {
+                                readOnly: !!readOnly,
+                            },
+                        }}
                     />
                 </FormControl>
             )}

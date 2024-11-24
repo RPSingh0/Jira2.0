@@ -1,62 +1,43 @@
-import {Box, styled, Typography} from "@mui/material";
+import {Box, Paper, styled, Typography} from "@mui/material";
 
 export const StyledCreateProjectContainer = styled(Box)(() => ({
     display: "flex",
     padding: "1rem",
-    flexGrow: 1,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
 }));
 
-export const StyledCreateProjectContentBox = styled(Box)(({theme}) => ({
+export const StyledCreateProjectContentPaper = styled(Paper)(({theme}) => ({
     display: "flex",
     flexDirection: "column",
-    flex: 1,
-    maxWidth: "50%",
-    padding: "1rem 1rem 1rem 0",
+    gap: "2rem",
+    width: "50%",
+    padding: "1rem",
+    overflow: "hidden",
 
     [theme.breakpoints.down("lg")]: {
-        maxWidth: "70%"
+        width: "70%"
     },
 
     [theme.breakpoints.down("c800")]: {
-        maxWidth: "100%",
+        width: "100%",
         padding: "1rem"
     }
 }));
 
+StyledCreateProjectContentPaper.defaultProps = {
+    variant: "outlined"
+}
+
 export const StyledCreateProjectHeading = styled(Typography)(({theme}) => ({
     textTransform: "uppercase",
     fontWeight: "bold",
-    color: theme.palette.defaultBlack.main,
-    marginBottom: "2rem",
-    textAlign: "center"
+    color: theme.palette.defaultBlack.main
 }));
 
 export const StyledCreateProjectForm = styled('form')(() => ({
     display: "flex",
     flexDirection: "column",
     gap: "2rem",
-}));
-
-export const StyledCreateProjectAsideImageBox = styled(Box)(({theme}) => ({
-    flex: 1,
-    maxWidth: "50%",
-    overflow: "hidden",
-
-    [theme.breakpoints.down("lg")]: {
-        maxWidth: "30%"
-    },
-
-    [theme.breakpoints.down("c800")]: {
-        display: "none"
-    }
-}));
-
-export const StyledCreateProjectImage = styled('img')(({theme}) => ({
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-
-    [theme.breakpoints.down("c800")]: {
-        display: "none"
-    }
 }));
