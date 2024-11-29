@@ -1,4 +1,4 @@
-const URL = `${import.meta.env.VITE_BACKEND_URL}/api/v1/project`;
+const PROJECT_URL = `${import.meta.env.VITE_BACKEND_URL}/api/v1/project`;
 
 /**
  * This function takes project data and creates a project
@@ -16,7 +16,7 @@ const URL = `${import.meta.env.VITE_BACKEND_URL}/api/v1/project`;
  */
 export async function createProjectService({name, projectKey, description, projectLeadBy, startDate, expectedEndDate}) {
 
-    let data = await fetch(`${URL}/create`, {
+    let data = await fetch(`${PROJECT_URL}/create`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ export async function createProjectService({name, projectKey, description, proje
  */
 export async function generateProjectKeyService({name}) {
 
-    let data = await fetch(`${URL}/generateProjectKey`, {
+    let data = await fetch(`${PROJECT_URL}/generateProjectKey`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -74,13 +74,31 @@ export async function generateProjectKeyService({name}) {
  * Get all projects in system
  *
  * @param {string} token
+ * @param {string} search
+ * @param {string} page
+ * @param {string} pageSize
  *
  * @returns {Promise<*>}
  *
  * @throws {Error} Error if unable to fetch or if token is invalid
  */
-export async function getAllProjectsService({token}) {
-    let data = await fetch(`${URL}/getAllProjects`, {
+export async function getAllProjectsService({token, search, page, pageSize}) {
+
+    const url = new URL(`${PROJECT_URL}/getAllProjects`);
+
+    if (search) {
+        url.searchParams.append('search', search);
+    }
+
+    if (page) {
+        url.searchParams.append('page', page);
+    }
+
+    if (pageSize) {
+        url.searchParams.append('pageSize', pageSize);
+    }
+
+    let data = await fetch(url, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -94,7 +112,7 @@ export async function getAllProjectsService({token}) {
         throw new Error(data.message);
     }
 
-    return data.data.projects;
+    return data.data;
 }
 
 /**
@@ -107,7 +125,7 @@ export async function getAllProjectsService({token}) {
  * @throws {Error} Error if unable to fetch or if token is invalid
  */
 export async function getAllProjectsAsOptionsService({token}) {
-    let data = await fetch(`${URL}/getAllProjectsAsOptions`, {
+    let data = await fetch(`${PROJECT_URL}/getAllProjectsAsOptions`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -135,7 +153,7 @@ export async function getAllProjectsAsOptionsService({token}) {
  */
 export async function getProjectDetailService({projectKey}) {
 
-    let data = await fetch(`${URL}/getProject/${projectKey}`, {
+    let data = await fetch(`${PROJECT_URL}/getProject/${projectKey}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -164,7 +182,7 @@ export async function getProjectDetailService({projectKey}) {
  */
 export async function updateProjectDescriptionService({token, projectKey, description}) {
 
-    let data = await fetch(`${URL}/updateDescription`, {
+    let data = await fetch(`${PROJECT_URL}/updateDescription`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -198,7 +216,7 @@ export async function updateProjectDescriptionService({token, projectKey, descri
  */
 export async function updateProjectLeadByService({token, projectKey, leadBy}) {
 
-    let data = await fetch(`${URL}/updateLeadBy`, {
+    let data = await fetch(`${PROJECT_URL}/updateLeadBy`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',

@@ -1,34 +1,62 @@
-import {createContext, useContext} from "react";
+import {createContext, useContext, useEffect, useState} from "react";
 import useGetQueryHook from "../../queryHooks/useGetQueryHook.js";
 import {getAllProjectsService} from "../../services/project/projectService.js";
 import {useSelector} from "react-redux";
 import {getAuthToken} from "../../services/user/authenticationSlice.js";
+import {useQueryClient} from "@tanstack/react-query";
 
 const ProjectsContext = createContext();
 
 function ProjectsContextProvider({children}) {
 
     const authToken = useSelector(getAuthToken);
+    const [pages, setPages] = useState(0);
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(6);
+    const [searchString, setSearchString] = useState("");
+
+    const queryClient = useQueryClient();
 
     // load feature details using custom hook
     const {
         isLoading: loadingProjects,
         isFetching: fetchingProjects,
-        data: projects,
+        data: projectsData,
         error: errorProjects,
     } = useGetQueryHook({
         key: [`projects`],
         fn: getAllProjectsService,
-        token: authToken
+        token: authToken,
+        page: page,
+        pageSize: pageSize,
+        search: searchString
     });
+
+    useEffect(() => {
+        if (!loadingProjects && !fetchingProjects) {
+            const totalPages = Math.ceil(parseInt(projectsData?.total) / parseInt(projectsData?.pageSize));
+            setPages(totalPages);
+        }
+    }, [loadingProjects, fetchingProjects]);
+
+    useEffect(() => {
+        queryClient.invalidateQueries({queryKey: ['projects']});
+    }, [searchString, page, pageSize]);
 
 
     return (
         <ProjectsContext.Provider value={{
             loadingProjects,
             fetchingProjects,
-            projects,
-            errorProjects
+            projectsData,
+            errorProjects,
+            pages,
+            page,
+            setPage,
+            pageSize,
+            setPageSize,
+            searchString,
+            setSearchString,
         }}>
             {children}
         </ProjectsContext.Provider>
