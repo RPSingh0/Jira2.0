@@ -3,6 +3,7 @@ const ErrorInterceptor = require('../utils/errorInterceptor');
 const ErrorType = require('../utils/errorTypes');
 const User = require("./User");
 const {validateDateFormat, formatISODate} = require("../utils/utils");
+const mysql = require('mysql2');
 
 class Project {
     constructor(name, projectKey, description, projectLeadBy, startDate, expectedEndDate) {
@@ -354,8 +355,16 @@ class Project {
      *
      * @throws {ErrorInterceptor} Throws error if there is a database error
      */
-    static async getAllProjects(userEmail) {
+    static async getAllProjects(userEmail, skip, limit, search) {
         const query = `
+            WITH TotalCount AS (SELECT COUNT(DISTINCT (P.project_key)) AS totalRecords
+                                FROM Project AS P
+                                         LEFT JOIN Metadata AS M ON P.project_key = M.project_key
+                                         LEFT JOIN User AS U
+                                                   ON (M.assignee = U.email OR M.reporter = U.email OR
+                                                       P.project_lead_by = U.email)
+                                WHERE P.name LIKE ?
+                                   OR P.project_key LIKE ?)
             SELECT P.name,
                    P.project_key                                                              AS projectKey,
                    P.start_date                                                               AS startDate,
@@ -367,7 +376,8 @@ class Project {
                                                        U.profile_image) SEPARATOR '|+|'), '') AS team,
                    IFNULL(ROUND((MD.doneIssues / NULLIF((MD.openIssues + MD.doneIssues), 0)) * 100, 0),
                           0)                                                                  AS completionPercentage,
-                   COALESCE(YW.youWorkedOn, 0)                                                AS youWorkedOn
+                   COALESCE(YW.youWorkedOn, 0)                                                AS youWorkedOn,
+                   TC.totalRecords                                                            as totalRecords
             FROM Project AS P
                      LEFT JOIN (SELECT project_key,
                                        COUNT(CASE WHEN status != 3 THEN 1 END) AS openIssues,
@@ -382,12 +392,16 @@ class Project {
                                 GROUP BY project_key) AS YW ON P.project_key = YW.project_key
                      LEFT JOIN Metadata AS M ON P.project_key = M.project_key
                      LEFT JOIN User AS U
-                               ON (M.assignee = U.email OR M.reporter = U.email OR P.project_lead_by = U.email)
+                               ON (M.assignee = U.email OR M.reporter = U.email OR P.project_lead_by = U.email),
+                 TotalCount AS TC
+            WHERE P.name LIKE ?
+               OR P.project_key LIKE ?
             GROUP BY P.project_key, P.name, P.start_date, P.expected_end_date, MD.openIssues, MD.doneIssues,
-                     YW.youWorkedOn`;
+                     YW.youWorkedOn, TC.totalRecords
+            LIMIT ? OFFSET ?`;
 
         try {
-            const [results] = await dbPromise.execute(query, [userEmail, userEmail]);
+            const [results] = await dbPromise.execute(query, [`%${search}%`, `%${search}%`, userEmail, userEmail, `%${search}%`, `%${search}%`, `${limit}`, `${skip}`]);
             return results;
         } catch (err) {
             throw new ErrorInterceptor({

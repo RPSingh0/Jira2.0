@@ -117,6 +117,19 @@ router.route('/getAllProjectsAsOptions')
  *       - Authorization: []
  *     summary: Get all projects
  *     tags: [Project]
+ *     parameters:
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
  *         description: Projects retrieved successfully

@@ -1,3 +1,4 @@
+const {PAGE_NUMBER, PAGE_SIZE, SEARCH_STRING} = require("./CONSTANTS");
 exports.cleanProjectName = function (projectName) {
     return projectName
         .trim()
@@ -29,4 +30,28 @@ exports.formatISODate = function (isoDate) {
     const day = String(parsedDate.getUTCDate()).padStart(2, '0');
 
     return `${year}-${month}-${day}`;
+}
+
+exports.validateAndGetPage = function (page) {
+    if (page && page >= 1) {
+        return page
+    } else {
+        return PAGE_NUMBER
+    }
+}
+
+exports.validateAndGetPageSize = function (pageSize) {
+    if (pageSize && pageSize >= 1) {
+        return pageSize
+    } else {
+        return PAGE_SIZE
+    }
+}
+
+exports.validateAndGetSearchString = function (searchString) {
+    if (searchString === null || searchString === undefined || searchString.trim() === '') {
+        return SEARCH_STRING
+    } else {
+        return searchString
+    }
 }

@@ -1,7 +1,12 @@
 const catchAsync = require('../utils/catchAsync');
 const Response = require('../utils/response');
 const Project = require("../models/Project");
-const {cleanProjectName} = require("../utils/utils");
+const {
+    cleanProjectName,
+    validateAndGetSearchString,
+    validateAndGetPageSize,
+    validateAndGetPage
+} = require("../utils/utils");
 
 exports.generateProjectKey = catchAsync(async (req, res, next) => {
     const {name} = req.body;
@@ -41,16 +46,30 @@ exports.getAllProjectsAsOptions = catchAsync(async (req, res, next) => {
 });
 
 exports.getAllProjects = catchAsync(async (req, res, next) => {
+
+    // take out query params
+    let {search, page, pageSize} = req.query;
+
+    search = validateAndGetSearchString(search);
+    page = validateAndGetPage(parseInt(page));
+    pageSize = validateAndGetPageSize(parseInt(pageSize));
+
+    // calculate the offset
+    const skip = (page - 1) * pageSize;
+
     const email = req.user.email
-    const projects = await Project.getAllProjects(email);
+    const projects = await Project.getAllProjects(email, skip, pageSize, search);
+    let total = 0;
 
     // processing team name, email and profileImage
     const response = projects.map(project => {
         const team = project.team;
+        total = project.totalRecords;
 
         if (!team) {
             return {
                 ...project,
+                totalRecords: undefined,
                 completionPercentage: parseInt(project.completionPercentage),
                 team: []
             }
@@ -68,12 +87,13 @@ exports.getAllProjects = catchAsync(async (req, res, next) => {
 
         return {
             ...project,
+            totalRecords: undefined,
             completionPercentage: parseInt(project.completionPercentage),
             team: finalUsers
         }
     })
 
-    Response.ok200(res, {projects: response});
+    Response.ok200(res, {projects: response, total: total, page: page, pageSize: pageSize});
 });
 
 exports.getProjectByProjectKey = catchAsync(async (req, res, next) => {
