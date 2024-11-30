@@ -13,9 +13,11 @@ import ViewAllNavigate from "../../../components/viewAll/ViewAllNavigate.jsx";
 
 function YourProjectsSection() {
 
-    const {isLoading: loadingProjects, isFetching: fetchingProjects, data: projects} = useGetQueryHook({
+    const {isLoading: loadingProjects, isFetching: fetchingProjects, data: projectsData} = useGetQueryHook({
         key: [`dashboard-projects`],
         fn: getAllProjectsService,
+        page: 1,
+        size: 6
     });
 
     return (
@@ -31,7 +33,7 @@ function YourProjectsSection() {
                     loading={loadingProjects}
                     fetching={fetchingProjects}
                     loader={<DashboardProjectCardLoadingIndicator/>}>
-                    {projects?.map(project => <ProjectCard
+                    {projectsData?.projects?.map(project => <ProjectCard
                         key={project.projectKey}
                         name={project.name}
                         projectKey={project.projectKey}

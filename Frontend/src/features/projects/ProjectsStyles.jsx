@@ -26,7 +26,7 @@ StyledProjectsHeading.defaultProps = {
 }
 
 export const StyledDivider = styled(Divider)(() => ({
-    marginTop: "2rem",
+    marginTop: "1rem",
     marginBottom: "1rem"
 }));
 
