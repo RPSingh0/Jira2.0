@@ -103,7 +103,7 @@ export async function getFeatureDetailService({projectKey, featureKey}) {
  */
 export async function getAllFeaturesByProjectKey({projectKey}) {
 
-    let data = await fetch(`${URL}/getAllFeaturesByProjectKey/${projectKey}`, {
+    let data = await fetch(`${URL}/getFeature/${projectKey}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -116,7 +116,7 @@ export async function getAllFeaturesByProjectKey({projectKey}) {
         throw new Error(data.message);
     }
 
-    return data;
+    return data.data;
 }
 
 /**

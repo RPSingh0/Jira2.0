@@ -1,7 +1,7 @@
 import {createContext, useContext} from "react";
 import {useParams} from "react-router-dom";
 import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
-import {getFeaturesAsOptionsByProjectKey} from "../../../services/feature/featureService.js";
+import {getAllFeaturesByProjectKey} from "../../../services/feature/featureService.js";
 
 const ProjectDetailFeatureContext = createContext();
 
@@ -14,11 +14,11 @@ function ProjectDetailFeatureContextProvider({children}) {
     const {
         isLoading: loadingProjectFeature,
         isFetching: fetchingProjectFeature,
-        data: projectFeature,
+        data: featureData,
         error: errorProjectFeature,
     } = useGetQueryHook({
         key: [`${projectKey}-feature-detail`],
-        fn: getFeaturesAsOptionsByProjectKey,
+        fn: getAllFeaturesByProjectKey,
         projectKey: projectKey
     });
 
@@ -26,7 +26,7 @@ function ProjectDetailFeatureContextProvider({children}) {
         <ProjectDetailFeatureContext.Provider value={{
             loadingProjectFeature,
             fetchingProjectFeature,
-            projectFeature,
+            featureData,
             errorProjectFeature,
         }}>
             {children}
