@@ -251,23 +251,30 @@ class Feature {
     /**
      * Fetches and returns features from database by project key
      *
-     * @param projectKey
-     *
      * @returns {Promise<Object>} A promise that resolves with the result of database select operation
      *
      * @throws {ErrorInterceptor} Throws error if id is missing or if there is a database error
      */
-    static async findFeatureByProjectKey(projectKey) {
+    static async findFeatureByProjectKey(projectKey, skip, limit, search) {
         const query = `
+            WITH TotalCount AS (SELECT COUNT(project_key) as totalRecords
+                                FROM Feature
+                                WHERE project_key = ?
+                                  AND (feature_key LIKE ? OR name LIKE ?))
+
             SELECT name,
-                   feature_key AS featureKey,
-                   project_key AS projectKey,
-                   description
-            FROM Feature
-            WHERE project_key = ?`;
+                   feature_key             AS featureKey,
+                   project_key             AS projectKey,
+                   description,
+                   TC.totalRecords AS totalRecords
+            FROM Feature,
+            TotalCount AS TC
+            WHERE project_key = ?
+              AND (feature_key LIKE ? OR name LIKE ?)
+            LIMIT ? OFFSET ?`;
 
         try {
-            const [results] = await dbPromise.execute(query, [projectKey]);
+            const [results] = await dbPromise.execute(query, [projectKey, `%${search}%`, `%${search}%`, projectKey, `%${search}%`, `%${search}%`, `${limit}`, `${skip}`]);
             return results;
         } catch (err) {
             throw new ErrorInterceptor({

@@ -1,6 +1,7 @@
 const catchAsync = require('../utils/catchAsync');
 const Response = require('../utils/response');
 const Feature = require("../models/Feature");
+const {validateAndGetSearchString, validateAndGetPage, validateAndGetPageSize} = require("../utils/utils");
 
 exports.createFeature = catchAsync(async (req, res, next) => {
     const {name, description, projectKey} = req.body;
@@ -37,7 +38,17 @@ exports.getFeatureByProjectKeyAndFeatureKey = catchAsync(async (req, res, next) 
 exports.getFeatureByProjectKey = catchAsync(async (req, res, next) => {
     const {projectKey} = req.params;
 
-    const feature = await Feature.findFeatureByProjectKey(projectKey);
+    // take out query params
+    let {search, page, pageSize} = req.query;
+
+    search = validateAndGetSearchString(search);
+    page = validateAndGetPage(parseInt(page));
+    pageSize = validateAndGetPageSize(parseInt(pageSize));
+
+    // calculate the offset
+    const skip = (page - 1) * pageSize;
+
+    const feature = await Feature.findFeatureByProjectKey(projectKey, skip, pageSize, search);
 
     if (!feature || feature.length === 0) {
         return Response.notFound404(res, {message: `No features found under project: ${projectKey}`});
