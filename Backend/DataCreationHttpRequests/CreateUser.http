@@ -1,0 +1,43 @@
+### User one
+POST http://localhost:3000/api/v1/user/create
+Content-Type: application/json
+
+{
+  "firstName": "one",
+  "lastName": "first",
+  "email": "one.first@test.com",
+  "password": "Test@1234"
+}
+
+### User two
+POST http://localhost:3000/api/v1/user/create
+Content-Type: application/json
+
+{
+"firstName": "two",
+"lastName": "second",
+"email": "two.second@test.com",
+"password": "Test@1234"
+}
+
+### User three
+POST http://localhost:3000/api/v1/user/create
+Content-Type: application/json
+
+{
+  "firstName": "three",
+  "lastName": "third",
+  "email": "three.third@test.com",
+  "password": "Test@1234"
+}
+
+### User four
+POST http://localhost:3000/api/v1/user/create
+Content-Type: application/json
+
+{
+  "firstName": "four",
+  "lastName": "fourth",
+  "email": "four.fourth@test.com",
+  "password": "Test@1234"
+}

@@ -1,7 +1,7 @@
 const catchAsync = require('../utils/catchAsync');
 const ErrorInterceptor = require('../utils/errorInterceptor');
 const ErrorType = require('../utils/errorTypes');
-const User = require('../models/user');
+const UserService = require("../Service/UserService");
 const Response = require("../utils/response");
 const tokenUtils = require('../utils/tokenUtils');
 const jwt = require("jsonwebtoken");
@@ -18,18 +18,18 @@ exports.login = catchAsync(async (req, res, next) => {
     }
 
     // find user in database
-    const user = await User.findByEmail(email);
+    const {success, data: user, message} = await UserService.findByEmail(email);
 
     // if user does not exist
-    if (!user) {
+    if (!success) {
         throw new ErrorInterceptor({
             type: ErrorType.NOT_FOUND,
-            message: 'No user found'
+            message: message
         });
     }
 
     // if user is not active
-    if (user.status === 0) {
+    if (user.status === false) {
         throw new ErrorInterceptor({
             type: ErrorType.FORBIDDEN,
             message: 'Resource not allowed for user: Inactive'
@@ -37,7 +37,7 @@ exports.login = catchAsync(async (req, res, next) => {
     }
 
     // check for correct password
-    const isPasswordCorrect = await User.comparePassword(password, user.password);
+    const isPasswordCorrect = await UserService.comparePassword(password, user.password);
 
     if (!isPasswordCorrect) {
         throw new ErrorInterceptor({
@@ -46,7 +46,7 @@ exports.login = catchAsync(async (req, res, next) => {
         });
     }
 
-    const token = tokenUtils.signedToken(user.id);
+    const token = tokenUtils.signedToken(user.email);
 
     Response.ok200(res, {token: token});
 });
@@ -81,10 +81,10 @@ exports.authenticate = catchAsync(async (req, res, next) => {
     }
 
     // check if user exists
-    const currentUser = await User.findById(decoded.id);
+    const {success, data: user, message} = await UserService.findByEmail(decoded.email);
 
     // if there is no user
-    if (!currentUser) {
+    if (!success) {
         throw new ErrorInterceptor({
             type: ErrorType.UNAUTHORIZED,
             message: 'Invalid token'
@@ -92,7 +92,7 @@ exports.authenticate = catchAsync(async (req, res, next) => {
     }
 
     // if user exists, check for if user is active
-    if (currentUser.status === 0) {
+    if (user.status === false) {
         throw new ErrorInterceptor({
             type: ErrorType.FORBIDDEN,
             message: 'Resource not allowed for user: Inactive'
@@ -100,7 +100,7 @@ exports.authenticate = catchAsync(async (req, res, next) => {
     }
 
     // check if user changed password after token is issued
-    if (User.passwordChangedAfterTokenIssued(currentUser.password_changed_at, decoded.iat)) {
+    if (UserService.passwordChangedAfterTokenIssued(user.passwordChangedAt, decoded.iat)) {
         throw new ErrorInterceptor({
             type: ErrorType.UNAUTHORIZED,
             message: 'Password changed recently, please re-login'
@@ -108,7 +108,7 @@ exports.authenticate = catchAsync(async (req, res, next) => {
     }
 
     // #IMPORTANT Adding this user to request object, and it will be carried forward in next middleware
-    req.user = currentUser;
+    req.user = user;
     next();
 });
 

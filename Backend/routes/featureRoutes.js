@@ -124,7 +124,7 @@ router.route('/getFeature/:projectKey/:featureKey')
 
 /**
  * @swagger
- * /feature/getFeaturesAsOptionsByProjectKey/{projectKey}:
+ * /feature/getFeatureOptions/{projectKey}:
  *   get:
  *     summary: Get features as options by a project key
  *     tags: [Feature]
@@ -155,8 +155,8 @@ router.route('/getFeature/:projectKey/:featureKey')
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.route('/getFeaturesAsOptionsByProjectKey/:projectKey')
-    .get(featureController.getFeaturesAsOptionsByProjectKey);
+router.route('/getFeatureOptions/:projectKey')
+    .get(featureController.getFeatureOptions);
 
 /**
  * @swagger

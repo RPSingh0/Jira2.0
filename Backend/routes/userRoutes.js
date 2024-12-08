@@ -130,11 +130,11 @@ router.route('/login')
  *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/validateToken')
-    .get(authenticationController.validateToken);
+    .get(authenticationController.authenticate, authenticationController.validateToken);
 
 /**
  * @swagger
- * /user/getAllUsers:
+ * /user/getAllActiveUsers:
  *   get:
  *     security:
  *       - Authorization: []
@@ -166,8 +166,8 @@ router.route('/validateToken')
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.route('/getAllUsers')
-    .get(userController.getAllUsers);
+router.route('/getAllActiveUsers')
+    .get(userController.getAllActiveUsers);
 
 /**
  * @swagger
@@ -203,7 +203,7 @@ router.route('/getAllUsers')
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.route('/workedOn')
-    .get(authenticationController.authenticate, userController.workedOn);
+// router.route('/workedOn')
+//     .get(authenticationController.authenticate, userController.workedOn);
 
 module.exports = router;

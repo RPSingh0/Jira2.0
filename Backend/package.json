@@ -6,24 +6,30 @@
   "scripts": {
     "start": "node server.js",
     "start-dev": "set NODE_ENV=dev&&nodemon server.js",
-    "debug": "ndb server.js"
+    "debug": "ndb server.js",
+    "migrateDev": "dotenv -e ./envConfig/config.env.dev -- npx prisma migrate dev",
+    "migrateProd": "dotenv -e ./envConfig/config.env.prod -- npx prisma migrate dev"
   },
   "author": "Rupinder Pal Singh",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^6.0.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "dotenv-cli": "^7.4.4",
     "express": "^4.21.0",
+    "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
-    "mysql2": "^3.11.2",
     "serverless-http": "^3.2.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "validator": "^13.12.0"
   },
   "devDependencies": {
-    "ndb": "^1.1.5"
+    "ndb": "^1.1.5",
+    "prisma": "^6.0.1"
   }
 }

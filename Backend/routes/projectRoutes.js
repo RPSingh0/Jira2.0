@@ -82,7 +82,7 @@ router.route('/generateProjectKey')
 
 /**
  * @swagger
- * /project/getAllProjectsAsOptions:
+ * /project/getProjectOptions:
  *   get:
  *     summary: Get all projects as options
  *     tags: [Project]
@@ -106,8 +106,8 @@ router.route('/generateProjectKey')
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.route('/getAllProjectsAsOptions')
-    .get(projectController.getAllProjectsAsOptions);
+router.route('/getProjectOptions')
+    .get(projectController.getProjectOptions);
 
 /**
  * @swagger
@@ -226,9 +226,9 @@ router.route('/updateDescription')
 
 /**
  * @swagger
- * /project/updateLeadBy:
+ * /project/updateLead:
  *   patch:
- *     summary: Update project lead by
+ *     summary: Update project lead
  *     tags: [Project]
  *     requestBody:
  *       required: true
@@ -256,7 +256,7 @@ router.route('/updateDescription')
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.route('/updateLeadBy')
-    .patch(projectController.updateLeadBy);
+router.route('/updateLead')
+    .patch(projectController.updateLead);
 
 module.exports = router;
