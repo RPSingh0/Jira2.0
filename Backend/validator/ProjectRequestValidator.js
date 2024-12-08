@@ -110,3 +110,16 @@ exports.UpdateProjectLeadRequest = Joi.object({
             'any.required': "Project lead email is required",
         })
 });
+
+exports.GetProjectByProjectKeyRequest = Joi.object({
+    projectKey: Joi.string()
+        .trim()
+        .max(30)
+        .required()
+        .messages({
+            'string.base': "Project key should be a string",
+            'string.max': "Project key should not exceed 100 characters",
+            'string.empty': "Project key cannot be empty",
+            'any.required': "Project key is required"
+        })
+});

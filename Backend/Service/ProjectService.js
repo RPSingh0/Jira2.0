@@ -152,6 +152,83 @@ class ProjectService {
             });
         }
     }
+
+    static async getProjectByProjectKey(data) {
+
+        try {
+            const project = await prisma.project.findUnique({
+                where: {
+                    projectKey: data.projectKey
+                },
+                select: {
+                    name: true,
+                    projectKey: true,
+                    description: true,
+                    startDate: true,
+                    endDate: true,
+                    lead: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                            profileImage: true
+                        }
+                    },
+                    metadata: {
+                        select: {
+                            status: true
+                        }
+                    },
+                    _count: {
+                        select: {
+                            metadata: true
+                        }
+                    }
+                }
+            });
+
+            if (!project) {
+                return {success: false, message: "No projects found"}
+            }
+
+            // calculate days remaining for project completion
+            let daysRemaining = 0;
+            const today = new Date();
+
+            if (project.endDate > today) {
+                daysRemaining = Math.ceil((project.endDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+            }
+
+            // count jira by status
+            const doneJiras = project.metadata.filter(m => m.status === 'DONE').length;
+            const otherJiras = project.metadata.filter(m => m.status !== 'DONE').length;
+
+            const totalJiras = doneJiras + otherJiras;
+            const completionPercentage = totalJiras === 0 ? 0 : Math.round((doneJiras / totalJiras) * 100);
+
+            const result = {
+                projectKey: project.projectKey,
+                description: project.description,
+                leadName: `${project.lead.firstName} ${project.lead.lastName}`,
+                leadEmail: project.lead.email,
+                leadProfileImage: project.lead.profileImage,
+                startDate: project.startDate,
+                endDate: project.endDate,
+                daysRemaining: daysRemaining,
+                doneIssues: doneJiras,
+                openIssues: otherJiras,
+                completionPercentage: completionPercentage
+            }
+
+            return {success: true, data: result};
+
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: "Error fetching projects from DB"
+            });
+        }
+    }
 }
 
 module.exports = ProjectService;

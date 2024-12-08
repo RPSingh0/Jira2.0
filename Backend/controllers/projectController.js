@@ -10,7 +10,7 @@ const {
     ProjectKeyGenerateRequest,
     ProjectCreateRequest,
     UpdateProjectDescriptionRequest,
-    UpdateProjectLeadRequest
+    UpdateProjectLeadRequest, GetProjectByProjectKeyRequest
 } = require("../validator/ProjectRequestValidator");
 
 exports.generateProjectKey = catchAsync(async (req, res) => {
@@ -120,16 +120,25 @@ exports.getAllProjects = catchAsync(async (req, res) => {
     Response.ok200(res, {projects: response, total: total, page: page, pageSize: pageSize});
 });
 
-/* leave for now*/
 exports.getProjectByProjectKey = catchAsync(async (req, res) => {
-    const {projectKey} = req.params;
-    const project = await Project.getProjectByProjectKey(projectKey);
 
-    if (!project) {
-        return Response.notFound404(res, {message: `No project found with key: ${projectKey}`});
+    let validated = undefined;
+
+    try {
+        validated = await GetProjectByProjectKeyRequest.validateAsync({
+            projectKey: req.params.projectKey
+        });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
     }
 
-    Response.ok200(res, {project: project});
+    const {success, data, message} = await ProjectService.getProjectByProjectKey(validated);
+
+    if (!success) {
+        return Response.notFound404(res, {message: message});
+    }
+
+    Response.ok200(res, {project: data});
 });
 
 exports.updateDescription = catchAsync(async (req, res) => {
