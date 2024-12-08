@@ -144,14 +144,21 @@ class FeatureService {
         }
     }
 
-    static async findFeatureByProjectKeyAndFeatureKey(projectKey, featureKey) {
-        try {
+    static async findFeatureByProjectKeyAndFeatureKey(data) {
 
-            const feature = await FeatureModel.findOne({
-                attributes: ['name', 'featureKey', 'projectKey', 'description'],
+        try {
+            const feature = await prisma.feature.findUnique({
                 where: {
-                    projectKey: projectKey,
-                    featureKey: featureKey
+                    projectKey_featureKey: {
+                        projectKey: data.projectKey,
+                        featureKey: data.featureKey
+                    }
+                },
+                select: {
+                    name: true,
+                    featureKey: true,
+                    projectKey: true,
+                    description: true
                 }
             });
 
@@ -159,7 +166,7 @@ class FeatureService {
                 return {success: false, message: "No feature found"}
             }
 
-            return {success: true, data: feature.toJSON()};
+            return {success: true, data: feature};
 
         } catch (err) {
             throw new ErrorInterceptor({

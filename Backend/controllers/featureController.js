@@ -6,7 +6,7 @@ const {
     FeatureCreateRequest,
     GetFeatureOptionsRequest,
     UpdateFeatureNameRequest,
-    UpdateFeatureDescriptionRequest
+    UpdateFeatureDescriptionRequest, GetFeatureByProjectKeyAndFeatureKey
 } = require("../validator/FeatureRequestValidator");
 
 exports.createFeature = catchAsync(async (req, res) => {
@@ -52,22 +52,26 @@ exports.getFeatureByProjectKey = catchAsync(async (req, res) => {
     Response.ok200(res, features);
 });
 
-/* leave for now*/
 exports.getFeatureByProjectKeyAndFeatureKey = catchAsync(async (req, res) => {
 
-    const {projectKey, featureKey} = req.params;
+    let validated = undefined;
 
-    const {
-        success,
-        data: feature,
-        message
-    } = await FeatureService.findFeatureByProjectKeyAndFeatureKey(projectKey, featureKey)
+    try {
+        validated = await GetFeatureByProjectKeyAndFeatureKey.validateAsync({
+            projectKey: req.params.projectKey,
+            featureKey: req.params.featureKey
+        });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {success, data, message} = await FeatureService.findFeatureByProjectKeyAndFeatureKey(validated);
 
     if (!success) {
         return Response.notFound404(res, {message: message});
     }
 
-    Response.ok200(res, {feature: feature});
+    Response.ok200(res, {feature: data});
 });
 
 exports.getFeatureOptions = catchAsync(async (req, res) => {

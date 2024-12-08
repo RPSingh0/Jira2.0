@@ -111,3 +111,27 @@ exports.UpdateFeatureDescriptionRequest = Joi.object({
             'any.required': "Project description is required"
         })
 });
+
+exports.GetFeatureByProjectKeyAndFeatureKey = Joi.object({
+    projectKey: Joi.string()
+        .trim()
+        .max(30)
+        .required()
+        .messages({
+            'string.base': "Project key should be a string",
+            'string.max': "Project key should not exceed 100 characters",
+            'string.empty': "Project key cannot be empty",
+            'any.required': "Project key is required"
+        }),
+
+    featureKey: Joi.string()
+        .trim()
+        .max(30)
+        .required()
+        .messages({
+            'string.base': "Feature key should be a string",
+            'string.max': "Feature key should not exceed 100 characters",
+            'string.empty': "Feature key cannot be empty",
+            'any.required': "Feature key is required"
+        })
+});
