@@ -57,6 +57,18 @@ router.route('/create')
  *         schema:
  *           type: string
  *           description: The project key
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
  *         description: Features retrieved successfully

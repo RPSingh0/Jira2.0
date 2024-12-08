@@ -1,13 +1,13 @@
 const catchAsync = require('../utils/catchAsync');
 const Response = require('../utils/response');
-const {getPaginationParams} = require("../utils/utils");
 const FeatureService = require("../Service/FeatureService");
 const {
     FeatureCreateRequest,
     GetFeatureOptionsRequest,
     UpdateFeatureNameRequest,
-    UpdateFeatureDescriptionRequest, GetFeatureByProjectKeyAndFeatureKey
+    UpdateFeatureDescriptionRequest, GetFeatureByProjectKeyAndFeatureKey, GetFeatureByProjectKey
 } = require("../validator/FeatureRequestValidator");
+
 
 exports.createFeature = catchAsync(async (req, res) => {
 
@@ -35,21 +35,27 @@ exports.createFeature = catchAsync(async (req, res) => {
 /* leave for now*/
 exports.getFeatureByProjectKey = catchAsync(async (req, res) => {
 
-    const {projectKey} = req.params;
+    let validated = undefined
 
-    const {page, pageSize, search} = getPaginationParams(req.query);
+    try {
+        validated = await GetFeatureByProjectKey.validateAsync({
+            search: req.query.search,
+            page: req.query.page,
+            pageSize: req.query.pageSize,
+            projectKey: req.params.projectKey
+        });
 
-    const {
-        success,
-        data: features,
-        message
-    } = await FeatureService.findFeatureByProjectKey(projectKey, page, pageSize, search);
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {success, data, message} = await FeatureService.findFeatureByProjectKey(validated);
 
     if (!success) {
         return Response.notFound404(res, {message: message});
     }
 
-    Response.ok200(res, features);
+    Response.ok200(res, data);
 });
 
 exports.getFeatureByProjectKeyAndFeatureKey = catchAsync(async (req, res) => {

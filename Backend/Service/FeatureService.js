@@ -97,42 +97,47 @@ class FeatureService {
         }
     }
 
-    static async findFeatureByProjectKey(projectKey, page, pageSize, search) {
+    static async findFeatureByProjectKey(data) {
+
         try {
+            const skip = (data.page - 1) * data.pageSize;
 
-            const offset = (page - 1) * pageSize;
-
-            const {count, rows} = await FeatureModel.findAndCountAll({
-                attributes: ['name', 'featureKey', 'projectKey', 'description'],
-                where: {
-                    [Op.and]: [
-                        {projectKey: projectKey},
-                        {
-                            [Op.or]: [
-                                {name: {[Op.like]: `%${search}%`}},
-                                {featureKey: {[Op.like]: `%${search}%`}}
-                            ]
-                        }
-                    ]
-                },
-                limit: pageSize,
-                offset: offset
-            });
-
-            if (count === 0) {
-                return {success: false, message: "No features found"}
+            const searchCondition = data.search?.length > 0 ? {
+                OR: [
+                    {projectKey: data.projectKey, name: {contains: data.search, mode: 'insensitive'}},
+                    {projectKey: data.projectKey, featureKey: {contains: data.search, mode: 'insensitive'}},
+                ]
+            } : {
+                projectKey: data.projectKey
             }
 
-            let featuresJson = rows.map(feature => feature.toJSON());
+            const totalFeatures = await prisma.feature.count({
+                where: searchCondition
+            });
+
+            const features = await prisma.feature.findMany({
+                where: searchCondition,
+                skip: skip,
+                take: data.pageSize,
+                select: {
+                    name: true,
+                    featureKey: true,
+                    projectKey: true,
+                    description: true
+                }
+            });
+
+            if (features.length === 0) {
+                return {success: false, message: "No features available"};
+            }
 
             return {
                 success: true,
                 data: {
-                    features: featuresJson,
-                    totalRecords: count,
-                    totalPages: Math.ceil(count / pageSize),
-                    currentPage: page,
-                    pageSize: pageSize,
+                    features: features,
+                    page: data.page,
+                    pageSize: data.pageSize,
+                    totalPages: Math.ceil(totalFeatures / data.pageSize)
                 }
             };
 
