@@ -100,18 +100,17 @@ class UserService {
     }
 
     static async findByEmailActive(email) {
-        try {
 
+        try {
             const user = await prisma.user.findUnique({
                 where: {
                     email: email,
                     status: true
                 },
                 select: {
-                    firstName: true,
-                    lastName: true,
                     email: true,
-                    profileImage: true
+                    password: true,
+                    passwordChangedAt: true
                 }
             })
 
@@ -127,19 +126,6 @@ class UserService {
                 message: "Error fetching user from DB"
             });
         }
-    }
-
-    static async comparePassword(candidatePassword, userPassword) {
-        return await bcrypt.compare(candidatePassword, userPassword);
-    }
-
-    static passwordChangedAfterTokenIssued(passwordChangedAt, tokenIssuedAt) {
-        if (passwordChangedAt) {
-            const changedTimestamp = parseInt(new Date(passwordChangedAt).getTime() / 1000, 10);
-            return tokenIssuedAt < changedTimestamp;
-        }
-
-        return false;
     }
 }
 

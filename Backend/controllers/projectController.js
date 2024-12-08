@@ -1,16 +1,11 @@
 const catchAsync = require('../utils/catchAsync');
 const Response = require('../utils/response');
-const {
-    validateAndGetSearchString,
-    validateAndGetPageSize,
-    validateAndGetPage
-} = require("../utils/utils");
 const ProjectService = require("../Service/ProjectService");
 const {
     ProjectKeyGenerateRequest,
     ProjectCreateRequest,
     UpdateProjectDescriptionRequest,
-    UpdateProjectLeadRequest, GetProjectByProjectKeyRequest
+    UpdateProjectLeadRequest, GetProjectByProjectKeyRequest, GetAllProjectsRequest
 } = require("../validator/ProjectRequestValidator");
 
 exports.generateProjectKey = catchAsync(async (req, res) => {
@@ -68,56 +63,30 @@ exports.getProjectOptions = catchAsync(async (req, res) => {
     Response.ok200(res, {projects: projects});
 });
 
-/* leave for now*/
 exports.getAllProjects = catchAsync(async (req, res) => {
 
-    // take out query params
-    let {search, page, pageSize} = req.query;
+    let validated = undefined
 
-    search = validateAndGetSearchString(search);
-    page = validateAndGetPage(parseInt(page));
-    pageSize = validateAndGetPageSize(parseInt(pageSize));
-
-    // calculate the offset
-    const skip = (page - 1) * pageSize;
-
-    const email = req.user.email
-    const projects = await Project.getAllProjects(email, skip, pageSize, search);
-    let total = 0;
-
-    // processing team name, email and profileImage
-    const response = projects.map(project => {
-        const team = project.team;
-        total = project.totalRecords;
-
-        if (!team) {
-            return {
-                ...project,
-                totalRecords: undefined,
-                completionPercentage: parseInt(project.completionPercentage),
-                team: []
-            }
-        }
-
-        const users = team.split('|+|');
-        const finalUsers = users.map(user => {
-            const userData = user.split('||');
-            return {
-                name: userData[0],
-                email: userData[1],
-                profileImage: userData[2],
-            }
+    try {
+        validated = await GetAllProjectsRequest.validateAsync({
+            search: req.query.search,
+            page: req.query.page,
+            pageSize: req.query.pageSize
         });
 
-        return {
-            ...project,
-            totalRecords: undefined,
-            completionPercentage: parseInt(project.completionPercentage),
-            team: finalUsers
-        }
-    })
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
 
-    Response.ok200(res, {projects: response, total: total, page: page, pageSize: pageSize});
+    validated.user = req.user;
+
+    const {success, data, message} = await ProjectService.getAllProjects(validated);
+
+    if (!success) {
+        return Response.notFound404(res, {message: message});
+    }
+
+    Response.ok200(res, data);
 });
 
 exports.getProjectByProjectKey = catchAsync(async (req, res) => {
