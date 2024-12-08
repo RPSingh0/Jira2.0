@@ -80,7 +80,14 @@ class FeatureService {
                 return {success: false, message: "No features found"}
             }
 
-            return {success: true, data: features};
+            const result = features.map(feature => {
+                return {
+                    featureKey: feature.featureKey,
+                    optionText: `${feature.featureKey} | ${feature.name}`,
+                }
+            })
+
+            return {success: true, data: result};
 
         } catch (err) {
             throw new ErrorInterceptor({
