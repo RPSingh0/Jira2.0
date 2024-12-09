@@ -14,32 +14,30 @@ dotenv.config({
  * Initialize application
  */
 const app = require('./app');
+const prisma = require("./db");
 
-/**
- * Database connection
- */
-const {dbConnection} = require("./db");
+async function startServer() {
+    try {
+        // authenticating db for connection
+        await prisma.$connect();
+        console.log("Database connection has been established successfully.");
 
-dbConnection.connect((err) => {
-    if (err) {
-        console.log(`Unable to connect to DB: ${err.message}`);
+        // starting the server
+        if (process.env.NODE_ENV === 'dev') {
+            const port = process.env.PORT || 3000;
+            app.listen(port, '0.0.0.0', () => {
+                console.log(`Application is running on port: ${port}...`);
+            });
+        } else {
+            /**
+             * Code for lambda
+             */
+            module.exports.handler = serverless(app);
+        }
+    } catch (error) {
+        console.log("Unable to connect to the database: ", error.message);
         process.exit(1);
-    } else {
-        console.log('Connected to DB');
     }
-});
-
-/**
- * Run server based on environment
- */
-if (process.env.NODE_ENV === 'dev') {
-    const port = process.env.PORT || 3000;
-    app.listen(port, '0.0.0.0', () => {
-        console.log(`Application is running on port: ${port}...`);
-    });
-} else {
-    /**
-     * Code for lambda
-     */
-    module.exports.handler = serverless(app);
 }
+
+startServer();

@@ -1,140 +1,213 @@
 const catchAsync = require('../utils/catchAsync');
 const Response = require('../utils/response');
-const Jira = require("../models/Jira");
-const Metadata = require("../models/Metadata");
+const JiraService = require("../Service/JiraService");
+const {
+    JiraCreateRequest, GetJiraDetailsByJiraKeyRequest,
+    GetJiraMetadataByJiraKeyRequest, GetJiraUnderFeatureRequest, UpdateJiraSummaryRequest, UpdateJiraDescriptionRequest,
+    UpdateJiraAssigneeRequest, UpdateJiraPointsRequest, UpdateJiraFeatureRequest
+} = require("../validator/JiraRequestValidator");
 
-exports.createJira = catchAsync(async (req, res, next) => {
-    const {summary, jiraType, description, jiraPoint, projectKey, featureKey, assignee} = req.body;
+exports.createJira = catchAsync(async (req, res) => {
 
-    // generate jira key
-    const jiraKeySequence = await Jira.generateJiraKeySequence(projectKey);
-    const generatedJiraKey = projectKey + '-' + (jiraKeySequence + 1);
+    let validated = undefined;
 
-    // create the jira
-    const jira = Jira.create()
-        .setSummary(summary)
-        .setJiraKey(generatedJiraKey)
-        .setJiraType(jiraType)
-        .setDescription(description)
-        .setJiraLink(`/project/${projectKey}/feature/${featureKey}/${generatedJiraKey}`)
-        .build();
+    try {
+        validated = await JiraCreateRequest.validateAsync({
+            summary: req.body.summary,
+            jiraType: req.body.jiraType,
+            description: req.body.description,
+            jiraPoint: req.body.jiraPoint,
+            projectKey: req.body.projectKey,
+            featureKey: req.body.featureKey,
+            assignee: req.body.assignee,
+            reporter: "one.first@test.com"
+        });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
 
-    // create metadata
-    const metadata = Metadata.create()
-        .setJiraKey(generatedJiraKey)
-        .setJiraPoint(jiraPoint)
-        .setProjectKey(projectKey)
-        .setFeatureKey(featureKey)
-        .setAssignee(assignee)
-        .setReporter(req.user.email)
-        .setStatus(1)
-        .build();
+    const {success, message} = await JiraService.createJira(validated);
 
-    const result = await jira.save(metadata);
+    if (!success) {
+        return Response.badRequest400(res, {message: message});
+    }
 
-    Response.ok201(res, {jiraKey: result.jiraKey});
+    Response.ok201(res);
 });
 
-exports.getJiraDetailsByJiraKey = catchAsync(async (req, res, next) => {
-    const jiraKey = req.params.jiraKey;
+exports.getJiraDetailsByJiraKey = catchAsync(async (req, res) => {
 
-    const jiraDetails = await Jira.getJiraDetailsByJiraKey(jiraKey);
+    let validated = undefined;
 
-    if (!jiraDetails) {
+    try {
+        validated = await GetJiraDetailsByJiraKeyRequest.validateAsync({
+            jiraKey: req.params.jiraKey
+        });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {success, data, message} = await JiraService.getJiraDetailsByJiraKey(validated);
+
+    if (!success) {
+        return Response.notFound404(res, {message: message});
+    }
+
+    Response.ok200(res, {jiraDetails: data});
+});
+
+exports.getJiraMetadataByJiraKey = catchAsync(async (req, res) => {
+
+    let validated = undefined;
+
+    try {
+        validated = await GetJiraMetadataByJiraKeyRequest.validateAsync({
+            jiraKey: req.params.jiraKey
+        });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {success, data, message} = await JiraService.getJiraMetadataByJiraKey(validated);
+
+    if (!success) {
         return Response.notFound404(res, {
-            message: `No jira found by key: ${jiraKey}`
+            message: message
         });
     }
 
-    Response.ok200(res, {jiraDetails: jiraDetails});
+    Response.ok200(res, {jiraMetadata: data});
 });
 
-exports.getJiraMetadataByJiraKey = catchAsync(async (req, res, next) => {
-    const jiraKey = req.params.jiraKey;
+exports.getJiraUnderFeature = catchAsync(async (req, res) => {
 
-    const jiraMetadata = await Metadata.getJiraMetadataByJiraKey(jiraKey);
+    let validated = undefined;
 
-    if (!jiraMetadata) {
-        return Response.notFound404(res, {
-            message: `No jira found by key: ${jiraKey}`
+    try {
+        validated = await GetJiraUnderFeatureRequest.validateAsync({
+            projectKey: req.params.projectKey,
+            featureKey: req.params.featureKey
         });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
     }
 
-    Response.ok200(res, {jiraMetadata: jiraMetadata});
-});
+    const {success, message, data} = await JiraService.getJiraByProjectKeyAndFeatureKey(validated);
 
-exports.getJiraUnderFeature = catchAsync(async (req, res, next) => {
-    const {projectKey, featureKey} = req.params;
-
-    const jira = await Jira.getJiraByProjectKeyAndFeatureKey(projectKey, featureKey);
-
-    if (!jira || jira.length === 0) {
-        return Response.notFound404(res, {message: `No jira under project: ${projectKey} and feature : ${featureKey}`});
+    if (!success) {
+        return Response.notFound404(res, {message: message});
     }
 
-    Response.ok200(res, {jira: jira});
+    Response.ok200(res, {jira: data});
 });
 
-exports.updateSummary = catchAsync(async (req, res, next) => {
-    const {jiraKey, summary} = req.body;
+exports.updateSummary = catchAsync(async (req, res) => {
 
-    const affectedRows = await Jira.updateJiraSummaryByJiraKey(jiraKey, summary);
+    let validated = undefined;
 
-    if (affectedRows === 0) {
-        return Response.notFound404(res, {
-            message: `No such jira by key: ${jiraKey}`
+    try {
+        validated = await UpdateJiraSummaryRequest.validateAsync({
+            jiraKey: req.body.jiraKey,
+            summary: req.body.summary
         });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {success, message} = await JiraService.updateJiraSummary(validated);
+
+    if (!success) {
+        return Response.notFound404(res, {message: message});
     }
 
     Response.ok200(res);
 });
 
-exports.updateDescription = catchAsync(async (req, res, next) => {
-    const {jiraKey, description} = req.body;
+exports.updateDescription = catchAsync(async (req, res) => {
 
-    const affectedRows = await Jira.updateJiraDescriptionByJiraKey(jiraKey, description);
+    let validated = undefined;
 
-    if (affectedRows === 0) {
-        return Response.notFound404(res, {
-            message: `No such jira by key: ${jiraKey}`
+    try {
+        validated = await UpdateJiraDescriptionRequest.validateAsync({
+            jiraKey: req.body.jiraKey,
+            description: req.body.description
         });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {success, message} = await JiraService.updateJiraDescription(validated);
+
+    if (!success) {
+        return Response.notFound404(res, {message: message});
     }
 
     Response.ok200(res);
 });
 
-exports.updateAssignee = catchAsync(async (req, res, next) => {
-    const {jiraKey, assignee} = req.body;
+exports.updateAssignee = catchAsync(async (req, res) => {
 
-    const affectedRows = await Metadata.updateAssignee(jiraKey, assignee);
+    let validated = undefined;
 
-    if (affectedRows === 0) {
-        return Response.notFound404(res, {
-            message: `No such jira by key: ${jiraKey}`
+    try {
+        validated = await UpdateJiraAssigneeRequest.validateAsync({
+            jiraKey: req.body.jiraKey,
+            assignee: req.body.assignee
         });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {success, message} = await JiraService.updateJiraAssignee(validated);
+
+    if (!success) {
+        return Response.notFound404(res, {message: message});
     }
 
     Response.ok200(res);
 });
 
-exports.updatePoints = catchAsync(async (req, res, next) => {
-    const {jiraKey, jiraPoint} = req.body;
+exports.updatePoints = catchAsync(async (req, res) => {
 
-    const affectedRows = await Metadata.updatePoints(jiraKey, jiraPoint);
+    let validated = undefined;
 
-    if (affectedRows === 0) {
-        return Response.notFound404(res, {
-            message: `No such jira by key: ${jiraKey}`
+    try {
+        validated = await UpdateJiraPointsRequest.validateAsync({
+            jiraKey: req.body.jiraKey,
+            jiraPoint: req.body.jiraPoint
         });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {success, message} = await JiraService.updateJiraPoints(validated);
+
+    if (!success) {
+        return Response.notFound404(res, {message: message});
     }
 
     Response.ok200(res);
 });
 
-exports.updateFeature = catchAsync(async (req, res, next) => {
-    const {jiraKey, projectKey, featureKey} = req.body;
+exports.updateFeature = catchAsync(async (req, res) => {
 
-    await Metadata.updateFeature(jiraKey, projectKey, featureKey);
+    let validated = undefined;
+
+    try {
+        validated = await UpdateJiraFeatureRequest.validateAsync({
+            jiraKey: req.body.jiraKey,
+            projectKey: req.body.projectKey,
+            featureKey: req.body.featureKey
+        });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {success, message} = await JiraService.updateJiraFeature(validated);
+
+    if (!success) {
+        return Response.notFound404(res, {message: message});
+    }
 
     Response.ok200(res);
 });

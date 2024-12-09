@@ -1,134 +1,157 @@
 const catchAsync = require('../utils/catchAsync');
 const Response = require('../utils/response');
-const Project = require("../models/Project");
+const ProjectService = require("../Service/ProjectService");
 const {
-    cleanProjectName,
-    validateAndGetSearchString,
-    validateAndGetPageSize,
-    validateAndGetPage
-} = require("../utils/utils");
+    ProjectKeyGenerateRequest,
+    ProjectCreateRequest,
+    UpdateProjectDescriptionRequest,
+    UpdateProjectLeadRequest, GetProjectByProjectKeyRequest, GetAllProjectsRequest
+} = require("../validator/ProjectRequestValidator");
 
-exports.generateProjectKey = catchAsync(async (req, res, next) => {
-    const {name} = req.body;
-    const processedName = cleanProjectName(name);
-    const projectKey = await Project.generateProjectKeySequence(processedName);
-    const finalKey = processedName + (projectKey + 1);
+exports.generateProjectKey = catchAsync(async (req, res) => {
 
-    Response.ok201(res, {projectKey: finalKey});
+    let validated = undefined
+
+    try {
+
+        validated = await ProjectKeyGenerateRequest.validateAsync({
+            name: req.body.name
+        });
+
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {data: generatedKey} = await ProjectService.generateNextProjectKey(validated);
+
+    Response.ok201(res, {projectKey: generatedKey});
 });
 
-exports.createProject = catchAsync(async (req, res, next) => {
-    const {name, description, projectLeadBy, startDate, expectedEndDate} = req.body;
+exports.createProject = catchAsync(async (req, res) => {
 
-    // generate project key
-    const processedName = cleanProjectName(name);
-    const projectKeySequence = await Project.generateProjectKeySequence(processedName);
-    const generatedProjectKey = processedName + (projectKeySequence + 1);
+    let validated = undefined;
 
-    // create the user object
-    const newProject = Project.create()
-        .setName(name)
-        .setProjectKey(generatedProjectKey)
-        .setDescription(description)
-        .setLead(projectLeadBy)
-        .setStartDate(startDate)
-        .setExpectedEndDate(expectedEndDate)
-        .build();
+    try {
+        validated = await ProjectCreateRequest.validateAsync({
+            name: req.body.name,
+            description: req.body.description,
+            projectLeadBy: req.body.projectLeadBy,
+            startDate: req.body.startDate,
+            endDate: req.body.endDate
+        });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
 
-    await newProject.save();
+    const {success, message} = await ProjectService.createProject(validated);
 
-    Response.ok201(res, {projectKey: generatedProjectKey});
+    if (!success) {
+        return Response.badRequest400(res, {message: message});
+    }
+
+    Response.ok201(res);
 });
 
-exports.getAllProjectsAsOptions = catchAsync(async (req, res, next) => {
-    const projects = await Project.getAllProjectsAsOptions();
+exports.getProjectOptions = catchAsync(async (req, res) => {
+
+    const {success, data: projects, message} = await ProjectService.getProjectOptions();
+
+    if (!success) {
+        return Response.notFound404(res, {message: message});
+    }
+
     Response.ok200(res, {projects: projects});
 });
 
-exports.getAllProjects = catchAsync(async (req, res, next) => {
+exports.getAllProjects = catchAsync(async (req, res) => {
 
-    // take out query params
-    let {search, page, pageSize} = req.query;
+    let validated = undefined
 
-    search = validateAndGetSearchString(search);
-    page = validateAndGetPage(parseInt(page));
-    pageSize = validateAndGetPageSize(parseInt(pageSize));
-
-    // calculate the offset
-    const skip = (page - 1) * pageSize;
-
-    const email = req.user.email
-    const projects = await Project.getAllProjects(email, skip, pageSize, search);
-    let total = 0;
-
-    // processing team name, email and profileImage
-    const response = projects.map(project => {
-        const team = project.team;
-        total = project.totalRecords;
-
-        if (!team) {
-            return {
-                ...project,
-                totalRecords: undefined,
-                completionPercentage: parseInt(project.completionPercentage),
-                team: []
-            }
-        }
-
-        const users = team.split('|+|');
-        const finalUsers = users.map(user => {
-            const userData = user.split('||');
-            return {
-                name: userData[0],
-                email: userData[1],
-                profileImage: userData[2],
-            }
+    try {
+        validated = await GetAllProjectsRequest.validateAsync({
+            search: req.query.search,
+            page: req.query.page,
+            pageSize: req.query.pageSize
         });
 
-        return {
-            ...project,
-            totalRecords: undefined,
-            completionPercentage: parseInt(project.completionPercentage),
-            team: finalUsers
-        }
-    })
-
-    Response.ok200(res, {projects: response, total: total, page: page, pageSize: pageSize});
-});
-
-exports.getProjectByProjectKey = catchAsync(async (req, res, next) => {
-    const {projectKey} = req.params;
-    const project = await Project.getProjectByProjectKey(projectKey);
-
-    if (!project) {
-        return Response.notFound404(res, {message: `No project found with key: ${projectKey}`});
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
     }
 
-    Response.ok200(res, {project: project});
+    validated.user = req.user;
+
+    const {success, data, message} = await ProjectService.getAllProjects(validated);
+
+    if (!success) {
+        return Response.notFound404(res, {message: message});
+    }
+
+    Response.ok200(res, data);
 });
 
-exports.updateDescription = catchAsync(async (req, res, next) => {
-    const {projectKey, description} = req.body;
+exports.getProjectByProjectKey = catchAsync(async (req, res) => {
 
-    const affectedRows = await Project.updateProjectDescription(projectKey, description);
+    let validated = undefined;
 
-    if (affectedRows === 0) {
+    try {
+        validated = await GetProjectByProjectKeyRequest.validateAsync({
+            projectKey: req.params.projectKey
+        });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {success, data, message} = await ProjectService.getProjectByProjectKey(validated);
+
+    if (!success) {
+        return Response.notFound404(res, {message: message});
+    }
+
+    Response.ok200(res, {project: data});
+});
+
+exports.updateDescription = catchAsync(async (req, res) => {
+
+    let validated = undefined;
+
+    try {
+        validated = await UpdateProjectDescriptionRequest.validateAsync({
+            projectKey: req.body.projectKey,
+            description: req.body.description
+        });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {success, message} = await ProjectService.updateProjectDescription(validated);
+
+    if (!success) {
         return Response.notFound404(res, {
-            message: `No such project found by key: ${projectKey}`,
+            message: message,
         });
     }
 
     Response.ok200(res);
 });
 
-exports.updateLeadBy = catchAsync(async (req, res, next) => {
-    const {projectKey, leadBy} = req.body;
+exports.updateLead = catchAsync(async (req, res) => {
 
-    const affectedRows = await Project.updateLeadBy(projectKey, leadBy);
+    let validated = undefined;
 
-    if (affectedRows === 0) {
+    try {
+        validated = await UpdateProjectLeadRequest.validateAsync({
+            projectKey: req.body.projectKey,
+            projectLeadBy: req.body.projectLeadBy
+        });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {success, message} = await ProjectService.updateProjectLead(validated);
+
+    if (!success) {
         return Response.notFound404(res, {
-            message: `No such project by key: ${projectKey}`
+            message: message,
         });
     }
 

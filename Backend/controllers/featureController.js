@@ -1,98 +1,146 @@
 const catchAsync = require('../utils/catchAsync');
 const Response = require('../utils/response');
-const Feature = require("../models/Feature");
-const {validateAndGetSearchString, validateAndGetPage, validateAndGetPageSize} = require("../utils/utils");
+const FeatureService = require("../Service/FeatureService");
+const {
+    FeatureCreateRequest,
+    GetFeatureOptionsRequest,
+    UpdateFeatureNameRequest,
+    UpdateFeatureDescriptionRequest, GetFeatureByProjectKeyAndFeatureKey, GetFeatureByProjectKey
+} = require("../validator/FeatureRequestValidator");
 
-exports.createFeature = catchAsync(async (req, res, next) => {
-    const {name, description, projectKey} = req.body;
 
-    // generate feature key
-    const featureKeySequence = await Feature.generateFeatureKeySequence(projectKey);
-    const generatedFeatureKey = 'ftr-' + (featureKeySequence + 1);
+exports.createFeature = catchAsync(async (req, res) => {
 
-    // create the user object
-    const newFeature = Feature.create()
-        .setName(name)
-        .setFeatureKey(generatedFeatureKey)
-        .setDescription(description)
-        .setProjectKey(projectKey)
-        .build();
+    let validated = undefined;
 
-    await newFeature.save();
-
-    Response.ok201(res, {featureKey: generatedFeatureKey});
-});
-
-exports.getFeatureByProjectKeyAndFeatureKey = catchAsync(async (req, res, next) => {
-    const {projectKey, featureKey} = req.params;
-
-    const feature = await Feature.findFeatureByProjectKeyAndFeatureKey(projectKey, featureKey);
-
-    if (!feature) {
-        return Response.notFound404(res, {message: `No feature with key: ${featureKey} within ${projectKey}`});
+    try {
+        validated = await FeatureCreateRequest.validateAsync({
+            name: req.body.name,
+            description: req.body.description,
+            projectKey: req.body.projectKey
+        });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
     }
 
-    Response.ok200(res, {feature: feature});
-});
+    const {success, message} = await FeatureService.createFeature(validated);
 
-exports.getFeatureByProjectKey = catchAsync(async (req, res, next) => {
-    const {projectKey} = req.params;
-
-    // take out query params
-    let {search, page, pageSize} = req.query;
-
-    search = validateAndGetSearchString(search);
-    page = validateAndGetPage(parseInt(page));
-    pageSize = validateAndGetPageSize(parseInt(pageSize));
-
-    // calculate the offset
-    const skip = (page - 1) * pageSize;
-
-    const feature = await Feature.findFeatureByProjectKey(projectKey, skip, pageSize, search);
-
-    if (!feature || feature.length === 0) {
-        return Response.notFound404(res, {message: `No features found under project: ${projectKey}`});
+    if (!success) {
+        return Response.badRequest400(res, {message: message});
     }
 
-    Response.ok200(res, {feature: feature});
+    Response.ok201(res);
 });
 
-exports.getFeaturesAsOptionsByProjectKey = catchAsync(async (req, res, next) => {
-    let {projectKey} = req.params;
-    projectKey = projectKey.trim().toUpperCase();
+exports.getFeatureByProjectKey = catchAsync(async (req, res) => {
 
-    if (!projectKey) {
-        Response.badRequest400(res, {message: 'No project key provided'});
+    let validated = undefined
+
+    try {
+        validated = await GetFeatureByProjectKey.validateAsync({
+            search: req.query.search,
+            page: req.query.page,
+            pageSize: req.query.pageSize,
+            projectKey: req.params.projectKey
+        });
+
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
     }
 
-    const features = await Feature.getFeaturesAsOptionsByProjectKey(projectKey);
+    const {success, data, message} = await FeatureService.findFeatureByProjectKey(validated);
+
+    if (!success) {
+        return Response.notFound404(res, {message: message});
+    }
+
+    Response.ok200(res, data);
+});
+
+exports.getFeatureByProjectKeyAndFeatureKey = catchAsync(async (req, res) => {
+
+    let validated = undefined;
+
+    try {
+        validated = await GetFeatureByProjectKeyAndFeatureKey.validateAsync({
+            projectKey: req.params.projectKey,
+            featureKey: req.params.featureKey
+        });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {success, data, message} = await FeatureService.findFeatureByProjectKeyAndFeatureKey(validated);
+
+    if (!success) {
+        return Response.notFound404(res, {message: message});
+    }
+
+    Response.ok200(res, {feature: data});
+});
+
+exports.getFeatureOptions = catchAsync(async (req, res) => {
+
+    let validated = undefined;
+
+    try {
+        validated = await GetFeatureOptionsRequest.validateAsync({
+            projectKey: req.params.projectKey
+        });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {success, data: features, message} = await FeatureService.getFeatureOptions(validated);
+
+    if (!success) {
+        return Response.notFound404(res, {message: message});
+    }
 
     Response.ok200(res, {features: features});
 })
 
-exports.updateName = catchAsync(async (req, res, next) => {
-    const {projectKey, featureKey, name} = req.body;
+exports.updateName = catchAsync(async (req, res) => {
 
-    const affectedRows = await Feature.updateFeatureName(projectKey, featureKey, name);
+    let validated = undefined;
 
-    if (affectedRows === 0) {
-        return Response.notFound404(res, {
-            message: `No such feature under project: ${projectKey} by feature: ${featureKey}`,
+    try {
+        validated = await UpdateFeatureNameRequest.validateAsync({
+            projectKey: req.body.projectKey,
+            featureKey: req.body.featureKey,
+            name: req.body.name
         });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {success, message} = await FeatureService.updateFeatureName(validated);
+
+    if (!success) {
+        return Response.notFound404(res, {message: message,});
     }
 
     Response.ok200(res);
 });
 
-exports.updateDescription = catchAsync(async (req, res, next) => {
-    const {projectKey, featureKey, description} = req.body;
+exports.updateDescription = catchAsync(async (req, res) => {
 
-    const affectedRows = await Feature.updateFeatureDescription(projectKey, featureKey, description);
+    let validated = undefined;
 
-    if (affectedRows === 0) {
-        return Response.notFound404(res, {
-            message: `No such feature under project: ${projectKey} by feature: ${featureKey}`
+    try {
+        validated = await UpdateFeatureDescriptionRequest.validateAsync({
+            projectKey: req.body.projectKey,
+            featureKey: req.body.featureKey,
+            description: req.body.description
         });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    const {success, message} = await FeatureService.updateFeatureDescription(validated);
+
+    if (!success) {
+        return Response.notFound404(res, {message: message,});
     }
 
     Response.ok200(res);

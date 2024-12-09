@@ -1,0 +1,47 @@
+### Project one
+POST http://localhost:3000/api/v1/project/create
+Content-Type: application/json
+
+{
+  "name": "My Project One",
+  "description": "Some desc",
+  "projectLeadBy": "one.first@test.com",
+  "startDate": "2024-11-25T18:05:50.582Z",
+  "endDate": "2024-11-29T18:05:50.582Z"
+}
+
+### Project two
+POST http://localhost:3000/api/v1/project/create
+Content-Type: application/json
+
+{
+  "name": "My Project Two",
+  "description": "Some desc",
+  "projectLeadBy": "two.second@test.com",
+  "startDate": "2024-11-25T18:05:50.582Z",
+  "endDate": "2024-11-29T18:05:50.582Z"
+}
+
+### Project three
+POST http://localhost:3000/api/v1/project/create
+Content-Type: application/json
+
+{
+  "name": "My Project Three",
+  "description": "Some desc",
+  "projectLeadBy": "three.third@test.com",
+  "startDate": "2024-11-25T18:05:50.582Z",
+  "endDate": "2024-11-29T18:05:50.582Z"
+}
+
+### Project four
+POST http://localhost:3000/api/v1/project/create
+Content-Type: application/json
+
+{
+  "name": "My Project Four",
+  "description": "Some desc",
+  "projectLeadBy": "four.fourth@test.com",
+  "startDate": "2024-11-25T18:05:50.582Z",
+  "endDate": "2024-11-29T18:05:50.582Z"
+}

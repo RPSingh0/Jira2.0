@@ -57,6 +57,18 @@ router.route('/create')
  *         schema:
  *           type: string
  *           description: The project key
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
  *         description: Features retrieved successfully
@@ -124,7 +136,7 @@ router.route('/getFeature/:projectKey/:featureKey')
 
 /**
  * @swagger
- * /feature/getFeaturesAsOptionsByProjectKey/{projectKey}:
+ * /feature/getFeatureOptions/{projectKey}:
  *   get:
  *     summary: Get features as options by a project key
  *     tags: [Feature]
@@ -155,8 +167,8 @@ router.route('/getFeature/:projectKey/:featureKey')
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.route('/getFeaturesAsOptionsByProjectKey/:projectKey')
-    .get(featureController.getFeaturesAsOptionsByProjectKey);
+router.route('/getFeatureOptions/:projectKey')
+    .get(featureController.getFeatureOptions);
 
 /**
  * @swagger

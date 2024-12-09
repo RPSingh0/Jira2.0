@@ -2,34 +2,16 @@ const {PAGE_NUMBER, PAGE_SIZE, SEARCH_STRING} = require("./CONSTANTS");
 exports.cleanProjectName = function (projectName) {
     return projectName
         .trim()
+        .replace(/[^a-zA-Z0-9\s]/g, '')
         .replace(/\s+/g, ' ')
+        .trim()
         .split(' ')
         .map(word => word[0].toLowerCase())
         .join('');
 }
 
-exports.validateDateFormat = function (date) {
-    const isoRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{3})?Z$/;
-    if (!isoRegex.test(date)) {
-        return false;
-    }
-
-    const parsedDate = new Date(date);
-
-    if (parsedDate.toString() === 'Invalid Date') {
-        return false;
-    }
-
-    return parsedDate.toISOString() === date;
-}
-
-exports.formatISODate = function (isoDate) {
-    const parsedDate = new Date(isoDate);
-    const year = parsedDate.getUTCFullYear();
-    const month = String(parsedDate.getUTCMonth() + 1).padStart(2, '0');
-    const day = String(parsedDate.getUTCDate()).padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
+exports.cleanProjectKey = function (projectKey) {
+    return projectKey.trim();
 }
 
 exports.validateAndGetPage = function (page) {
@@ -54,4 +36,16 @@ exports.validateAndGetSearchString = function (searchString) {
     } else {
         return searchString
     }
+}
+
+exports.getPaginationParams = function (query) {
+
+    // take out query params
+    let {search, page, pageSize} = query;
+
+    search = exports.validateAndGetSearchString(search);
+    page = exports.validateAndGetPage(parseInt(page));
+    pageSize = exports.validateAndGetPageSize(parseInt(pageSize));
+
+    return {page, pageSize, search}
 }

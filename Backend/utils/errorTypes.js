@@ -4,6 +4,7 @@ const ErrorType = Object.freeze({
     UNAUTHORIZED: 'UnauthorizedError',
     FORBIDDEN: 'ForbiddenError',
     NOT_FOUND: 'NotFound',
+    INTERNAL_SERVER_ERROR: 'InternalServerError'
 });
 
 module.exports = ErrorType;

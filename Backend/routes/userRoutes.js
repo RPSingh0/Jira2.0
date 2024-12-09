@@ -130,11 +130,11 @@ router.route('/login')
  *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/validateToken')
-    .get(authenticationController.validateToken);
+    .get(authenticationController.authenticate, authenticationController.validateToken);
 
 /**
  * @swagger
- * /user/getAllUsers:
+ * /user/getAllActiveUsers:
  *   get:
  *     security:
  *       - Authorization: []
@@ -166,8 +166,8 @@ router.route('/validateToken')
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-router.route('/getAllUsers')
-    .get(userController.getAllUsers);
+router.route('/getAllActiveUsers')
+    .get(userController.getAllActiveUsers);
 
 /**
  * @swagger
@@ -183,6 +183,18 @@ router.route('/getAllUsers')
  *         schema:
  *           type: string
  *           description: The type of jira
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
  *         description: Jira retrieved successfully
