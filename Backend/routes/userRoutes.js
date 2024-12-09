@@ -183,6 +183,18 @@ router.route('/getAllActiveUsers')
  *         schema:
  *           type: string
  *           description: The type of jira
+ *       - in: query
+ *         name: search
+ *         schema:
+ *           type: string
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *       - in: query
+ *         name: pageSize
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
  *         description: Jira retrieved successfully
@@ -203,7 +215,7 @@ router.route('/getAllActiveUsers')
  *             schema:
  *               $ref: '#/components/schemas/InternalServerError'
  */
-// router.route('/workedOn')
-//     .get(authenticationController.authenticate, userController.workedOn);
+router.route('/workedOn')
+    .get(authenticationController.authenticate, userController.workedOn);
 
 module.exports = router;

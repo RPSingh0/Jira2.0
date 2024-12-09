@@ -407,6 +407,97 @@ class JiraService {
             });
         }
     }
+
+    static async getJiraByUserEmail(data) {
+
+        try {
+            const skip = (data.page - 1) * data.pageSize;
+
+            const searchCondition = data.search?.length > 0 ? {
+                OR: [
+                    {jiraKey: {contains: data.search, mode: 'insensitive'}},
+                    {summary: {contains: data.search, mode: 'insensitive'}}
+                ]
+            } : {}
+
+            const jiraTypeCondition = data.type?.length > 0 ? {
+                jiraType: data.type
+            } : {}
+
+            const whereClause = {
+                ...searchCondition,
+                ...jiraTypeCondition,
+                metadata: {
+                    OR: [
+                        {assignee: data.user.email},
+                        {reporter: data.user.email}
+                    ]
+                }
+            }
+
+            // get total jira
+            const totalJira = await prisma.jira.count({
+                where: whereClause
+            });
+
+            const jiras = await prisma.jira.findMany({
+                where: whereClause,
+                skip: skip,
+                take: data.pageSize,
+                select: {
+                    jiraKey: true,
+                    jiraType: true,
+                    summary: true,
+                    jiraLink: true,
+                    metadata: {
+                        select: {
+                            status: true,
+                            UserAssignee: {
+                                select: {
+                                    firstName: true,
+                                    lastName: true,
+                                    email: true,
+                                    profileImage: true
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            if (jiras.length === 0) {
+                return {success: false, message: "No jira available"}
+            }
+
+            const result = jiras.map(jira => {
+                return {
+                    summary: jira.summary,
+                    jiraType: jira.jiraType,
+                    jiraKey: jira.jiraKey,
+                    jiraLink: jira.jiraLink,
+                    assigneeName: `${jira.metadata.UserAssignee.firstName} ${jira.metadata.UserAssignee.lastName}`,
+                    assigneeEmail: jira.metadata.UserAssignee.email,
+                    assigneeProfileImage: jira.metadata.UserAssignee.profileImage,
+                    status: jira.metadata.status
+                }
+            });
+
+            return {
+                success: true, data: {
+                    jira: result,
+                    page: data.page,
+                    pageSize: data.pageSize,
+                    totalPages: Math.ceil(totalJira / data.pageSize)
+                }
+            };
+
+        } catch (err) {
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: "Error fetching jira from DB"
+            });
+        }
+    }
 }
 
 module.exports = JiraService;

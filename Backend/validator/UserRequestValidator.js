@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const {PaginationValidators} = require("./PaginationValidators");
 
 exports.UserCreateRequest = Joi.object({
     firstName: Joi.string()
@@ -57,4 +58,16 @@ exports.UserCreateRequest = Joi.object({
             'string.empty': "Password cannot be empty",
             'any.required': "Password is required",
         })
+});
+
+exports.GetWorkedOnJiraRequest = Joi.object({
+    type: Joi.string()
+        .trim()
+        .valid('STORY', 'BUG', 'TASK')
+        .messages({
+            'string.empty': "Jira type cannot be empty",
+            'any.only': "Jira type must be one of STORY, BUG or TASK"
+        }),
+
+    ...PaginationValidators
 });

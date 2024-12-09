@@ -32,7 +32,6 @@ exports.createFeature = catchAsync(async (req, res) => {
     Response.ok201(res);
 });
 
-/* leave for now*/
 exports.getFeatureByProjectKey = catchAsync(async (req, res) => {
 
     let validated = undefined

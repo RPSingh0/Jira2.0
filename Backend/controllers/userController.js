@@ -1,7 +1,8 @@
 const catchAsync = require('../utils/catchAsync');
 const Response = require('../utils/response');
 const UserService = require("../Service/UserService");
-const {UserCreateRequest} = require("../validator/UserRequestValidator");
+const JiraService = require("../Service/JiraService");
+const {UserCreateRequest, GetWorkedOnJiraRequest} = require("../validator/UserRequestValidator");
 
 exports.createUser = catchAsync(async (req, res) => {
 
@@ -35,21 +36,28 @@ exports.getAllActiveUsers = catchAsync(async (req, res) => {
     Response.ok200(res, {users: users});
 });
 
-// exports.workedOn = catchAsync(async (req, res) => {
-//     // get the query from request
-//     const query = req.query;
-//     let response = null;
-//
-//     // if type is available
-//     if (!query.type) {
-//         response = await Jira.getJiraByUserEmail(req.user.email);
-//     } else {
-//         response = await Jira.getJiraByUserEmail(req.user.email, query.type);
-//     }
-//
-//     if (!response || response.length === 0) {
-//         return Response.notFound404(res, {message: `No data for user or type is invalid`});
-//     }
-//
-//     Response.ok200(res, {jira: response});
-// });
+exports.workedOn = catchAsync(async (req, res) => {
+
+    let validated = undefined;
+
+    try {
+        validated = await GetWorkedOnJiraRequest.validateAsync({
+            type: req.query.type,
+            page: req.query.page,
+            pageSize: req.query.pageSize,
+            search: req.query.search
+        });
+    } catch (err) {
+        return Response.badRequest400(res, {message: err.message});
+    }
+
+    validated.user = req.user;
+
+    const {success, data, message} = await JiraService.getJiraByUserEmail(validated);
+
+    if (!success) {
+        return Response.notFound404(res, {message: message});
+    }
+
+    Response.ok200(res, {jira: data});
+});

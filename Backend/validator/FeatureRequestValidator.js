@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const {PaginationValidators} = require("./PaginationValidators");
 
 exports.FeatureCreateRequest = Joi.object({
     name: Joi.string()
@@ -137,31 +138,6 @@ exports.GetFeatureByProjectKeyAndFeatureKey = Joi.object({
 });
 
 exports.GetFeatureByProjectKey = Joi.object({
-    search: Joi.string()
-        .trim()
-        .allow('')
-        .default(''),
-
-    page: Joi.number()
-        .integer()
-        .min(1)
-        .default(1)
-        .messages({
-            'number.base': "Page must be a number",
-            'number.integer': "Page must be an integer",
-            'number.min': "Page must be at least 1"
-        }),
-
-    pageSize: Joi.number()
-        .integer()
-        .min(1)
-        .default(6)
-        .messages({
-            'number.base': "Page size must be a number",
-            'number.integer': "Page size must be an integer",
-            'number.min': "Page size must be at least 1"
-        }),
-
     projectKey: Joi.string()
         .trim()
         .max(30)
@@ -171,5 +147,7 @@ exports.GetFeatureByProjectKey = Joi.object({
             'string.max': "Project key should not exceed 100 characters",
             'string.empty': "Project key cannot be empty",
             'any.required': "Project key is required"
-        })
+        }),
+
+    ...PaginationValidators
 });
