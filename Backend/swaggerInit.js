@@ -31,7 +31,7 @@ const options = {
     },
     apis: [
         "./routes/**/*.js",
-
+        "./routes/**/*.yaml"
     ]
 };
 

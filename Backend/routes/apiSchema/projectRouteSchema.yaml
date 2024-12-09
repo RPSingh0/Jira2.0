@@ -1,0 +1,182 @@
+components:
+  schemas:
+    ProjectCreate:
+      required:
+        - name
+        - description
+        - projectLeadBy
+        - startDate
+        - endDate
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        projectLeadBy:
+          type: string
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+    GenerateProjectKey:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    GenerateProjectKeySuccess:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: object
+          properties:
+            projectKey:
+              type: string
+    ProjectCreateSuccess:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: object
+          properties:
+            projectKey:
+              type: string
+    GetAllProjectsAsOptionSuccess:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: object
+          properties:
+            projects:
+              type: array
+              items:
+                type: object
+                properties:
+                  projectKey:
+                    type: string
+                  optionText:
+                    type: string
+    GetProjectByProjectKeySuccess:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: object
+          properties:
+            project:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  projectKey:
+                    type: string
+                  description:
+                    type: string
+                  leadName:
+                    type: string
+                  leadEmail:
+                    type: string
+                  leadProfileImage:
+                    type: string
+                  startDate:
+                    type: string
+                  endDate:
+                    type: string
+                  daysRemaining:
+                    type: number
+                  doneIssues:
+                    type: number
+                  openIssues:
+                    type: number
+                  completionPercentage:
+                    type: number
+    UpdateProjectDescription:
+      required:
+        - projectKey
+        - description
+      type: object
+      properties:
+        projectKey:
+          type: string
+        description:
+          type: string
+    UpdateProjectDescriptionSuccess:
+      type: object
+      properties:
+        status:
+          type: string
+    UpdateProjectLead:
+      required:
+        - projectKey
+        - projectLeadBy
+      type: object
+      properties:
+        projectKey:
+          type: string
+        projectLeadBy:
+          type: string
+    UpdateProjectLeadSuccess:
+      type: object
+      properties:
+        status:
+          type: string
+    GetAllProjectsSuccess:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: object
+          properties:
+            projects:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  projectKey:
+                    type: string
+                  startDate:
+                    type: string
+                  endDate:
+                    type: string
+                  daysRemaining:
+                    type: number
+                  doneIssues:
+                    type: number
+                  openIssues:
+                    type: number
+                  team:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        email:
+                          type: string
+                        profileImage:
+                          type: string
+                  completionPercentage:
+                    type: number
+                  youWorkedOn:
+                    type: number
+            page:
+              type: integer
+            pageSize:
+              type: integer
+            totalPages:
+              type: integer

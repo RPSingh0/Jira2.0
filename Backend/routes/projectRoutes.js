@@ -29,18 +29,6 @@ const router = express.Router();
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/UserCreateSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/create')
     .post(projectController.createProject);
@@ -64,18 +52,6 @@ router.route('/create')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/GenerateProjectKeySuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/generateProjectKey')
     .post(projectController.generateProjectKey);
@@ -93,18 +69,6 @@ router.route('/generateProjectKey')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/GetAllProjectsAsOptionSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/getProjectOptions')
     .get(projectController.getProjectOptions);
@@ -137,18 +101,6 @@ router.route('/getProjectOptions')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/GetAllProjectsSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/getAllProjects')
     .get(authenticationController.authenticate, projectController.getAllProjects);
@@ -173,18 +125,6 @@ router.route('/getAllProjects')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/GetProjectByProjectKeySuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/getProject/:projectKey')
     .get(projectController.getProjectByProjectKey);
@@ -208,18 +148,6 @@ router.route('/getProject/:projectKey')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/UpdateProjectDescriptionSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/updateDescription')
     .patch(projectController.updateDescription);
@@ -235,26 +163,14 @@ router.route('/updateDescription')
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/UpdateLeadBy'
+ *             $ref: '#/components/schemas/UpdateProjectLead'
  *     responses:
  *       200:
  *         description: Project lead updated successfully
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/UpdateLeadBySuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
+ *               $ref: '#/components/schemas/UpdateProjectLeadSuccess'
  */
 router.route('/updateLead')
     .patch(projectController.updateLead);

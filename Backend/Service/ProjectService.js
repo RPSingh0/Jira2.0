@@ -87,7 +87,14 @@ class ProjectService {
                 return {success: false, message: "No projects found"}
             }
 
-            return {success: true, data: projects};
+            const result = projects.map(project => {
+                return {
+                    projectKey: project.projectKey,
+                    optionText: `${project.projectKey} | ${project.name}`
+                }
+            });
+
+            return {success: true, data: result};
 
         } catch (err) {
             throw new ErrorInterceptor({
@@ -207,6 +214,7 @@ class ProjectService {
             const completionPercentage = totalIssues === 0 ? 0 : Math.round((doneIssues / totalIssues) * 100);
 
             const result = {
+                name: project.name,
                 projectKey: project.projectKey,
                 description: project.description,
                 leadName: `${project.lead.firstName} ${project.lead.lastName}`,
