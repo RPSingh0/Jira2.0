@@ -28,18 +28,6 @@ const router = express.Router();
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/FeatureCreateSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/create')
     .post(featureController.createFeature);
@@ -76,18 +64,6 @@ router.route('/create')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/GetFeatureByProjectKeySuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/getFeature/:projectKey')
     .get(featureController.getFeatureByProjectKey);
@@ -118,18 +94,6 @@ router.route('/getFeature/:projectKey')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/GetFeatureByProjectKeyAndFeatureKeySuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/getFeature/:projectKey/:featureKey')
     .get(featureController.getFeatureByProjectKeyAndFeatureKey);
@@ -154,18 +118,6 @@ router.route('/getFeature/:projectKey/:featureKey')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/GetFeaturesAsOptionsByProjectKeySuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/getFeatureOptions/:projectKey')
     .get(featureController.getFeatureOptions);
@@ -189,18 +141,6 @@ router.route('/getFeatureOptions/:projectKey')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/UpdateFeatureNameSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/updateName')
     .patch(featureController.updateName);
@@ -224,18 +164,6 @@ router.route('/updateName')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/UpdateFeatureDescriptionSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/updateDescription')
     .patch(featureController.updateDescription);
