@@ -30,18 +30,6 @@ const jiraController = require('../controllers/jiraController');
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/JiraCreateSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/create')
     .post(jiraController.createJira);
@@ -66,18 +54,6 @@ router.route('/create')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/GetJiraDetailsByJiraKeySuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/getJiraDetailsByJiraKey/:jiraKey')
     .get(jiraController.getJiraDetailsByJiraKey);
@@ -102,18 +78,6 @@ router.route('/getJiraDetailsByJiraKey/:jiraKey')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/GetJiraMetadataByJiraKeySuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/getJiraMetadataByJiraKey/:jiraKey')
     .get(jiraController.getJiraMetadataByJiraKey);
@@ -144,18 +108,6 @@ router.route('/getJiraMetadataByJiraKey/:jiraKey')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/GetJiraUnderFeatureSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/getJira/:projectKey/:featureKey')
     .get(jiraController.getJiraUnderFeature);
@@ -179,18 +131,6 @@ router.route('/getJira/:projectKey/:featureKey')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/UpdateDescriptionSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/updateDescription')
     .patch(jiraController.updateDescription);
@@ -214,18 +154,6 @@ router.route('/updateDescription')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/UpdateSummarySuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/updateSummary')
     .patch(jiraController.updateSummary);
@@ -249,18 +177,6 @@ router.route('/updateSummary')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/UpdateAssigneeSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/updateAssignee')
     .patch(jiraController.updateAssignee);
@@ -284,18 +200,6 @@ router.route('/updateAssignee')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/UpdatePointsSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/updatePoints')
     .patch(jiraController.updatePoints);
@@ -319,18 +223,6 @@ router.route('/updatePoints')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/UpdateFeatureSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/updateFeature')
     .patch(jiraController.updateFeature);

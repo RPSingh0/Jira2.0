@@ -20,7 +20,7 @@ exports.createJira = catchAsync(async (req, res) => {
             projectKey: req.body.projectKey,
             featureKey: req.body.featureKey,
             assignee: req.body.assignee,
-            reporter: "one.first@test.com"
+            reporter: req.user.email
         });
     } catch (err) {
         return Response.badRequest400(res, {message: err.message});
