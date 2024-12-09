@@ -30,18 +30,6 @@ const router = express.Router();
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/UserCreateSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/create')
     .post(userController.createUser);
@@ -65,36 +53,6 @@ router.route('/create')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/UserLoginSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       401:
- *         description: Unauthorized
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Unauthorized'
- *       403:
- *         description: Forbidden
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Forbidden'
- *       404:
- *         description: Not Found
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/NotFound'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/login')
     .post(authenticationController.login);
@@ -110,24 +68,6 @@ router.route('/login')
  *     responses:
  *       204:
  *         description: Token is verified
- *       401:
- *         description: Unauthorized
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Unauthorized'
- *       403:
- *         description: Forbidden
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Forbidden'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/validateToken')
     .get(authenticationController.authenticate, authenticationController.validateToken);
@@ -136,8 +76,6 @@ router.route('/validateToken')
  * @swagger
  * /user/getAllActiveUsers:
  *   get:
- *     security:
- *       - Authorization: []
  *     summary: Get all users
  *     tags: [User]
  *     responses:
@@ -147,24 +85,6 @@ router.route('/validateToken')
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/GetAllUsersSuccess'
- *       401:
- *         description: Unauthorized
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Unauthorized'
- *       403:
- *         description: Forbidden
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Forbidden'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/getAllActiveUsers')
     .get(userController.getAllActiveUsers);
@@ -182,7 +102,6 @@ router.route('/getAllActiveUsers')
  *         name: type
  *         schema:
  *           type: string
- *           description: The type of jira
  *       - in: query
  *         name: search
  *         schema:
@@ -197,23 +116,11 @@ router.route('/getAllActiveUsers')
  *           type: integer
  *     responses:
  *       200:
- *         description: Jira retrieved successfully
+ *         description: Jiras retrieved successfully
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/GetJiraUserWorkedOnSuccess'
- *       400:
- *         description: Bad Request
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/BadRequest'
- *       500:
- *         description: Internal server Error
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/InternalServerError'
  */
 router.route('/workedOn')
     .get(authenticationController.authenticate, userController.workedOn);

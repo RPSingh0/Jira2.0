@@ -8,8 +8,8 @@
  *         - firstName
  *         - lastName
  *         - email
- *         - status
  *         - password
+ *         - profileImage
  *       properties:
  *         firstName:
  *           type: string
@@ -17,20 +17,15 @@
  *           type: string
  *         email:
  *           type: string
- *         status:
- *           type: string
  *         password:
+ *           type: string
+ *         profileImage:
  *           type: string
  *     UserCreateSuccess:
  *       type: object
  *       properties:
  *         status:
  *           type: string
- *         data:
- *           type: object
- *           properties:
- *             id:
- *               type: number
  *     UserLogin:
  *       type: object
  *       required:
@@ -97,6 +92,12 @@
  *                     type: string
  *                   assigneeProfileImage:
  *                     type: string
- *                   statusType:
+ *                   status:
  *                     type: string
+ *             page:
+ *               type: integer
+ *             pageSize:
+ *               type: integer
+ *             totalPages:
+ *               type: integer
  */
