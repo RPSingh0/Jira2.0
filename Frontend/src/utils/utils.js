@@ -30,7 +30,6 @@ export function getFeatureIfLoaded(isLoading, data, key) {
     let value = data.filter(item => item.featureKey === key)[0];
 
     if (value === undefined) {
-        console.log('here')
         return {optionText: "Select feature"};
     }
 

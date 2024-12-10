@@ -55,7 +55,7 @@ function CreateJira({formId, setSubmitClicked, toggle}) {
 
     // Updating project selection once all projects are loaded
     useEffect(() => {
-        setValue('feature', (getFeatureIfLoaded(isFetchingFeatures, featureOptions, featureKey)));
+        setValue('feature', (getFeatureIfLoaded(isFetchingFeatures || isLoadingFeatures, featureOptions, featureKey)));
     }, [isFetchingFeatures]);
 
     useEffect(() => {

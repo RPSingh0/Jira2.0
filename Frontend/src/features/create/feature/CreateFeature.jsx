@@ -45,9 +45,11 @@ function CreateFeature({formId, setSubmitClicked, toggle}) {
             description: editorData,
             projectKey: project.projectKey
         }, {
+            onSuccess: () => {
+                toggle();
+            },
             onSettled: () => {
                 setSubmitClicked(false);
-                toggle();
             }
         });
     }
