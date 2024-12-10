@@ -21,7 +21,6 @@ function FeatureDetailJira() {
                 loading={loadingFeatureJira}
                 fetching={fetchingFeatureJira}
                 loader={<FeatureJiraLoadingIndicator/>}>
-                <Search placeholder={"Search"}/>
                 <StyledListContainer>
                     {featureJira?.map(item =>
                         <JiraListItem
@@ -32,7 +31,7 @@ function FeatureDetailJira() {
                             title={item.summary}
                             user={item.assigneeName}
                             assigneeProfileImage={item.assigneeProfileImage}
-                            status={item.statusType.toLowerCase()}
+                            status={item.status}
                             priority={"high"}
                         />
                     )}

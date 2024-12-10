@@ -17,7 +17,7 @@ const StyledEditorPaper = styled(Paper, {
 
     "& .tiptap.ProseMirror": {
         outline: 'none',
-        padding: '0.5rem',
+        padding: '0 0.5rem 0.5rem 0.5rem',
         height: isEditorMode ? height || "12rem" : 'max-content',
         maxWidth: "100%",
         wordWrap: "break-word",
@@ -99,6 +99,10 @@ const StyledEditorPaper = styled(Paper, {
         border: 'none',
         borderTop: `1px solid ${grey[500]}`,
         margin: '2rem 0'
+    },
+
+    "& .tiptap.ProseMirror :first-child": {
+        marginTop: "0.5rem"
     }
 
 }));
