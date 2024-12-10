@@ -77,7 +77,7 @@ class FeatureService {
             });
 
             if (features.length === 0) {
-                return {success: false, message: "No features found"}
+                return {success: false, data: []}
             }
 
             const result = features.map(feature => {

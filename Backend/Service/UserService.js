@@ -59,7 +59,14 @@ class UserService {
                 return {success: false, message: "No users found"}
             }
 
-            return {success: true, data: users};
+            const result = users.map(user => {
+                return {
+                    name: `${user.firstName} ${user.lastName}`,
+                    ...user
+                }
+            })
+
+            return {success: true, data: result};
 
         } catch (err) {
             throw new ErrorInterceptor({

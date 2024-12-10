@@ -49,7 +49,7 @@ class JiraService {
             const {data: jiraKey} = await JiraService.generateNextJiraKey({projectKey: data.projectKey});
 
             // generate jira link
-            const jiraLink = '/project/' + data.projectKey + '/' + data.featureKey + '/' + jiraKey;
+            const jiraLink = '/project/' + data.projectKey + '/feature/' + data.featureKey + '/' + jiraKey;
 
             // start transaction
             const result = await prisma.$transaction(async (tx) => {

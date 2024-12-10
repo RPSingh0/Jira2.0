@@ -59,5 +59,5 @@ exports.workedOn = catchAsync(async (req, res) => {
         return Response.notFound404(res, {message: message});
     }
 
-    Response.ok200(res, {jira: data});
+    Response.ok200(res, data);
 });

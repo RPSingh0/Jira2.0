@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const jiraController = require('../controllers/jiraController');
+const authenticationController = require("../controllers/authenticationController");
 
 /**
  * @swagger
@@ -32,7 +33,7 @@ const jiraController = require('../controllers/jiraController');
  *               $ref: '#/components/schemas/JiraCreateSuccess'
  */
 router.route('/create')
-    .post(jiraController.createJira);
+    .post(authenticationController.authenticate, jiraController.createJira);
 
 /**
  * @swagger

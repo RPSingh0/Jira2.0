@@ -91,13 +91,9 @@ exports.getFeatureOptions = catchAsync(async (req, res) => {
         return Response.badRequest400(res, {message: err.message});
     }
 
-    const {success, data: features, message} = await FeatureService.getFeatureOptions(validated);
+    const {data} = await FeatureService.getFeatureOptions(validated);
 
-    if (!success) {
-        return Response.notFound404(res, {message: message});
-    }
-
-    Response.ok200(res, {features: features});
+    Response.ok200(res, {features: data});
 })
 
 exports.updateName = catchAsync(async (req, res) => {
