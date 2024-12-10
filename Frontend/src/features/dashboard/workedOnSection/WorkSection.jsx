@@ -25,13 +25,13 @@ function WorkSection() {
                         color={ColorMap["workedOn"]}
                     />
                     <StyledTabButton
-                        icon={IconMap['userStory']}
+                        icon={IconMap['STORY']}
                         iconPosition="start"
                         label={"Stories"}
                         color={ColorMap["userStory"]}
                     />
                     <StyledTabButton
-                        icon={IconMap['bug']}
+                        icon={IconMap['BUG']}
                         iconPosition="start"
                         label="Bugs"
                         color={ColorMap["bug"]}

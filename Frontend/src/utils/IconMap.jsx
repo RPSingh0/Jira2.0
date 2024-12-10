@@ -14,8 +14,8 @@ import {
 
 export const IconMap = {
     'work': <WorkHistory/>,
-    'userStory': <AutoStories/>,
-    'bug': <BugReport/>,
+    'STORY': <AutoStories/>,
+    'BUG': <BugReport/>,
     'search': <Search/>,
     'feature': <FeaturedVideo/>,
     'low': <KeyboardArrowUp/>,
