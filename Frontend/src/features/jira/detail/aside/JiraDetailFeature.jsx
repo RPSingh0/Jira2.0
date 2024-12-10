@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {Box} from "@mui/material";
 import {useQueryClient} from "@tanstack/react-query";
 import {useJiraMetadataContext} from "../../context/JiraMetadataContext.jsx";
-import {getFeaturesAsOptionsByProjectKey} from "../../../../services/feature/featureService.js";
+import {getFeatureOptions} from "../../../../services/feature/featureService.js";
 import {useUpdateJiraFeature} from "../../hooks/useUpdateJiraFeature.js";
 import {Rounded2Half} from "../../../../components/loader/Loader.jsx";
 import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper.jsx";
@@ -36,7 +36,7 @@ function JiraDetailFeature() {
     // Fetch all features related to project
     const {isLoading: isLoadingFeatures, data: featureOptions} = useGetQueryHook({
         key: ['featureOptions'],
-        fn: getFeaturesAsOptionsByProjectKey,
+        fn: getFeatureOptions,
         projectKey: jiraMetadata?.projectKey,
         enabledDependency: [!loadingJiraMetadata, !fetchingJiraMetadata]
     });

@@ -128,9 +128,9 @@ export async function getAllFeaturesByProjectKey({projectKey}) {
  *
  * @throws {Error} Error if api call is unsuccessful
  */
-export async function getFeaturesAsOptionsByProjectKey({projectKey}) {
+export async function getFeatureOptions({projectKey}) {
 
-    let data = await fetch(`${URL}/getFeaturesAsOptionsByProjectKey/${projectKey}`, {
+    let data = await fetch(`${URL}/getFeatureOptions/${projectKey}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
