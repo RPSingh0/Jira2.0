@@ -8,10 +8,10 @@ import {Box} from "@mui/material";
 import Label from "../../../components/label/Label.jsx";
 import AutocompleteSelector from "../../../components/autocomplete/AutocompleteSelector.jsx";
 import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
-import {getAllProjectsAsOptionsService} from "../../../services/project/projectService.js";
 import {useEffect} from "react";
 import {getProjectIfLoaded} from "../../../utils/utils.js";
 import {useParams} from "react-router-dom";
+import {getProjectOptionsService} from "../../../services/project/projectService.js";
 
 function CreateFeature({formId, setSubmitClicked, toggle}) {
 
@@ -23,7 +23,7 @@ function CreateFeature({formId, setSubmitClicked, toggle}) {
     // Fetch all the projects
     const {isLoading: isLoadingProjects, data: projectOptions} = useGetQueryHook({
         key: ['projectOptions'],
-        fn: getAllProjectsAsOptionsService
+        fn: getProjectOptionsService
     });
 
     // Updating project selection once all projects are loaded

@@ -14,7 +14,7 @@ const PROJECT_URL = `${import.meta.env.VITE_BACKEND_URL}/api/v1/project`;
  *
  * @throws {Error} Error if api call is unsuccessful
  */
-export async function createProjectService({name, projectKey, description, projectLeadBy, startDate, expectedEndDate}) {
+export async function createProjectService({name, projectKey, description, projectLeadBy, startDate, endDate}) {
 
     let data = await fetch(`${PROJECT_URL}/create`, {
         method: 'POST',
@@ -27,7 +27,7 @@ export async function createProjectService({name, projectKey, description, proje
             description: description,
             projectLeadBy: projectLeadBy,
             startDate: startDate,
-            expectedEndDate: expectedEndDate
+            endDate: endDate
         })
     });
 
@@ -124,8 +124,8 @@ export async function getAllProjectsService({token, search, page, pageSize}) {
  *
  * @throws {Error} Error if unable to fetch or if token is invalid
  */
-export async function getAllProjectsAsOptionsService({token}) {
-    let data = await fetch(`${PROJECT_URL}/getAllProjectsAsOptions`, {
+export async function getProjectOptionsService({token}) {
+    let data = await fetch(`${PROJECT_URL}/getProjectOptions`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

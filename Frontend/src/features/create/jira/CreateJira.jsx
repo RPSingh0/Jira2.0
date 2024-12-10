@@ -5,8 +5,7 @@ import useDefaultEditor from "../../../components/editor/useDefaultEditor.js";
 import TextEditor from "../../../components/editor/Editor.jsx";
 import AutocompleteSelector from "../../../components/autocomplete/AutocompleteSelector.jsx";
 import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
-import {getAllProjectsAsOptionsService} from "../../../services/project/projectService.js";
-import {getFeaturesAsOptionsByProjectKey} from "../../../services/feature/featureService.js";
+import {getProjectOptionsService} from "../../../services/project/projectService.js";
 import {getAllUsersService} from "../../../services/user/userService.js";
 import {useCreateJira} from "../../jira/hooks/useCreateJira.js";
 import {getAuthToken} from "../../../services/user/authenticationSlice.js";
@@ -18,6 +17,7 @@ import {useEffect} from "react";
 import {useQueryClient} from "@tanstack/react-query";
 import {getFeatureIfLoaded, getProjectIfLoaded} from "../../../utils/utils.js";
 import {useParams} from "react-router-dom";
+import {getFeatureOptions} from "../../../services/feature/featureService.js";
 
 function CreateJira({formId, setSubmitClicked, toggle}) {
 
@@ -31,14 +31,14 @@ function CreateJira({formId, setSubmitClicked, toggle}) {
 
     const {isLoading: isLoadingProjects, data: projectOptions} = useGetQueryHook({
         key: ['projectOptions'],
-        fn: getAllProjectsAsOptionsService
+        fn: getProjectOptionsService
     });
 
     const selectedProject = useWatch({control: control, name: "project"});
 
     const {isLoading: isLoadingFeatures, isFetching: isFetchingFeatures, data: featureOptions} = useGetQueryHook({
         key: ['featureOptions'],
-        fn: getFeaturesAsOptionsByProjectKey,
+        fn: getFeatureOptions,
         projectKey: selectedProject?.projectKey,
         enabledDependency: [Boolean(selectedProject?.projectKey)]
     });
@@ -79,9 +79,11 @@ function CreateJira({formId, setSubmitClicked, toggle}) {
             featureKey: feature.featureKey,
             assignee: assignee.email
         }, {
+            onSuccess: () => {
+                toggle();
+            },
             onSettled: () => {
                 setSubmitClicked(false);
-                toggle();
             }
         });
     }
@@ -128,8 +130,8 @@ function CreateJira({formId, setSubmitClicked, toggle}) {
                 requiredMessage={"Please select the issue type"}
                 id={"issueType"}
                 options={[
-                    {text: "Bug", value: "bug"},
-                    {text: "Story", value: "userStory"}
+                    {text: "Bug", value: "BUG"},
+                    {text: "Story", value: "STORY"}
                 ]}
                 disabled={isCreating}
                 error={!!errors.issueType}

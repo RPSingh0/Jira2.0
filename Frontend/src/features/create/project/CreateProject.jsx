@@ -54,15 +54,15 @@ function CreateProject() {
 
     function onSubmit(data) {
 
-        const {projectName, leadBy, startDate, expectedEndDate} = data;
+        const {projectName, projectLead, startDate, endDate} = data;
         const editorData = editingOn.getHTML();
 
         createProject({
             name: projectName,
             description: editorData,
-            projectLeadBy: leadBy.email,
+            projectLeadBy: projectLead.email,
             startDate: startDate,
-            expectedEndDate: expectedEndDate
+            endDate: endDate
         }, {
             onSuccess: () => navigate('/dashboard')
         });
@@ -112,8 +112,8 @@ function CreateProject() {
             case 1:
                 return (
                     <AutocompleteSelector
-                        name={"leadBy"}
-                        id={"leadBy"}
+                        name={"projectLead"}
+                        id={"projectLead"}
                         labelText={"Project Lead"}
                         control={control}
                         options={usersForLead}
@@ -149,15 +149,15 @@ function CreateProject() {
                             helperText={errors.startDate?.message}
                         />
                         <InputDatePicker
-                            name={"expectedEndDate"}
+                            name={"endDate"}
                             control={control}
-                            id={"expectedEndDate"}
+                            id={"endDate"}
                             required={true}
                             requiredMessage={"Please select a end date"}
-                            labelText={"Expected End Date"}
+                            labelText={"End Date"}
                             disabled={isCreating}
-                            error={!!errors.expectedEndDate}
-                            helperText={errors.expectedEndDate?.message}
+                            error={!!errors.endDate}
+                            helperText={errors.endDate?.message}
                         />
                     </>
                 );

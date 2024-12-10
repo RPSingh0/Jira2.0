@@ -10,7 +10,7 @@ export function useCreateJira() {
             if (error) {
                 toast.error(error.message);
             } else {
-                toast.success(`Jira created ${data.data.jiraKey}`);
+                toast.success(`Jira created successfully`);
             }
         }
     });
