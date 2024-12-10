@@ -24,8 +24,8 @@ function ProjectsCardContainer() {
                     doneIssues={project.doneIssues}
                     youWorkedOn={project.youWorkedOn}
                     dateStarted={formatDateToLocale(project.startDate)}
-                    expectedEndDate={formatDateToLocale(project.expectedEndDate)}
-                    daysSpent={project.daysSpent}
+                    endDate={formatDateToLocale(project.endDate)}
+                    daysRemaining={project.daysRemaining}
                     completionPercentage={project.completionPercentage}
                     team={project.team}
                 />)}

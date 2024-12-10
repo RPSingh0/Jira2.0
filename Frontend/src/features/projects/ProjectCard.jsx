@@ -15,7 +15,7 @@ import {ProjectProgress} from "../../components/progress/projectProgressBar.jsx"
 import useMatchBreakpointDown from "../../hooks/useMatchBreakpointDown.js";
 
 function ProjectCard({
-                         name, projectKey, openIssues, doneIssues, youWorkedOn, dateStarted, expectedEndDate, daysSpent,
+                         name, projectKey, openIssues, doneIssues, youWorkedOn, dateStarted, endDate, daysRemaining,
                          completionPercentage, team
                      }) {
 
@@ -50,7 +50,7 @@ function ProjectCard({
                                 data={doneIssues}
                             />
                             <InfoItem
-                                text={"Done By You"}
+                                text={"You worked on"}
                                 data={youWorkedOn}
                             />
                         </StyledInfoContentBox>
@@ -70,12 +70,12 @@ function ProjectCard({
                                 data={dateStarted}
                             />
                             <InfoItem
-                                text={"Expected"}
-                                data={expectedEndDate}
+                                text={"End Date"}
+                                data={endDate}
                             />
                             <InfoItem
-                                text={"Days on project"}
-                                data={daysSpent}
+                                text={"Days Remaining"}
+                                data={daysRemaining}
                             />
                         </StyledInfoContentBox>
                     </StyledProjectCardOverviewSection>

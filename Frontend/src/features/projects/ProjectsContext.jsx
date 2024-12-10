@@ -10,7 +10,7 @@ const ProjectsContext = createContext();
 function ProjectsContextProvider({children}) {
 
     const authToken = useSelector(getAuthToken);
-    const [pages, setPages] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(6);
     const [searchString, setSearchString] = useState("");
@@ -34,8 +34,7 @@ function ProjectsContextProvider({children}) {
 
     useEffect(() => {
         if (!loadingProjects && !fetchingProjects) {
-            const totalPages = Math.ceil(parseInt(projectsData?.total) / parseInt(projectsData?.pageSize));
-            setPages(totalPages);
+            setTotalPages(projectsData?.totalPages);
         }
     }, [loadingProjects, fetchingProjects]);
 
@@ -50,7 +49,7 @@ function ProjectsContextProvider({children}) {
             fetchingProjects,
             projectsData,
             errorProjects,
-            pages,
+            totalPages,
             page,
             setPage,
             pageSize,

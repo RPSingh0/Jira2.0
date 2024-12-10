@@ -5,12 +5,12 @@ import {StyledProjectsPagination} from "./ProjectsPaginationStyles.jsx";
 
 function ProjectsPagination() {
 
-    const {pages, page, setPage} = useProjectsContext();
+    const {totalPages, page, setPage} = useProjectsContext();
 
     return (
         <StyledProjectsPagination>
             <Stack spacing={2}>
-                <Pagination count={pages} page={page} variant="outlined" color="secondary"
+                <Pagination count={totalPages} page={page} variant="outlined" color="secondary"
                             onChange={(e, v) => setPage(v)}/>
             </Stack>
         </StyledProjectsPagination>
