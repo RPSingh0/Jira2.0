@@ -112,5 +112,5 @@ export async function getJiraCurrentUserWorkedOnService({token, type}) {
         throw new Error(data.message);
     }
 
-    return data.data.jira;
+    return data.data;
 }

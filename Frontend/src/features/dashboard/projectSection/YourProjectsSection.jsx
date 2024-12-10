@@ -15,9 +15,7 @@ function YourProjectsSection() {
 
     const {isLoading: loadingProjects, isFetching: fetchingProjects, data: projectsData} = useGetQueryHook({
         key: [`dashboard-projects`],
-        fn: getAllProjectsService,
-        page: 1,
-        size: 6
+        fn: getAllProjectsService
     });
 
     return (

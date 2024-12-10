@@ -14,7 +14,7 @@ function WorkedOnTab() {
             fetching={fetchingWorkedOn}
             loader={<FeatureJiraLoadingIndicator/>}>
             <StyledWorkedOnTabBox>
-                {workedOn?.map(item =>
+                {workedOn?.jira?.map(item =>
                     <JiraListItem
                         key={item.jiraKey}
                         type={item.jiraType}
@@ -23,7 +23,7 @@ function WorkedOnTab() {
                         title={item.summary}
                         user={item.assigneeName}
                         assigneeProfileImage={item.assigneeProfileImage}
-                        status={item.statusType.toLowerCase()}
+                        status={item.status.toLowerCase()}
                         priority={"high"}
                     />)}
             </StyledWorkedOnTabBox>
