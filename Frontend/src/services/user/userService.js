@@ -62,7 +62,7 @@ export async function authenticateUserWithTokenService({token}) {
  * @throws {Error} Error if unable to fetch or if token is invalid
  */
 export async function getAllUsersService({token}) {
-    let data = await fetch(`${USER_URL}/getAllUsers`, {
+    let data = await fetch(`${USER_URL}/getAllActiveUsers`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

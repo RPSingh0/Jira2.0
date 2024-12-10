@@ -3,7 +3,7 @@ import ProjectDetailAsideOpenIssue from "./ProjectDetailAsideOpenIssue.jsx";
 import ProjectDetailAsideDoneIssue from "./ProjectDetailAsideDoneIssue.jsx";
 import ProjectDetailAsideStarted from "./ProjectDetailAsideStarted.jsx";
 import ProjectDetailAsideEnd from "./ProjectDetailAsideEnd.jsx";
-import ProjectDetailAsideDaySpent from "./ProjectDetailAsideDaySpent.jsx";
+import ProjectDetailAsideDaysRemaining from "./ProjectDetailAsideDaysRemaining.jsx";
 import {StyledProjectDetailAsideBox} from "./ProjectDetailAsideStyles.jsx";
 
 function ProjectDetailAside() {
@@ -15,7 +15,7 @@ function ProjectDetailAside() {
             <ProjectDetailAsideDoneIssue/>
             <ProjectDetailAsideStarted/>
             <ProjectDetailAsideEnd/>
-            <ProjectDetailAsideDaySpent/>
+            <ProjectDetailAsideDaysRemaining/>
         </StyledProjectDetailAsideBox>
     );
 }

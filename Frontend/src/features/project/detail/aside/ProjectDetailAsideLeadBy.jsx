@@ -6,7 +6,7 @@ import {useQueryClient} from "@tanstack/react-query";
 import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper.jsx";
 import {Rounded2Half} from "../../../../components/loader/Loader.jsx";
 import {useProjectDetailContext} from "../../context/ProjectDetailContext.jsx";
-import {useUpdateProjectLeadBy} from "../../hooks/useUpdateProjectLeadBy.js";
+import {useUpdateProjectLead} from "../../hooks/useUpdateProjectLeadBy.js";
 import AutocompleteAssign from "../../../../components/autocompleteAssign/AutocompleteAssign.jsx";
 import AsideElementHeading from "../../../../components/heading/AsideElementHeading.jsx";
 import {StaticAvatarAndText} from "../../../../components/avatar/StaticAvatarAndText.jsx";
@@ -19,12 +19,12 @@ function ProjectDetailAsideLeadBy() {
 
     // react query hooks
     const queryClient = useQueryClient();
-    const {updateProjectLeadBy, isUpdating} = useUpdateProjectLeadBy();
+    const {updateProjectLead, isUpdating} = useUpdateProjectLead();
 
     const [isEditing, setIsEditing] = useState(false);
     const {control, handleSubmit, formState: {errors}, setValue} = useForm();
 
-    const selectedLeadBy = useWatch({control: control, name: "leadBy"});
+    const selectedProjectLead = useWatch({control: control, name: "projectLead"});
 
     // load all the users
     const {isLoading: isLoadingUsers, data: users} = useGetQueryHook({
@@ -37,7 +37,7 @@ function ProjectDetailAsideLeadBy() {
         // if jira details are loaded
         if (!loadingProjectDetail && !fetchingProjectDetail) {
             // set the user
-            setValue("leadBy", {
+            setValue("projectLead", {
                 name: projectDetail.leadName,
                 email: projectDetail.leadEmail,
                 profileImage: projectDetail.leadProfileImage,
@@ -48,13 +48,13 @@ function ProjectDetailAsideLeadBy() {
 
     function onSubmit() {
 
-        if (selectedLeadBy.email === projectDetail.leadEmail) {
+        if (selectedProjectLead.email === projectDetail.leadEmail) {
             return;
         }
 
-        updateProjectLeadBy({
+        updateProjectLead({
             projectKey: projectDetail.projectKey,
-            leadBy: selectedLeadBy.email
+            projectLead: selectedProjectLead.email
         }, {
             onSuccess: () => {
                 setIsEditing(false);
@@ -70,14 +70,14 @@ function ProjectDetailAsideLeadBy() {
 
     return (
         <Box>
-            <AsideElementHeading text={"Lead By"}/>
+            <AsideElementHeading text={"Project Lead"}/>
             <LoadOrFetchWrapper
                 loading={loadingProjectDetail}
                 fetching={fetchingProjectDetail}
                 loader={<Rounded2Half/>}>
                 <AutocompleteAssign
-                    name={"leadBy"}
-                    id={"leadBy"}
+                    name={"projectLead"}
+                    id={"projectLead"}
                     control={control}
                     options={users}
                     optionKey={"email"}
@@ -86,8 +86,8 @@ function ProjectDetailAsideLeadBy() {
                     variant={"user-avatar"}
                     loading={isLoadingUsers}
                     disabled={isLoadingUsers || isUpdating}
-                    error={!!errors.leadBy}
-                    helperText={errors.leadBy?.message}
+                    error={!!errors.projectLead}
+                    helperText={errors.projectLead?.message}
                     isEditing={isEditing}
                     setIsEditing={setIsEditing}
                     isUpdating={isUpdating}

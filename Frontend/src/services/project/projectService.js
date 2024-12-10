@@ -214,9 +214,9 @@ export async function updateProjectDescriptionService({token, projectKey, descri
  *
  * @throws {Error} Error if api call is unsuccessful
  */
-export async function updateProjectLeadByService({token, projectKey, leadBy}) {
+export async function updateProjectLeadService({token, projectKey, projectLead}) {
 
-    let data = await fetch(`${PROJECT_URL}/updateLeadBy`, {
+    let data = await fetch(`${PROJECT_URL}/updateLead`, {
         method: 'PATCH',
         headers: {
             'Content-Type': 'application/json',
@@ -224,7 +224,7 @@ export async function updateProjectLeadByService({token, projectKey, leadBy}) {
         },
         body: JSON.stringify({
             projectKey: projectKey,
-            leadBy: leadBy
+            projectLeadBy: projectLead
         })
     });
 

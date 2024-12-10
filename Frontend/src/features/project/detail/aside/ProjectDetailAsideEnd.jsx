@@ -12,12 +12,12 @@ function ProjectDetailAsideEnd() {
 
     return (
         <Box>
-            <AsideElementHeading text={"End Date (Expected)"}/>
+            <AsideElementHeading text={"End Date"}/>
             <LoadOrFetchWrapper
                 loading={loadingProjectDetail}
                 fetching={fetchingProjectDetail}
                 loader={<Rounded2Half/>}>
-                <StaticText text={formatDateToLocale(projectDetail?.expectedEndDate)}/>
+                <StaticText text={formatDateToLocale(projectDetail?.endDate)}/>
             </LoadOrFetchWrapper>
         </Box>
     );

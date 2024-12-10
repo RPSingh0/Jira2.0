@@ -25,7 +25,7 @@ function ProjectDetailFeature() {
                 fetching={fetchingProjectFeature}
                 loader={<FeatureJiraLoadingIndicator/>}>
                 <StyledListContainer>
-                    {featureData?.feature?.map(item =>
+                    {featureData?.features?.map(item =>
                         <FeatureListItem
                             key={item.featureKey}
                             featureKey={item.featureKey}

@@ -1,11 +1,11 @@
 import {useMutation} from "@tanstack/react-query";
 import {toast} from "react-toastify";
-import {updateProjectLeadByService} from "../../../services/project/projectService.js";
+import {updateProjectLeadService} from "../../../services/project/projectService.js";
 
-export function useUpdateProjectLeadBy() {
+export function useUpdateProjectLead() {
 
-    const {mutate: updateProjectLeadBy, isPending: isUpdating} = useMutation({
-        mutationFn: updateProjectLeadByService,
+    const {mutate: updateProjectLead, isPending: isUpdating} = useMutation({
+        mutationFn: updateProjectLeadService,
         onSettled: (data, error) => {
             if (error) {
                 toast.error(error.message);
@@ -15,5 +15,5 @@ export function useUpdateProjectLeadBy() {
         }
     });
 
-    return {updateProjectLeadBy, isUpdating};
+    return {updateProjectLead, isUpdating};
 }
