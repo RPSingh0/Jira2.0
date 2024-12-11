@@ -10,7 +10,6 @@ const StyledJiraPaper = styled(Paper)(() => ({
     flexDirection: "row",
     gap: "0.5rem",
     padding: "0.5rem",
-    overflow: "hidden",
     justifyContent: "space-between",
     transition: "all 0.5s ease",
 

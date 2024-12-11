@@ -1,5 +1,4 @@
-import {Box, styled, Typography} from "@mui/material";
-import Search from "../../../components/search/Search.jsx";
+import {Box, Divider, styled, Typography} from "@mui/material";
 import {useFeatureJiraContext} from "./FeatureDetailJiraContext.jsx";
 import {FeatureJiraLoadingIndicator} from "../../../components/loader/Loader.jsx";
 import LoadOrFetchWrapper from "../../../components/loader/LoadOrFetchWrapper.jsx";
@@ -14,9 +13,10 @@ function FeatureDetailJira() {
 
     return (
         <StyledFeatureDetailJiraBox>
-            <Typography variant="body1" gutterBottom>
+            <Typography variant="h6" gutterBottom>
                 Jiras
             </Typography>
+            <Divider/>
             <LoadOrFetchWrapper
                 loading={loadingFeatureJira}
                 fetching={fetchingFeatureJira}

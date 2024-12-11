@@ -22,19 +22,25 @@ function WorkSection() {
                         icon={IconMap['work']}
                         iconPosition="start"
                         label={"Worked On"}
-                        color={ColorMap["workedOn"]}
+                        color={ColorMap["ALL"]}
                     />
                     <StyledTabButton
                         icon={IconMap['STORY']}
                         iconPosition="start"
                         label={"Stories"}
-                        color={ColorMap["userStory"]}
+                        color={ColorMap["STORY"]}
                     />
                     <StyledTabButton
                         icon={IconMap['BUG']}
                         iconPosition="start"
                         label="Bugs"
-                        color={ColorMap["bug"]}
+                        color={ColorMap["BUG"]}
+                    />
+                    <StyledTabButton
+                        icon={IconMap['TASK']}
+                        iconPosition="start"
+                        label={"Tasks"}
+                        color={ColorMap["TASK"]}
                     />
                 </Tabs>
             </StyledTabButtonBox>

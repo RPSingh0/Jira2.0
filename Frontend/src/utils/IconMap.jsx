@@ -1,7 +1,9 @@
 import {
-    AutoStories,
+    Bookmark,
     BugReport,
-    CheckCircle, Close, Done,
+    CheckCircle,
+    Close,
+    Done,
     FeaturedVideo,
     KeyboardArrowUp,
     KeyboardDoubleArrowUp,
@@ -9,13 +11,15 @@ import {
     PriorityHigh,
     RadioButtonChecked,
     Search,
+    Task,
     WorkHistory
 } from "@mui/icons-material";
 
 export const IconMap = {
     'work': <WorkHistory/>,
-    'STORY': <AutoStories/>,
+    'STORY': <Bookmark/>,
     'BUG': <BugReport/>,
+    'TASK': <Task/>,
     'search': <Search/>,
     'feature': <FeaturedVideo/>,
     'low': <KeyboardArrowUp/>,
@@ -24,6 +28,6 @@ export const IconMap = {
     'todo': <PlaylistAddCheck/>,
     'in-progress': <RadioButtonChecked/>,
     'done': <CheckCircle/>,
-    'save': <Done fontSize={"small"}/>,
-    'close': <Close fontSize={"small"}/>
+    'save': <Done fontSize="small"/>,
+    'close': <Close fontSize="small"/>
 }
