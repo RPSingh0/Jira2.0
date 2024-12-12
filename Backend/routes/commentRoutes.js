@@ -58,7 +58,7 @@ router.route('/project/create')
  *               $ref: '#/components/schemas/GetProjectCommentsSuccess'
  */
 router.route('/project/get/:projectKey')
-    .get(authenticationController.authenticate, commentController.getProjectComment)
+    .get(authenticationController.authenticate, commentController.getProjectComment);
 
 /**
  * @swagger
@@ -113,6 +113,56 @@ router.route('/feature/create')
  *               $ref: '#/components/schemas/GetFeatureCommentsSuccess'
  */
 router.route('/feature/get/:projectKey/:featureKey')
-    .get(authenticationController.authenticate, commentController.getFeatureComment)
+    .get(authenticationController.authenticate, commentController.getFeatureComment);
+
+/**
+ * @swagger
+ * /comment/jira/create:
+ *   post:
+ *     security:
+ *       - Authorization: []
+ *     summary: Adds a new jira comment
+ *     tags: [Comment]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/JiraCommentCreate'
+ *     responses:
+ *       201:
+ *         description: Jira comment added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/JiraCommentCreateSuccess'
+ */
+router.route('/jira/create')
+    .post(authenticationController.authenticate, commentController.createJiraComment);
+
+/**
+ * @swagger
+ * /comment/jira/get/{jiraKey}:
+ *   get:
+ *     security:
+ *       - Authorization: []
+ *     summary: Get all comments for one jira
+ *     tags: [Comment]
+ *     parameters:
+ *       - in: path
+ *         name: jiraKey
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Comments retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GetJiraCommentsSuccess'
+ */
+router.route('/jira/get/:jiraKey')
+    .get(authenticationController.authenticate, commentController.getJiraComment);
 
 module.exports = router;

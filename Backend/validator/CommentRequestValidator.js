@@ -91,3 +91,38 @@ exports.GetFeatureCommentRequest = Joi.object({
             'any.required': "Feature key is required"
         })
 });
+
+exports.CreateJiraCommentRequest = Joi.object({
+    jiraKey: Joi.string()
+        .trim()
+        .max(30)
+        .required()
+        .messages({
+            'string.base': "Jira key should be a string",
+            'string.max': "Jira key should not exceed 100 characters",
+            'string.empty': "Jira key cannot be empty",
+            'any.required': "Jira key is required"
+        }),
+
+    content: Joi.string()
+        .min(3)
+        .required()
+        .messages({
+            'string.min': "Comment should be at least 3 characters",
+            'string.empty': "Comment cannot be empty",
+            'any.required': "Comment is required"
+        })
+});
+
+exports.GetJiraCommentRequest = Joi.object({
+    jiraKey: Joi.string()
+        .trim()
+        .max(30)
+        .required()
+        .messages({
+            'string.base': "Jira key should be a string",
+            'string.max': "Jira key should not exceed 100 characters",
+            'string.empty': "Jira key cannot be empty",
+            'any.required': "Jira key is required"
+        }),
+});

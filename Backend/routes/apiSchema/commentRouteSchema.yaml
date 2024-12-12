@@ -87,3 +87,44 @@ components:
                   updatedAt:
                     type: string
                     format: date
+    JiraCommentCreate:
+      type: object
+      required:
+        - jiraKey
+        - content
+      properties:
+        jiraKey:
+          type: string
+        content:
+          type: string
+    JiraCommentCreateSuccess:
+      type: object
+      properties:
+        status:
+          type: string
+    GetJiraCommentsSuccess:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: object
+          properties:
+            projects:
+              type: array
+              items:
+                type: object
+                properties:
+                  jiraKey:
+                    type: string
+                  content:
+                    type: string
+                  authorEmail:
+                    type: string
+                  authorName:
+                    type: string
+                  authorProfileImage:
+                    type: string
+                  updatedAt:
+                    type: string
+                    format: date

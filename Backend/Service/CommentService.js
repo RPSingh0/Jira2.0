@@ -163,6 +163,84 @@ class CommentService {
             });
         }
     }
+
+    static async createJiraComment(data) {
+
+        try {
+            const comment = await prisma.jiraComment.create({
+                data: {
+                    jiraKey: data.jiraKey,
+                    authorEmail: data.user.email,
+                    content: data.content
+                }
+            });
+
+            return {success: true, data: comment};
+
+        } catch (err) {
+
+            const extra = parsePrismaError(err);
+
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error creating jira comment ${extra ? extra : ""}`,
+            });
+        }
+    }
+
+    static async getJiraComments(data) {
+        try {
+            const comments = await prisma.jiraComment.findMany({
+                where: {
+                    jiraKey: data.jiraKey
+                },
+                select: {
+                    jiraKey: true,
+                    content: true,
+                    author: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                            profileImage: true
+                        }
+                    },
+                    updatedAt: true
+                },
+                orderBy: [
+                    {
+                        createdAt: 'desc'
+                    }
+                ]
+            });
+
+            if (comments.length === 0) {
+                return {success: true, data: []}
+            }
+
+            const result = comments.map(comment => {
+                return {
+                    jiraKey: comment.jiraKey,
+                    content: comment.content,
+                    authorEmail: comment.author.email,
+                    authorName: `${comment.author.firstName} ${comment.author.lastName}`,
+                    authorProfileImage: comment.author.profileImage,
+                    updatedAt: comment.updatedAt
+                }
+            });
+
+            return {success: true, data: result};
+
+        } catch (err) {
+
+            const extra = parsePrismaError(err);
+
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error fetching jira comments ${extra ? extra : ""}`,
+            });
+        }
+    }
 }
 
 module.exports = CommentService;
