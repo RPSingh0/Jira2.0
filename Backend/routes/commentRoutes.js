@@ -76,7 +76,7 @@ router.route('/project/get/:projectKey')
  *             $ref: '#/components/schemas/FeatureCommentCreate'
  *     responses:
  *       201:
- *         description: Project comment added successfully
+ *         description: Feature comment added successfully
  *         content:
  *           application/json:
  *             schema:

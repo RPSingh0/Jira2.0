@@ -31,6 +31,7 @@ exports.createProjectComment = catchAsync(async (req, res) => {
 });
 
 exports.getProjectComment = catchAsync(async (req, res) => {
+
     let validated = undefined;
 
     try {
@@ -78,6 +79,7 @@ exports.createFeatureComment = catchAsync(async (req, res) => {
 });
 
 exports.getFeatureComment = catchAsync(async (req, res) => {
+
     let validated = undefined;
 
     try {
@@ -125,6 +127,7 @@ exports.createJiraComment = catchAsync(async (req, res) => {
 });
 
 exports.getJiraComment = catchAsync(async (req, res) => {
+
     let validated = undefined;
 
     try {
