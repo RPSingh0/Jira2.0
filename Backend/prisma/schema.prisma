@@ -21,8 +21,11 @@ model User {
 
   // References
   projectsLead     Project[]
-  metadataAssignee Metadata[] @relation("UserAssignee")
-  metadataReporter Metadata[] @relation("UserReporter")
+  metadataAssignee Metadata[]       @relation("UserAssignee")
+  metadataReporter Metadata[]       @relation("UserReporter")
+  projectComments  ProjectComment[]
+  featureComments  FeatureComment[]
+  jiraComments     JiraComment[]
 }
 
 model Project {
@@ -37,9 +40,10 @@ model Project {
   updatedAt     DateTime @updatedAt
 
   // References
-  lead     User       @relation(fields: [projectLeadBy], references: [email])
+  lead     User             @relation(fields: [projectLeadBy], references: [email])
   features Feature[]
   metadata Metadata[]
+  comments ProjectComment[]
 }
 
 model Feature {
@@ -52,8 +56,9 @@ model Feature {
   updatedAt   DateTime @updatedAt
 
   // References
-  project  Project    @relation(fields: [projectKey], references: [projectKey])
+  project  Project          @relation(fields: [projectKey], references: [projectKey])
   metadata Metadata[]
+  comments FeatureComment[]
 
   // Index
   @@unique([projectKey, featureKey])
@@ -71,6 +76,7 @@ model Jira {
 
   // References
   metadata Metadata?
+  comments JiraComment[]
 }
 
 model Metadata {
@@ -91,6 +97,46 @@ model Metadata {
   feature      Feature @relation(fields: [projectKey, featureKey], references: [projectKey, featureKey])
   UserAssignee User    @relation("UserAssignee", fields: [assignee], references: [email])
   UserReporter User    @relation("UserReporter", fields: [reporter], references: [email])
+}
+
+model ProjectComment {
+  id          String   @id @default(uuid())
+  content     String
+  projectKey  String   @db.VarChar(30)
+  authorEmail String   @db.VarChar(100)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // References
+  project Project @relation(fields: [projectKey], references: [projectKey])
+  author  User    @relation(fields: [authorEmail], references: [email])
+}
+
+model FeatureComment {
+  id          String   @id @default(uuid())
+  content     String
+  projectKey  String   @db.VarChar(30)
+  featureKey  String   @db.VarChar(30)
+  authorEmail String   @db.VarChar(100)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // References
+  feature Feature @relation(fields: [projectKey, featureKey], references: [projectKey, featureKey])
+  author  User    @relation(fields: [authorEmail], references: [email])
+}
+
+model JiraComment {
+  id          String   @id @default(uuid())
+  content     String
+  jiraKey     String   @db.VarChar(30)
+  authorEmail String   @db.VarChar(100)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // References
+  jira   Jira @relation(fields: [jiraKey], references: [jiraKey])
+  author User @relation(fields: [authorEmail], references: [email])
 }
 
 enum JiraType {

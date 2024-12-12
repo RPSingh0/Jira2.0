@@ -8,6 +8,7 @@ const userRouter = require('./routes/userRoutes');
 const projectRouter = require('./routes/projectRoutes');
 const featureRouter = require('./routes/featureRoutes');
 const jiraRouter = require('./routes/jiraRoutes');
+const commentRouter = require('./routes/commentRoutes');
 
 const app = express();
 app.use(cors());
@@ -45,6 +46,7 @@ app.use('/api/v1/user', userRouter);
 app.use('/api/v1/project', projectRouter);
 app.use('/api/v1/feature', featureRouter);
 app.use('/api/v1/jira', jiraRouter);
+app.use('/api/v1/comment', commentRouter);
 
 /**
  * If path is not defined, raising error which will be caught by global exception handler
