@@ -59,4 +59,60 @@ router.route('/project/create')
  */
 router.route('/project/get/:projectKey')
     .get(authenticationController.authenticate, commentController.getProjectComment)
+
+/**
+ * @swagger
+ * /comment/feature/create:
+ *   post:
+ *     security:
+ *       - Authorization: []
+ *     summary: Adds a new feature comment
+ *     tags: [Comment]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/FeatureCommentCreate'
+ *     responses:
+ *       201:
+ *         description: Project comment added successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/FeatureCommentCreateSuccess'
+ */
+router.route('/feature/create')
+    .post(authenticationController.authenticate, commentController.createFeatureComment);
+
+/**
+ * @swagger
+ * /comment/feature/get/{projectKey}/{featureKey}:
+ *   get:
+ *     security:
+ *       - Authorization: []
+ *     summary: Get all comments for one feature
+ *     tags: [Comment]
+ *     parameters:
+ *       - in: path
+ *         name: projectKey
+ *         required: true
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: featureKey
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Comments retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/GetFeatureCommentsSuccess'
+ */
+router.route('/feature/get/:projectKey/:featureKey')
+    .get(authenticationController.authenticate, commentController.getFeatureComment)
+
 module.exports = router;

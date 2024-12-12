@@ -81,6 +81,88 @@ class CommentService {
             });
         }
     }
+
+    static async createFeatureComment(data) {
+
+        try {
+            const comment = await prisma.featureComment.create({
+                data: {
+                    projectKey: data.projectKey,
+                    featureKey: data.featureKey,
+                    authorEmail: data.user.email,
+                    content: data.content
+                }
+            });
+
+            return {success: true, data: comment};
+
+        } catch (err) {
+
+            const extra = parsePrismaError(err);
+
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error creating feature comment ${extra ? extra : ""}`,
+            });
+        }
+    }
+
+    static async getFeatureComments(data) {
+        try {
+            const comments = await prisma.featureComment.findMany({
+                where: {
+                    projectKey: data.projectKey,
+                    featureKey: data.featureKey
+                },
+                select: {
+                    projectKey: true,
+                    featureKey: true,
+                    content: true,
+                    author: {
+                        select: {
+                            firstName: true,
+                            lastName: true,
+                            email: true,
+                            profileImage: true
+                        }
+                    },
+                    updatedAt: true
+                },
+                orderBy: [
+                    {
+                        createdAt: 'desc'
+                    }
+                ]
+            });
+
+            if (comments.length === 0) {
+                return {success: true, data: []}
+            }
+
+            const result = comments.map(comment => {
+                return {
+                    projectKey: comment.projectKey,
+                    featureKey: comment.featureKey,
+                    content: comment.content,
+                    authorEmail: comment.author.email,
+                    authorName: `${comment.author.firstName} ${comment.author.lastName}`,
+                    authorProfileImage: comment.author.profileImage,
+                    updatedAt: comment.updatedAt
+                }
+            });
+
+            return {success: true, data: result};
+
+        } catch (err) {
+
+            const extra = parsePrismaError(err);
+
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error fetching feature comments ${extra ? extra : ""}`,
+            });
+        }
+    }
 }
 
 module.exports = CommentService;

@@ -41,3 +41,49 @@ components:
                   updatedAt:
                     type: string
                     format: date
+    FeatureCommentCreate:
+      type: object
+      required:
+        - projectKey
+        - featureKey
+        - content
+      properties:
+        projectKey:
+          type: string
+        featureKey:
+          type: string
+        content:
+          type: string
+    FeatureCommentCreateSuccess:
+      type: object
+      properties:
+        status:
+          type: string
+    GetFeatureCommentsSuccess:
+      type: object
+      properties:
+        status:
+          type: string
+        data:
+          type: object
+          properties:
+            projects:
+              type: array
+              items:
+                type: object
+                properties:
+                  projectKey:
+                    type: string
+                  featureKey:
+                    type: string
+                  content:
+                    type: string
+                  authorEmail:
+                    type: string
+                  authorName:
+                    type: string
+                  authorProfileImage:
+                    type: string
+                  updatedAt:
+                    type: string
+                    format: date
