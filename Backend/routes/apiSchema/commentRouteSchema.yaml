@@ -23,7 +23,7 @@ components:
         data:
           type: object
           properties:
-            projects:
+            comments:
               type: array
               items:
                 type: object
@@ -67,7 +67,7 @@ components:
         data:
           type: object
           properties:
-            projects:
+            comments:
               type: array
               items:
                 type: object
@@ -110,7 +110,7 @@ components:
         data:
           type: object
           properties:
-            projects:
+            comments:
               type: array
               items:
                 type: object
