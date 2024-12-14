@@ -42,25 +42,29 @@ export function TextButton({text, onClickHandler}) {
     );
 }
 
-export function ContainedButton({text, onClickHandler}) {
-
-    const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.down('sm'));
+export function ContainedButton({text, onClickHandler, disabled}) {
 
     return (
-        <StyledContainedButton variant={"contained"} onClick={onClickHandler} size={matches ? "small" : "medium"}>
+        <StyledContainedButton
+            variant={"contained"}
+            onClick={onClickHandler}
+            size="small"
+            disabled={disabled}
+        >
             {text}
         </StyledContainedButton>
     );
 }
 
-export function OutlinedButton({text, onClickHandler}) {
-
-    const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.down('sm'));
+export function OutlinedButton({text, onClickHandler, disabled}) {
 
     return (
-        <StyledOutlinedButton variant={"outlined"} onClick={onClickHandler} size={matches ? "small" : "medium"}>
+        <StyledOutlinedButton
+            variant={"outlined"}
+            onClick={onClickHandler}
+            size="small"
+            disabled={disabled}
+        >
             {text}
         </StyledOutlinedButton>
     );

@@ -1,6 +1,6 @@
 import {
     Bookmark,
-    BugReport,
+    BugReport, Chat,
     CheckCircle,
     Close,
     Done,
@@ -11,7 +11,7 @@ import {
     PriorityHigh,
     RadioButtonChecked,
     Search,
-    Task,
+    Task, Timeline,
     WorkHistory
 } from "@mui/icons-material";
 
@@ -29,5 +29,7 @@ export const IconMap = {
     'in-progress': <RadioButtonChecked/>,
     'done': <CheckCircle/>,
     'save': <Done fontSize="small"/>,
-    'close': <Close fontSize="small"/>
+    'close': <Close fontSize="small"/>,
+    'history': <Timeline/>,
+    'comments': <Chat/>
 }

@@ -9,6 +9,7 @@ import {
     StyledProjectDetailContentBox,
     StyledProjectDetailMainSectionBox
 } from "./ProjectDetailStyles.jsx";
+import ProjectDetailActivity from "./activity/ProjectDetailActivity.jsx";
 
 function ProjectDetail() {
 
@@ -25,6 +26,7 @@ function ProjectDetail() {
                     <ProjectDetailFeatureContextProvider>
                         <ProjectDetailFeature/>
                     </ProjectDetailFeatureContextProvider>
+                    <ProjectDetailActivity/>
                 </StyledProjectDetailMainSectionBox>
                 <ProjectDetailContextProvider>
                     <ProjectDetailAside/>

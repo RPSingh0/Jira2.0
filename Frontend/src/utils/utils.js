@@ -41,6 +41,11 @@ export function formatDateToLocale(dateString) {
     return date.toLocaleDateString();
 }
 
+export function formatDateToLocalWithTime(dateString) {
+    const date = new Date(dateString);
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString(undefined, {hour: '2-digit', minute: '2-digit'});
+}
+
 export function getSlotPropsForInput(multiline) {
     return multiline ? {
         input: {

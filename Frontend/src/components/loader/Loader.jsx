@@ -83,3 +83,32 @@ export function DashboardProjectCardLoadingIndicator() {
         </>
     );
 }
+
+export function CommentsLoadingIndicator() {
+    return (
+        <Box sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "2rem"
+        }}>
+            {Array.from({length: 4}, (item, index) =>
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "1rem"
+                }} key={index}>
+                    <Skeleton variant="circular" width={24} height={24} animation="wave"/>
+                    <Box sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "0.5rem",
+                        flex: 1
+                    }}>
+                        <Skeleton variant="rounded" height={"1rem"} animation={"wave"}/>
+                        <Skeleton variant="rounded" height={"2.5rem"} animation={"wave"}/>
+                    </Box>
+                </Box>)
+            }
+        </Box>
+    );
+}

@@ -1,5 +1,5 @@
 import TextEditor from "./Editor.jsx";
-import DescriptionSaveOrCancel from "../button/DescriptionSaveOrCancel.jsx";
+import EditorContentSaveOrCancel from "../button/EditorContentSaveOrCancel.jsx";
 import {Box} from "@mui/material";
 
 function DescriptionEditor({isEditing, setIsEditing, editingOff, editingOn, handleSave}) {
@@ -17,7 +17,7 @@ function DescriptionEditor({isEditing, setIsEditing, editingOff, editingOn, hand
                 <TextEditor editor={editingOn} height={"min-content"}/>
                 :
                 <TextEditor editor={editingOff} height={"min-content"}/>}
-            {isEditing && <DescriptionSaveOrCancel
+            {isEditing && <EditorContentSaveOrCancel
                 onSaveClick={handleSave}
                 onCancelClick={() => setIsEditing(false)}
             />}

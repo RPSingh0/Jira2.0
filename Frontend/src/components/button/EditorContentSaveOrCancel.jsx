@@ -7,16 +7,16 @@ const StyledSaveOrCancelBox = styled(Box)(() => ({
     marginBottom: "1rem"
 }));
 
-function DescriptionSaveOrCancel({onSaveClick, onCancelClick}) {
+function EditorContentSaveOrCancel({onSaveClick, onCancelClick, disableSave, disableCancel}) {
 
     return (
         <StyledSaveOrCancelBox>
             <StyledEditingSaveAndCancelBox>
-                <ContainedButton text={"Save"} onClickHandler={onSaveClick}/>
-                <OutlinedButton text={"Cancel"} onClickHandler={onCancelClick}/>
+                <ContainedButton text={"Save"} onClickHandler={onSaveClick} disabled={disableSave}/>
+                <OutlinedButton text={"Cancel"} onClickHandler={onCancelClick} disabled={disableCancel}/>
             </StyledEditingSaveAndCancelBox>
         </StyledSaveOrCancelBox>
     );
 }
 
-export default DescriptionSaveOrCancel;
+export default EditorContentSaveOrCancel;
