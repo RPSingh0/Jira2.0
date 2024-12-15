@@ -5,7 +5,7 @@ import {getJiraDetailsByJiraKeyService} from "../../../services/jira/jiraService
 
 const JiraContext = createContext();
 
-function JiraDetailContextProvider({children}) {
+function JiraContextProvider({children}) {
 
     // get jira key from url
     const {jiraKey} = useParams();
@@ -35,7 +35,7 @@ function JiraDetailContextProvider({children}) {
     );
 }
 
-function useJiraDetailContext() {
+function useJiraContext() {
     const context = useContext(JiraContext);
 
     if (context === undefined) {
@@ -45,4 +45,4 @@ function useJiraDetailContext() {
     return context;
 }
 
-export {JiraDetailContextProvider, useJiraDetailContext};
+export {JiraContextProvider, useJiraContext};

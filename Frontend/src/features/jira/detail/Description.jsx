@@ -2,7 +2,7 @@ import useDefaultEditor from "../../../components/editor/useDefaultEditor.js";
 import {useEffect, useState} from "react";
 import {useUpdateJiraDescription} from "../hooks/useUpdateJiraDescription.js";
 import {useQueryClient} from "@tanstack/react-query";
-import {useJiraDetailContext} from "../context/JiraContext.jsx";
+import {useJiraContext} from "../context/JiraContext.jsx";
 import {DescriptionLoadingIndicator} from "../../../components/loader/Loader.jsx";
 import LoadOrFetchWrapper from "../../../components/loader/LoadOrFetchWrapper.jsx";
 import DescriptionEditor from "../../../components/editor/DescriptionEditor.jsx";
@@ -11,7 +11,7 @@ import DescriptionEditor from "../../../components/editor/DescriptionEditor.jsx"
 function Description() {
 
     // Contexts
-    const {jiraKey, loadingJiraDetail, fetchingJiraDetail, jiraDetailData} = useJiraDetailContext();
+    const {jiraKey, loadingJiraDetail, fetchingJiraDetail, jiraDetailData} = useJiraContext();
 
     // Local states
     const {editingOn, editingOff} = useDefaultEditor(undefined);
