@@ -99,3 +99,52 @@ export async function createFeatureCommentService({projectKey, featureKey, conte
 
     return data;
 }
+
+export async function getJiraComments({jiraKey}) {
+
+    const url = new URL(`${COMMENT_URL}/jira/get/${jiraKey}`);
+    const token = store.getState()?.authentication?.token;
+
+    let data = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        }
+    });
+
+    data = await data.json();
+
+    if (data && data.status === 'fail') {
+        throw new Error(data.message);
+    }
+
+    return data.data.comments;
+}
+
+export async function createJiraCommentService({jiraKey, content}) {
+
+    const url = new URL(`${COMMENT_URL}/jira/create`);
+
+    const token = store.getState()?.authentication?.token;
+
+    let data = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            jiraKey: jiraKey,
+            content: content
+        })
+    });
+
+    data = await data.json();
+
+    if (data && data.status === 'fail') {
+        throw new Error(data.message);
+    }
+
+    return data;
+}

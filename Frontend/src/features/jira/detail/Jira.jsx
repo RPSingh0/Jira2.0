@@ -4,17 +4,19 @@ import Aside from "./aside/Aside.jsx";
 import {JiraMetadataContextProvider} from "../context/JiraMetadataContext.jsx";
 import Summary from "./Summary.jsx";
 import Description from "./Description.jsx";
+import Activity from "./activity/Activity.jsx";
 
 
 function Jira() {
     return (
         <StyledProjectDetailContentBox>
-            <JiraContextProvider>
-                <StyledProjectDetailMainSectionBox>
+            <StyledProjectDetailMainSectionBox>
+                <JiraContextProvider>
                     <Summary/>
                     <Description/>
-                </StyledProjectDetailMainSectionBox>
-            </JiraContextProvider>
+                </JiraContextProvider>
+                <Activity/>
+            </StyledProjectDetailMainSectionBox>
             <JiraMetadataContextProvider>
                 <Aside/>
             </JiraMetadataContextProvider>
