@@ -1,15 +1,15 @@
 import {Box, Divider, styled, Typography} from "@mui/material";
-import {useFeatureJiraContext} from "./FeatureDetailJiraContext.jsx";
-import {FeatureJiraLoadingIndicator} from "../../../components/loader/Loader.jsx";
-import LoadOrFetchWrapper from "../../../components/loader/LoadOrFetchWrapper.jsx";
-import {StyledListContainer} from "../../../styles/StyledListContainer.jsx";
-import JiraListItem from "../../../components/jira/JiraListItem.jsx";
+import {useJiraContext} from "../../context/JiraContext.jsx";
+import {FeatureJiraLoadingIndicator} from "../../../../components/loader/Loader.jsx";
+import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper.jsx";
+import {StyledListContainer} from "../../../../styles/StyledListContainer.jsx";
+import JiraListItem from "../../../../components/jira/JiraListItem.jsx";
 
 const StyledFeatureDetailJiraBox = styled(Box)(() => ({}));
 
-function FeatureDetailJira() {
+function Jira() {
 
-    const {loadingFeatureJira, fetchingFeatureJira, featureJira,} = useFeatureJiraContext();
+    const {loadingFeatureJira, fetchingFeatureJira, featureJira,} = useJiraContext();
 
     return (
         <StyledFeatureDetailJiraBox>
@@ -41,4 +41,4 @@ function FeatureDetailJira() {
     );
 }
 
-export default FeatureDetailJira;
+export default Jira;

@@ -2,15 +2,15 @@ import useDefaultEditor from "../../../components/editor/useDefaultEditor.js";
 import {useEffect, useState} from "react";
 import {DescriptionLoadingIndicator} from "../../../components/loader/Loader.jsx";
 import LoadOrFetchWrapper from "../../../components/loader/LoadOrFetchWrapper.jsx";
-import {useFeatureDetailContext} from "../context/FeatureDetailContext.jsx";
+import {useFeatureContext} from "../context/FeatureContext.jsx";
 import {useUpdateFeatureDescription} from "../hooks/useUpdateFeatureDescription.js";
 import {useQueryClient} from "@tanstack/react-query";
 import DescriptionEditor from "../../../components/editor/DescriptionEditor.jsx";
 
-function FeatureDetailDescription() {
+function Description() {
 
     // Contexts
-    const {loadingFeatureDetail, fetchingFeatureDetail, featureDetail} = useFeatureDetailContext();
+    const {loadingFeatureDetail, fetchingFeatureDetail, featureDetail} = useFeatureContext();
 
     // Local states
     const {editingOn, editingOff} = useDefaultEditor(undefined);
@@ -58,4 +58,4 @@ function FeatureDetailDescription() {
     );
 }
 
-export default FeatureDetailDescription;
+export default Description;

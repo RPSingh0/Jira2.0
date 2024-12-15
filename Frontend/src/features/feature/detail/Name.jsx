@@ -1,4 +1,4 @@
-import {useFeatureDetailContext} from "../context/FeatureDetailContext.jsx";
+import {useFeatureContext} from "../context/FeatureContext.jsx";
 import {Rounded2Half} from "../../../components/loader/Loader.jsx";
 import LoadOrFetchWrapper from "../../../components/loader/LoadOrFetchWrapper.jsx";
 import {useEffect, useState} from "react";
@@ -7,10 +7,10 @@ import {useQueryClient} from "@tanstack/react-query";
 import NameSummaryEditor from "../../../components/editor/NameSummaryEditor.jsx";
 
 
-function FeatureDetailName() {
+function Name() {
 
     // Contexts
-    const {loadingFeatureDetail, fetchingFeatureDetail, featureDetail} = useFeatureDetailContext();
+    const {loadingFeatureDetail, fetchingFeatureDetail, featureDetail} = useFeatureContext();
 
     // Local states
     const [name, setName] = useState('');
@@ -59,4 +59,4 @@ function FeatureDetailName() {
     );
 }
 
-export default FeatureDetailName;
+export default Name;

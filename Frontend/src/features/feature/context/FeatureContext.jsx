@@ -3,9 +3,9 @@ import {useParams} from "react-router-dom";
 import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
 import {getFeatureDetailService} from "../../../services/feature/featureService.js";
 
-const FeatureDetailContext = createContext();
+const FeatureContext = createContext();
 
-function FeatureDetailContextProvider({children}) {
+function FeatureContextProvider({children}) {
 
     // get jira key from url
     const {projectKey, featureKey} = useParams();
@@ -24,19 +24,19 @@ function FeatureDetailContextProvider({children}) {
     });
 
     return (
-        <FeatureDetailContext.Provider value={{
+        <FeatureContext.Provider value={{
             loadingFeatureDetail,
             fetchingFeatureDetail,
             featureDetail,
             errorFeatureDetail,
         }}>
             {children}
-        </FeatureDetailContext.Provider>
+        </FeatureContext.Provider>
     );
 }
 
-function useFeatureDetailContext() {
-    const context = useContext(FeatureDetailContext);
+function useFeatureContext() {
+    const context = useContext(FeatureContext);
 
     if (context === undefined) {
         throw new Error("Using context outside provider");
@@ -45,4 +45,4 @@ function useFeatureDetailContext() {
     return context;
 }
 
-export {FeatureDetailContextProvider, useFeatureDetailContext};
+export {FeatureContextProvider, useFeatureContext};
