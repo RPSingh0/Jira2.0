@@ -31,7 +31,7 @@ export function DescriptionLoadingIndicator() {
 
 export function FeatureJiraLoadingIndicator() {
     return (
-        <Box sx={{display: "flex", flexDirection: "column", gap: "1rem"}}>
+        <Box sx={{display: "flex", flexDirection: "column", gap: "1rem", marginBottom: "2rem"}}>
             <Skeleton variant="rounded" height={"3rem"} animation={"wave"}/>
             <Skeleton variant="rounded" height={"3rem"} animation={"wave"}/>
             <Skeleton variant="rounded" height={"3rem"} animation={"wave"}/>

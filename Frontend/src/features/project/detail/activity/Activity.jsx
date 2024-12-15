@@ -1,10 +1,10 @@
 import {useState} from "react";
-import {StyledTabButton, StyledTabButtonBox} from "../../../dashboard/workedOnSection/WorkSectionStyles.jsx";
 import {IconMap} from "../../../../utils/IconMap.jsx";
 import {Tabs} from "@mui/material";
 import ActivityTab from "./ActivityTab.jsx";
-import Comment from "./Comment.jsx";
+import Comment from "./comments/Comment.jsx";
 import {CommentContextProvider} from "../../context/CommentContext.jsx";
+import {StyledTabButton, StyledTabButtonBox} from "../../../../styles/StyledTabButton.jsx";
 
 function Activity() {
 
