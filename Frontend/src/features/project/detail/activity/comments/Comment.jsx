@@ -3,7 +3,7 @@ import AddComment from "./AddComment.jsx";
 import SingleComment from "./SingleComment.jsx";
 import LoadOrFetchWrapper from "../../../../../components/loader/LoadOrFetchWrapper.jsx";
 import {CommentsLoadingIndicator} from "../../../../../components/loader/Loader.jsx";
-import {StyledCommentsBox} from "./CommentStyles.jsx";
+import {StyledCommentsBox} from "../../../../../styles/CommentStyles.jsx";
 
 function Comment() {
 

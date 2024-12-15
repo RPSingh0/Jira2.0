@@ -1,4 +1,4 @@
-import {Box, Divider, styled, Typography} from "@mui/material";
+import {Box, styled, Typography} from "@mui/material";
 import {useJiraContext} from "../../context/JiraContext.jsx";
 import {FeatureJiraLoadingIndicator} from "../../../../components/loader/Loader.jsx";
 import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper.jsx";
@@ -16,7 +16,6 @@ function Jira() {
             <Typography variant="h6" gutterBottom>
                 Jiras
             </Typography>
-            <Divider/>
             <LoadOrFetchWrapper
                 loading={loadingFeatureJira}
                 fetching={fetchingFeatureJira}

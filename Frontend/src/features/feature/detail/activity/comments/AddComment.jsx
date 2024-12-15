@@ -3,31 +3,33 @@ import {useState} from "react";
 import useDefaultEditor from "../../../../../components/editor/useDefaultEditor.js";
 import {Typography} from "@mui/material";
 import {Avatar24x24} from "../../../../../components/avatar/Avatars.jsx";
-import {useCreateProjectComment} from "../../../hooks/useCreateProjectComment.js";
 import {useParams} from "react-router-dom";
 import {useQueryClient} from "@tanstack/react-query";
 import {StyledAddCommentAside, StyledAddCommentBox} from "../../../../../styles/CommentStyles.jsx";
+import {useCreateFeatureComment} from "../../../hooks/useCreateFeatureComment.js";
 
 function AddComment() {
 
     const [isEditing, setIsEditing] = useState(false);
     const {editingOn, editingOff} = useDefaultEditor("Add your comment here...");
+    const {createFeatureComment, isCreating} = useCreateFeatureComment();
     const queryClient = useQueryClient();
-    const {createProjectComment, isCreating} = useCreateProjectComment();
-    const {projectKey} = useParams();
+
+    const {projectKey, featureKey} = useParams();
 
     function handleAddComment() {
 
         const editorData = editingOn.getHTML();
         editingOn.setEditable(false);
 
-        createProjectComment({
+        createFeatureComment({
             projectKey: projectKey,
+            featureKey: featureKey,
             content: editorData
         }, {
             onSuccess: () => {
                 setIsEditing(false);
-                queryClient.invalidateQueries({queryKey: [`${projectKey}-comments`]})
+                queryClient.invalidateQueries({queryKey: [`${projectKey}-${featureKey}-comments`]})
             },
             onSettled: () => editingOn.setEditable(true)
         });
