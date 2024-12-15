@@ -12,7 +12,7 @@ import {StaticAvatarAndText} from "../../../../components/avatar/StaticAvatarAnd
 import AsideElementHeading from "../../../../components/heading/AsideElementHeading.jsx";
 import {useWatch} from "react-hook-form";
 
-function JiraDetailAssignee() {
+function Assignee() {
 
     // context states
     const {
@@ -112,4 +112,4 @@ function JiraDetailAssignee() {
     );
 }
 
-export default JiraDetailAssignee;
+export default Assignee;

@@ -5,7 +5,7 @@ import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper
 import AsideElementHeading from "../../../../components/heading/AsideElementHeading.jsx";
 import {StaticAvatarAndText} from "../../../../components/avatar/StaticAvatarAndText.jsx";
 
-function JiraDetailReporter() {
+function Reporter() {
 
     // context states
     const {loadingJiraMetadata, fetchingJiraMetadata, jiraMetadata} = useJiraMetadataContext();
@@ -27,4 +27,4 @@ function JiraDetailReporter() {
     );
 }
 
-export default JiraDetailReporter;
+export default Reporter;

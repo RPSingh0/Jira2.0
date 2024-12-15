@@ -12,7 +12,7 @@ import StaticText from "../../../../components/text/StaticText.jsx";
 import AsideElementHeading from "../../../../components/heading/AsideElementHeading.jsx";
 import {useWatch} from "react-hook-form";
 
-function JiraDetailFeature() {
+function Feature() {
 
     // context states
     const {
@@ -108,4 +108,4 @@ function JiraDetailFeature() {
     );
 }
 
-export default JiraDetailFeature;
+export default Feature;

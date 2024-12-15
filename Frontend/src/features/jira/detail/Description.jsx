@@ -2,13 +2,13 @@ import useDefaultEditor from "../../../components/editor/useDefaultEditor.js";
 import {useEffect, useState} from "react";
 import {useUpdateJiraDescription} from "../hooks/useUpdateJiraDescription.js";
 import {useQueryClient} from "@tanstack/react-query";
-import {useJiraDetailContext} from "../context/JiraDetailContext.jsx";
+import {useJiraDetailContext} from "../context/JiraContext.jsx";
 import {DescriptionLoadingIndicator} from "../../../components/loader/Loader.jsx";
 import LoadOrFetchWrapper from "../../../components/loader/LoadOrFetchWrapper.jsx";
 import DescriptionEditor from "../../../components/editor/DescriptionEditor.jsx";
 
 
-function JiraDetailDescription() {
+function Description() {
 
     // Contexts
     const {jiraKey, loadingJiraDetail, fetchingJiraDetail, jiraDetailData} = useJiraDetailContext();
@@ -58,4 +58,4 @@ function JiraDetailDescription() {
     );
 }
 
-export default JiraDetailDescription;
+export default Description;

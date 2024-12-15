@@ -3,7 +3,7 @@ import {useParams} from "react-router-dom";
 import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
 import {getJiraDetailsByJiraKeyService} from "../../../services/jira/jiraService.js";
 
-const JiraDetailContext = createContext();
+const JiraContext = createContext();
 
 function JiraDetailContextProvider({children}) {
 
@@ -23,7 +23,7 @@ function JiraDetailContextProvider({children}) {
     });
 
     return (
-        <JiraDetailContext.Provider value={{
+        <JiraContext.Provider value={{
             jiraKey,
             loadingJiraDetail,
             fetchingJiraDetail,
@@ -31,12 +31,12 @@ function JiraDetailContextProvider({children}) {
             errorJiraDetail
         }}>
             {children}
-        </JiraDetailContext.Provider>
+        </JiraContext.Provider>
     );
 }
 
 function useJiraDetailContext() {
-    const context = useContext(JiraDetailContext);
+    const context = useContext(JiraContext);
 
     if (context === undefined) {
         throw new Error("Using context outside provider");

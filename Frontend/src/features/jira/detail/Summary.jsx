@@ -1,12 +1,12 @@
 import {useEffect, useState} from "react";
 import {useQueryClient} from "@tanstack/react-query";
-import {useJiraDetailContext} from "../context/JiraDetailContext.jsx";
+import {useJiraDetailContext} from "../context/JiraContext.jsx";
 import {useUpdateJiraSummary} from "../hooks/useUpdateJiraSummary.js";
 import {Rounded2Half} from "../../../components/loader/Loader.jsx";
 import LoadOrFetchWrapper from "../../../components/loader/LoadOrFetchWrapper.jsx";
 import NameSummaryEditor from "../../../components/editor/NameSummaryEditor.jsx";
 
-function JiraDetailSummary() {
+function Summary() {
 
     // Contexts
     const {jiraKey, loadingJiraDetail, fetchingJiraDetail, jiraDetailData} = useJiraDetailContext();
@@ -59,4 +59,4 @@ function JiraDetailSummary() {
     );
 }
 
-export default JiraDetailSummary;
+export default Summary;

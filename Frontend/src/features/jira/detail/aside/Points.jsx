@@ -10,7 +10,7 @@ import OptionEditor from "../../../../components/editor/OptionEditor.jsx";
 import StaticText from "../../../../components/text/StaticText.jsx";
 import {useWatch} from "react-hook-form";
 
-function JiraDetailPoints() {
+function Points() {
 
     // context states
     const {
@@ -99,4 +99,4 @@ function JiraDetailPoints() {
     );
 }
 
-export default JiraDetailPoints;
+export default Points;

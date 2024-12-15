@@ -5,7 +5,7 @@ import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper
 import StaticText from "../../../../components/text/StaticText.jsx";
 import AsideElementHeading from "../../../../components/heading/AsideElementHeading.jsx";
 
-function JiraDetailProject() {
+function Project() {
 
     // context states
     const {loadingJiraMetadata, fetchingJiraMetadata, jiraMetadata} = useJiraMetadataContext();
@@ -27,4 +27,4 @@ function JiraDetailProject() {
     );
 }
 
-export default JiraDetailProject;
+export default Project;
