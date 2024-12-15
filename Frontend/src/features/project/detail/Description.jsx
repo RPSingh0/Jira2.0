@@ -1,16 +1,16 @@
 import useDefaultEditor from "../../../components/editor/useDefaultEditor.js";
 import {DescriptionLoadingIndicator} from "../../../components/loader/Loader.jsx";
 import LoadOrFetchWrapper from "../../../components/loader/LoadOrFetchWrapper.jsx";
-import {useProjectDetailContext} from "../context/ProjectDetailContext.jsx";
+import {useProjectContext} from "../context/ProjectContext.jsx";
 import {useEffect, useState} from "react";
 import {useQueryClient} from "@tanstack/react-query";
 import {useUpdateProjectDescription} from "../hooks/useUpdateProjectDescription.js";
 import DescriptionEditor from "../../../components/editor/DescriptionEditor.jsx";
 
-function ProjectDetailDescription() {
+function Description() {
 
     // contexts
-    const {loadingProjectDetail, fetchingProjectDetail, projectDetail} = useProjectDetailContext();
+    const {loadingProjectDetail, fetchingProjectDetail, projectDetail} = useProjectContext();
 
     // Local states
     const {editingOn, editingOff} = useDefaultEditor(undefined);
@@ -57,4 +57,4 @@ function ProjectDetailDescription() {
     );
 }
 
-export default ProjectDetailDescription;
+export default Description;

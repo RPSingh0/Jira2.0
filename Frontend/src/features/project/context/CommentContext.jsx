@@ -3,9 +3,9 @@ import {useParams} from "react-router-dom";
 import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
 import {getProjectComments} from "../../../services/comments/commentsService.js";
 
-const ProjectDetailCommentContext = createContext();
+const CommentContext = createContext();
 
-function ProjectDetailCommentContextProvider({children}) {
+function CommentContextProvider({children}) {
 
     // get project key from url
     const {projectKey} = useParams();
@@ -23,19 +23,19 @@ function ProjectDetailCommentContextProvider({children}) {
     });
 
     return (
-        <ProjectDetailCommentContext.Provider value={{
+        <CommentContext.Provider value={{
             loadingProjectComments,
             fetchingProjectComments,
             commentsData,
             errorCommentsData
         }}>
             {children}
-        </ProjectDetailCommentContext.Provider>
+        </CommentContext.Provider>
     );
 }
 
-function useProjectDetailCommentContext() {
-    const context = useContext(ProjectDetailCommentContext);
+function useCommentContext() {
+    const context = useContext(CommentContext);
 
     if (context === undefined) {
         throw new Error("Using context outside provider");
@@ -44,4 +44,4 @@ function useProjectDetailCommentContext() {
     return context;
 }
 
-export {ProjectDetailCommentContextProvider, useProjectDetailCommentContext};
+export {CommentContextProvider, useCommentContext};

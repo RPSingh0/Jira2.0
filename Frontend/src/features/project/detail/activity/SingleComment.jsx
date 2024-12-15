@@ -4,7 +4,7 @@ import {formatDateToLocalWithTime} from "../../../../utils/utils.js";
 import useDefaultEditor from "../../../../components/editor/useDefaultEditor.js";
 import TextEditor from "../../../../components/editor/Editor.jsx";
 
-function CommentItem({item}) {
+function SingleComment({item}) {
 
     const {editingOff} = useDefaultEditor(item.content);
 
@@ -43,4 +43,4 @@ function CommentItem({item}) {
     );
 }
 
-export default CommentItem
+export default SingleComment

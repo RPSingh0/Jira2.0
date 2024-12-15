@@ -1,12 +1,12 @@
-import {useProjectDetailContext} from "../context/ProjectDetailContext.jsx";
+import {useProjectContext} from "../context/ProjectContext.jsx";
 import {Rounded2Half} from "../../../components/loader/Loader.jsx";
 import LoadOrFetchWrapper from "../../../components/loader/LoadOrFetchWrapper.jsx";
 import TypographyH5Heading from "../../../components/heading/TypographyH5.jsx";
 
-function ProjectDetailName() {
+function Name() {
 
     // contexts
-    const {loadingProjectDetail, fetchingProjectDetail, projectDetail} = useProjectDetailContext();
+    const {loadingProjectDetail, fetchingProjectDetail, projectDetail} = useProjectContext();
 
     return (
         <LoadOrFetchWrapper
@@ -18,4 +18,4 @@ function ProjectDetailName() {
     );
 }
 
-export default ProjectDetailName;
+export default Name;

@@ -1,6 +1,6 @@
 import {Box} from "@mui/material";
 
-function ProjectDetailActivityTabContainer({value, index, children}) {
+function ActivityTab({value, index, children}) {
     return (
         <Box role="tabpanel" hidden={value !== index}>
             {children}
@@ -8,4 +8,4 @@ function ProjectDetailActivityTabContainer({value, index, children}) {
     );
 }
 
-export default ProjectDetailActivityTabContainer;
+export default ActivityTab;

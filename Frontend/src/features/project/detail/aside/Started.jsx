@@ -1,4 +1,4 @@
-import {useProjectDetailContext} from "../../context/ProjectDetailContext.jsx";
+import {useProjectContext} from "../../context/ProjectContext.jsx";
 import {Box} from "@mui/material";
 import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper.jsx";
 import {Rounded2Half} from "../../../../components/loader/Loader.jsx";
@@ -6,9 +6,9 @@ import {formatDateToLocale} from "../../../../utils/utils.js";
 import AsideElementHeading from "../../../../components/heading/AsideElementHeading.jsx";
 import StaticText from "../../../../components/text/StaticText.jsx";
 
-function ProjectDetailAsideStarted() {
+function Started() {
 
-    const {loadingProjectDetail, fetchingProjectDetail, projectDetail} = useProjectDetailContext();
+    const {loadingProjectDetail, fetchingProjectDetail, projectDetail} = useProjectContext();
 
     return (
         <Box>
@@ -23,4 +23,4 @@ function ProjectDetailAsideStarted() {
     );
 }
 
-export default ProjectDetailAsideStarted;
+export default Started;

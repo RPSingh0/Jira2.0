@@ -1,13 +1,13 @@
-import {useProjectDetailCommentContext} from "../../context/ProjectDetailCommentContext.jsx";
+import {useCommentContext} from "../../context/CommentContext.jsx";
 import {Box} from "@mui/material";
-import ProjectDetailCommentEditor from "./ProjectDetailCommentEditor.jsx";
-import CommentItem from "./CommentItem.jsx";
+import AddComment from "./AddComment.jsx";
+import SingleComment from "./SingleComment.jsx";
 import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper.jsx";
 import {CommentsLoadingIndicator} from "../../../../components/loader/Loader.jsx";
 
-function ProjectDetailComment() {
+function Comment() {
 
-    const {loadingProjectComments, fetchingProjectComments, commentsData,} = useProjectDetailCommentContext();
+    const {loadingProjectComments, fetchingProjectComments, commentsData,} = useCommentContext();
 
     return (
         <LoadOrFetchWrapper
@@ -19,9 +19,9 @@ function ProjectDetailComment() {
                 flexDirection: "column",
                 gap: "1.8rem"
             }}>
-                <ProjectDetailCommentEditor/>
+                <AddComment/>
                 {(!loadingProjectComments || !fetchingProjectComments) && commentsData?.map(item =>
-                    <CommentItem item={item}/>
+                    <SingleComment item={item}/>
                 )}
             </Box>
         </LoadOrFetchWrapper>
@@ -29,4 +29,4 @@ function ProjectDetailComment() {
     );
 }
 
-export default ProjectDetailComment;
+export default Comment;

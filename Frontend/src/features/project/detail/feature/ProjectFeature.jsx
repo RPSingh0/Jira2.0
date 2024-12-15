@@ -1,22 +1,21 @@
 import {Box, Divider, styled, Typography} from "@mui/material";
 import {FeatureJiraLoadingIndicator} from "../../../../components/loader/Loader.jsx";
 import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper.jsx";
-import {useProjectDetailFeatureContext} from "../../context/ProjectDetailFeatureContext.jsx";
+import {useFeatureContext} from "../../context/FeatureContext.jsx";
 import {StyledListContainer} from "../../../../styles/StyledListContainer.jsx";
 import FeatureListItem from "../../../../components/feature/FeatureListItem.jsx";
 
 const StyledProjectDetailFeature = styled(Box)(() => ({marginTop: "2rem"}));
 
-function ProjectDetailFeature() {
+function ProjectFeature() {
 
-    const {loadingProjectFeature, fetchingProjectFeature, featureData} = useProjectDetailFeatureContext();
+    const {loadingProjectFeature, fetchingProjectFeature, featureData} = useFeatureContext();
 
     return (
         <StyledProjectDetailFeature>
             <Typography variant="h6" gutterBottom>
                 Features
             </Typography>
-            <Divider/>
             <LoadOrFetchWrapper
                 loading={loadingProjectFeature}
                 fetching={fetchingProjectFeature}
@@ -35,4 +34,4 @@ function ProjectDetailFeature() {
     );
 }
 
-export default ProjectDetailFeature;
+export default ProjectFeature;

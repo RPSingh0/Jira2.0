@@ -7,7 +7,7 @@ import {useCreateProjectComment} from "../../hooks/useCreateProjectComment.js";
 import {useParams} from "react-router-dom";
 import {useQueryClient} from "@tanstack/react-query";
 
-function ProjectDetailCommentEditor() {
+function AddComment() {
 
     const [isEditing, setIsEditing] = useState(false);
     const {editingOn, editingOff} = useDefaultEditor("Add your comment here...");
@@ -62,4 +62,4 @@ function ProjectDetailCommentEditor() {
     );
 }
 
-export default ProjectDetailCommentEditor;
+export default AddComment;

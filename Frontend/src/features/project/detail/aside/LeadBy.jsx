@@ -5,17 +5,17 @@ import {Box} from "@mui/material";
 import {useQueryClient} from "@tanstack/react-query";
 import LoadOrFetchWrapper from "../../../../components/loader/LoadOrFetchWrapper.jsx";
 import {Rounded2Half} from "../../../../components/loader/Loader.jsx";
-import {useProjectDetailContext} from "../../context/ProjectDetailContext.jsx";
+import {useProjectContext} from "../../context/ProjectContext.jsx";
 import {useUpdateProjectLead} from "../../hooks/useUpdateProjectLeadBy.js";
 import AutocompleteAssign from "../../../../components/autocompleteAssign/AutocompleteAssign.jsx";
 import AsideElementHeading from "../../../../components/heading/AsideElementHeading.jsx";
 import {StaticAvatarAndText} from "../../../../components/avatar/StaticAvatarAndText.jsx";
 import {useForm, useWatch} from "react-hook-form";
 
-function ProjectDetailAsideLeadBy() {
+function LeadBy() {
 
     // context states
-    const {loadingProjectDetail, fetchingProjectDetail, projectDetail} = useProjectDetailContext();
+    const {loadingProjectDetail, fetchingProjectDetail, projectDetail} = useProjectContext();
 
     // react query hooks
     const queryClient = useQueryClient();
@@ -104,4 +104,4 @@ function ProjectDetailAsideLeadBy() {
     );
 }
 
-export default ProjectDetailAsideLeadBy;
+export default LeadBy;

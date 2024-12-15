@@ -3,9 +3,9 @@ import {useParams} from "react-router-dom";
 import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
 import {getAllFeaturesByProjectKey} from "../../../services/feature/featureService.js";
 
-const ProjectDetailFeatureContext = createContext();
+const FeatureContext = createContext();
 
-function ProjectDetailFeatureContextProvider({children}) {
+function FeatureContextProvider({children}) {
 
     // get project key from url
     const {projectKey} = useParams();
@@ -17,25 +17,25 @@ function ProjectDetailFeatureContextProvider({children}) {
         data: featureData,
         error: errorProjectFeature,
     } = useGetQueryHook({
-        key: [`${projectKey}-feature-detail`],
+        key: [`${projectKey}-feature`],
         fn: getAllFeaturesByProjectKey,
         projectKey: projectKey
     });
 
     return (
-        <ProjectDetailFeatureContext.Provider value={{
+        <FeatureContext.Provider value={{
             loadingProjectFeature,
             fetchingProjectFeature,
             featureData,
             errorProjectFeature,
         }}>
             {children}
-        </ProjectDetailFeatureContext.Provider>
+        </FeatureContext.Provider>
     );
 }
 
-function useProjectDetailFeatureContext() {
-    const context = useContext(ProjectDetailFeatureContext);
+function useFeatureContext() {
+    const context = useContext(FeatureContext);
 
     if (context === undefined) {
         throw new Error("Using context outside provider");
@@ -44,4 +44,4 @@ function useProjectDetailFeatureContext() {
     return context;
 }
 
-export {ProjectDetailFeatureContextProvider, useProjectDetailFeatureContext};
+export {FeatureContextProvider, useFeatureContext};

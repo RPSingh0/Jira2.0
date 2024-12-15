@@ -3,9 +3,9 @@ import {useParams} from "react-router-dom";
 import useGetQueryHook from "../../../queryHooks/useGetQueryHook.js";
 import {getProjectDetailService} from "../../../services/project/projectService.js";
 
-const ProjectDetailContext = createContext();
+const ProjectContext = createContext();
 
-function ProjectDetailContextProvider({children}) {
+function ProjectContextProvider({children}) {
 
     // get project key from url
     const {projectKey} = useParams();
@@ -23,19 +23,19 @@ function ProjectDetailContextProvider({children}) {
     });
 
     return (
-        <ProjectDetailContext.Provider value={{
+        <ProjectContext.Provider value={{
             loadingProjectDetail,
             fetchingProjectDetail,
             projectDetail,
             errorProjectDetail,
         }}>
             {children}
-        </ProjectDetailContext.Provider>
+        </ProjectContext.Provider>
     );
 }
 
-function useProjectDetailContext() {
-    const context = useContext(ProjectDetailContext);
+function useProjectContext() {
+    const context = useContext(ProjectContext);
 
     if (context === undefined) {
         throw new Error("Using context outside provider");
@@ -44,4 +44,4 @@ function useProjectDetailContext() {
     return context;
 }
 
-export {ProjectDetailContextProvider, useProjectDetailContext};
+export {ProjectContextProvider, useProjectContext};

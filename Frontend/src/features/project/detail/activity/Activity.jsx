@@ -2,11 +2,11 @@ import {useState} from "react";
 import {StyledTabButton, StyledTabButtonBox} from "../../../dashboard/workedOnSection/WorkSectionStyles.jsx";
 import {IconMap} from "../../../../utils/IconMap.jsx";
 import {Tabs} from "@mui/material";
-import ProjectDetailActivityTabContainer from "./ProjectDetailActivityTabContainer.jsx";
-import ProjectDetailComment from "./ProjectDetailComment.jsx";
-import {ProjectDetailCommentContextProvider} from "../../context/ProjectDetailCommentContext.jsx";
+import ActivityTab from "./ActivityTab.jsx";
+import Comment from "./Comment.jsx";
+import {CommentContextProvider} from "../../context/CommentContext.jsx";
 
-function ProjectDetailActivity() {
+function Activity() {
 
     const [tab, setTab] = useState(0);
 
@@ -30,13 +30,13 @@ function ProjectDetailActivity() {
                     />
                 </Tabs>
             </StyledTabButtonBox>
-            <ProjectDetailActivityTabContainer value={tab} index={0}>
-                <ProjectDetailCommentContextProvider>
-                    <ProjectDetailComment/>
-                </ProjectDetailCommentContextProvider>
-            </ProjectDetailActivityTabContainer>
+            <ActivityTab value={tab} index={0}>
+                <CommentContextProvider>
+                    <Comment/>
+                </CommentContextProvider>
+            </ActivityTab>
         </>
     );
 }
 
-export default ProjectDetailActivity;
+export default Activity;

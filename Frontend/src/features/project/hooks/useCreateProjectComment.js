@@ -11,7 +11,7 @@ export function useCreateProjectComment() {
             if (error) {
                 toast.error(error.message);
             } else {
-                toast.success("Comment added...");
+                toast.success("SingleComment added...");
             }
         }
     });
