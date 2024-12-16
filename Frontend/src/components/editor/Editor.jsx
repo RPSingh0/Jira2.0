@@ -4,22 +4,22 @@ import EditorToolbar from "./EditorToolbar.jsx";
 import {grey} from "@mui/material/colors";
 
 const StyledEditorPaper = styled(Paper, {
-    shouldForwardProp: prop => prop !== 'isEditorMode'
-})(({theme, height, maxHeight, isEditorMode = false}) => ({
+    shouldForwardProp: prop => !prop.startsWith('$')
+})(({theme, $height, $maxHeight, $isEditorMode = false}) => ({
     padding: "0.5rem",
-    border: isEditorMode ? `1px solid ${grey["400"]}` : '',
+    border: $isEditorMode ? `1px solid ${grey["400"]}` : '',
     color: theme.palette.defaultBlack.main,
     transition: "all 0.2s ease",
 
     "&:hover": {
-        backgroundColor: isEditorMode ? '' : grey["200"],
+        backgroundColor: $isEditorMode ? '' : grey["200"],
     },
 
     "& .tiptap.ProseMirror": {
         outline: 'none',
-        padding: '0 0.5rem 0.5rem 0.5rem',
-        height: isEditorMode ? height || "12rem" : 'max-content',
-        ...(maxHeight && {maxHeight}),
+        padding: '0.5rem',
+        height: $isEditorMode ? $height || "12rem" : 'max-content',
+        ...($maxHeight && {$maxHeight}),
         maxWidth: "100%",
         wordWrap: "break-word",
         overflowWrap: "break-word",
@@ -100,19 +100,14 @@ const StyledEditorPaper = styled(Paper, {
         border: 'none',
         borderTop: `1px solid ${grey[500]}`,
         margin: '2rem 0'
-    },
-
-    "& .tiptap.ProseMirror :first-child": {
-        marginTop: "0.5rem"
     }
-
 }));
 
 function TextEditor({editor, height, maxHeight}) {
 
     if (editor.isEditable) {
         return (
-            <StyledEditorPaper elevation={0} height={height} maxHeight={maxHeight} isEditorMode={true}>
+            <StyledEditorPaper elevation={0} $height={height} $maxHeight={maxHeight} $isEditorMode={true}>
                 <EditorToolbar editor={editor}/>
                 <EditorContent editor={editor}/>
             </StyledEditorPaper>
@@ -120,7 +115,7 @@ function TextEditor({editor, height, maxHeight}) {
     }
 
     return (
-        <StyledEditorPaper elevation={0} height={height} maxHeight={maxHeight}>
+        <StyledEditorPaper elevation={0} $height={height} $maxHeight={maxHeight}>
             <EditorContent editor={editor}/>
         </StyledEditorPaper>
     );

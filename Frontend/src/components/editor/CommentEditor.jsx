@@ -2,7 +2,9 @@ import TextEditor from "./Editor.jsx";
 import EditorContentSaveOrCancel from "../button/EditorContentSaveOrCancel.jsx";
 import {Box, styled} from "@mui/material";
 
-const StyledCommentEditorStaticBox = styled(Box)(({theme, $isEditing}) => ({
+const StyledCommentEditorStaticBox = styled(Box, {
+    shouldForwardProp: prop => !prop.startsWith('$')
+})(({theme, $isEditing}) => ({
     border: $isEditing ? 'none' : `1px solid ${theme.palette.divider}`,
     borderRadius: theme.shape.borderRadius,
     userSelect: $isEditing ? 'text' : 'none',
