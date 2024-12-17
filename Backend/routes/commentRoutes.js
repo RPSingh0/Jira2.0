@@ -62,6 +62,31 @@ router.route('/project/get/:projectKey')
 
 /**
  * @swagger
+ * /comment/project/update:
+ *   patch:
+ *     security:
+ *       - Authorization: []
+ *     summary: Updates a project comment
+ *     tags: [Comment]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/ProjectCommentUpdate'
+ *     responses:
+ *       201:
+ *         description: Project comment updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ProjectCommentUpdateSuccess'
+ */
+router.route('/project/update')
+    .patch(authenticationController.authenticate, commentController.updateProjectComment);
+
+/**
+ * @swagger
  * /comment/feature/create:
  *   post:
  *     security:

@@ -15,6 +15,22 @@ components:
       properties:
         status:
           type: string
+    ProjectCommentUpdate:
+      type: object
+      required:
+        - commentId
+        - content
+      properties:
+        commentId:
+          type: string
+          format: uuid
+        content:
+          type: string
+    ProjectCommentUpdateSuccess:
+      type: object
+      properties:
+        status:
+          type: string
     GetProjectCommentsSuccess:
       type: object
       properties:
@@ -28,6 +44,9 @@ components:
               items:
                 type: object
                 properties:
+                  commentId:
+                    type: string
+                    format: uuid
                   projectKey:
                     type: string
                   content:

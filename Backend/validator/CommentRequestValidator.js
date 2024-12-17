@@ -35,6 +35,27 @@ exports.GetProjectCommentRequest = Joi.object({
         })
 });
 
+exports.UpdateProjectCommentRequest = Joi.object({
+    commentId: Joi.string()
+        .trim()
+        .uuid()
+        .required()
+        .messages({
+            'string.base': "comment id should be a UUID",
+            'string.empty': "comment id cannot be empty",
+            'any.required': "comment id is required"
+        }),
+
+    content: Joi.string()
+        .min(3)
+        .required()
+        .messages({
+            'string.min': "Comment should be at least 3 characters",
+            'string.empty': "Comment cannot be empty",
+            'any.required': "Comment is required"
+        })
+});
+
 exports.CreateFeatureCommentRequest = Joi.object({
     projectKey: Joi.string()
         .trim()

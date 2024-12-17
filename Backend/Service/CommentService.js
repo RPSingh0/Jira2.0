@@ -35,6 +35,7 @@ class CommentService {
                     projectKey: data.projectKey
                 },
                 select: {
+                    id: true,
                     projectKey: true,
                     content: true,
                     author: {
@@ -60,6 +61,7 @@ class CommentService {
 
             const result = comments.map(comment => {
                 return {
+                    commentId: comment.id,
                     projectKey: comment.projectKey,
                     content: comment.content,
                     authorEmail: comment.author.email,
@@ -78,6 +80,30 @@ class CommentService {
             throw new ErrorInterceptor({
                 type: ErrorType.DATABASE,
                 message: `Error fetching project comments ${extra ? extra : ""}`,
+            });
+        }
+    }
+
+    static async updateProjectComment(data) {
+        try {
+            const comment = await prisma.projectComment.update({
+                data: {
+                    content: data.content
+                },
+                where: {
+                    id: data.commentId
+                }
+            });
+
+            return {success: true, data: comment};
+
+        } catch (err) {
+
+            const extra = parsePrismaError(err);
+
+            throw new ErrorInterceptor({
+                type: ErrorType.DATABASE,
+                message: `Error updating project comment ${extra ? extra : ""}`,
             });
         }
     }
